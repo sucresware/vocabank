@@ -16,8 +16,7 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/terms', function () {
-})->name('terms');
+Route::get('/terms', function () { })->name('terms');
 
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
@@ -29,4 +28,5 @@ Route::get('/samples/random', 'SampleController@random')->name('samples.random')
 
 Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples.listen');
 Route::get('/samples/{sample}/download', 'SampleController@download')->name('samples.download');
+Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');
 Route::resource('samples', 'SampleController');

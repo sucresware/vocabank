@@ -125,17 +125,19 @@ class SampleController extends Controller
         return view('sample.show', compact('sample'));
     }
 
-    public function edit($id)
+    public function iframe(Sample $sample)
     {
+        return view('sample.iframe', compact('sample'));
     }
+
+    public function edit($id)
+    { }
 
     public function update(Request $request, $id)
-    {
-    }
+    { }
 
     public function destroy($id)
-    {
-    }
+    { }
 
     public function listen(Sample $sample)
     {
