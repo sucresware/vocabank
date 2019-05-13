@@ -17,7 +17,7 @@ $(document).ready(function () {
     bsCustomFileInput.init()
     var clipboard = new ClipboardJS('[data-clipboard]');
 
-    clipboard.on('success', function(e) {
+    clipboard.on('success', function (e) {
         $(e.trigger).html("<i class='fas fa-check fa-fw mr-1'></i> Copié");
         e.clearSelection();
     });
@@ -34,6 +34,7 @@ $(document).ready(function () {
             cursorColor: '#4d6e96',
             height: height,
             normalize: true,
+            backend: 'MediaElement'
         })
         wavesurfer.load(src)
         wavesurfer.setVolume(0.7)
