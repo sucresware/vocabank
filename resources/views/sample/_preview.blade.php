@@ -17,7 +17,7 @@
             </div>
             <div class="d-none d-md-flex col-md-auto">
                 @foreach($sample->tags as $tag)
-                    <a href="{{ route('samples.search') }}?q={{ $tag->name }}" class="badge badge-secondary">{{ $tag->name }}</a>
+                    <a @isset($iframe) target="_blank" @endisset href="{{ route('samples.search') }}?q={{ $tag->name }}" class="badge badge-secondary">{{ $tag->name }}</a>
                 @endforeach
             </div>
         </div>
