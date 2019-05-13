@@ -5,5 +5,5 @@
 @endsection
 
 @section('content')
-    @include('sample._preview', $sample)
+    @include('sample._preview', ['iframe' => true])
 @endsection

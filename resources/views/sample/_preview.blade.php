@@ -12,8 +12,8 @@
                 </div>
             </div>
             <div class="col">
-                <div class="text-small"><a href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</div>
-                <strong><a href="{{ route('samples.show', $sample) }}">{{ $sample->name }}</a></strong>
+                <div class="text-small"><a href="{{ route('users.show', $sample->user) }}" @isset($iframe) target="_blank" @endisset>{{ $sample->user->name }}</div>
+                <strong><a href="{{ route('samples.show', $sample) }}" @isset($iframe) target="_blank" @endisset>{{ $sample->name }}</a></strong>
             </div>
             <div class="d-none d-md-flex col-md-auto">
                 @foreach($sample->tags as $tag)
