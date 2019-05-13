@@ -66,7 +66,20 @@
                 </div>
                 <div class="card-body blue row no-gutters dimmed-border-bottom align-items-center">
                     <div class="col-3 pr-2">
-                        <strong>Partage</strong>
+                        <strong>Lien Vocaroo</strong>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group">
+                            <input id="v{{ $sample->id }}" value="{{ $sample->vocaroo_link }}" class="form-control">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" data-clipboard-target="#v{{ $sample->id }}" data-clipboard><i class="fas fa-link fa-fw mr-1"></i> Copier le lien</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body white row no-gutters dimmed-border-bottom align-items-center">
+                    <div class="col-3 pr-2">
+                        <strong>Partage VocaBank</strong>
                     </div>
                     <div class="col-9">
                         <div class="input-group">
@@ -77,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body white text-center">
+                <div class="card-body blue text-center">
 
                     <a href="{{ route('samples.download', $sample) }}" class="btn btn-primary">Télécharger</a>
                     <a href="mailto:contact@4sucres.org" class="btn btn-outline-danger">Signaler</a>
