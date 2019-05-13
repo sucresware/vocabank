@@ -1,5 +1,5 @@
-<div class="row align-items-center mb-3">
-    <div class="col-12 col-sm-auto mb-3 mb-md-0">
+<div class="row align-items-center">
+    <div class="d-none d-sm-flex col-auto">
         <div class="sample-thumbnail shadow mx-auto">
             <a href="{{ route('samples.show', $sample) }}"><img src="{{ $sample->thumbnail_link }}" class="rounded"></a>
         </div>
