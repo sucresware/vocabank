@@ -142,42 +142,61 @@ class SampleController extends Controller
     public function listen(Sample $sample)
     {
         $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
-        $headers = get_headers($url, 1);
-        $length = array_reverse(array_sort($headers['Content-Length']))[0];
 
-        return response()->stream(function () use ($url) {
-            $stream = fopen($url, 'r');
-            fpassthru($stream);
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-        }, 200, [
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Content-Type' => 'audio/mpeg',
-            'Content-Length' => $length,
-            'Content-Disposition' => $headers['Content-Disposition'],
-            'Pragma' => 'public',
-        ]);
+        $media_name = $sample->id . '_vocaroo_' . $sample->vocaroo_id . '.mp3';
+        $media_path = storage_path('app/temp/' . $media_name);
+        if (!File::exists($media_path)) {
+            File::put($media_path, file_get_contents($url));
+        }
+
+        return response()->file($media_path);
+
+        // $headers = get_headers($url, 1);
+        // $length = array_reverse(array_sort($headers['Content-Length']))[0];
+
+        // return response()->stream(function () use ($url) {
+        //     $stream = fopen($url, 'r');
+        //     fpassthru($stream);
+        //     if (is_resource($stream)) {
+        //         fclose($stream);
+        //     }
+        // }, 200, [
+        //     'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+        //     'Content-Type' => 'audio/mpeg3',
+        //     'Content-Length' => $length,
+        //     'Content-Disposition' => $headers['Content-Disposition'],
+        //     'Pragma' => 'public',
+        // ]);
     }
 
     public function download(Sample $sample)
     {
         $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
-        $headers = get_headers($url, 1);
-        $length = array_reverse(array_sort($headers['Content-Length']))[0];
 
-        return response()->stream(function () use ($url) {
-            $stream = fopen($url, 'r');
-            fpassthru($stream);
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-        }, 200, [
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Content-Type' => 'application/force-download',
-            'Content-Length' => $length,
-            'Content-Disposition' => trim($headers['Content-Disposition'], ':'),
-            'Pragma' => 'public',
-        ]);
+        $media_name = $sample->id . '_vocaroo_' . $sample->vocaroo_id . '.mp3';
+        $media_path = storage_path('app/temp/' . $media_name);
+        if (!File::exists($media_path)) {
+            File::put($media_path, file_get_contents($url));
+        }
+
+        return response()->download($media_path);
+
+        // $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
+        // $headers = get_headers($url, 1);
+        // $length = array_reverse(array_sort($headers['Content-Length']))[0];
+
+        // return response()->stream(function () use ($url) {
+        //     $stream = fopen($url, 'r');
+        //     fpassthru($stream);
+        //     if (is_resource($stream)) {
+        //         fclose($stream);
+        //     }
+        // }, 200, [
+        //     'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+        //     'Content-Type' => 'application/force-download',
+        //     'Content-Length' => $length,
+        //     'Content-Disposition' => trim($headers['Content-Disposition'], ':'),
+        //     'Pragma' => 'public',
+        // ]);
     }
 }
