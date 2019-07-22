@@ -45,14 +45,15 @@ class Sample extends Model implements ViewableContract
         $autoplay = $options['autoplay'] ?? false;
         $uniqid = $options['uniqid'] ?? $this->id;
 
-        $markup = '<div data-wavesurfer data-src="/samples/' . $this->id . '/listen" data-id="' . $uniqid . '" data-height="' . $height . '" ' . ($autoplay ? 'data-autoplay' : '') . '>';
+        $markup = '<div class="mb-3" style="height: ' . $height . 'px" data-wavesurfer data-src="/samples/' . $this->id . '/listen" data-id="' . $uniqid . '" data-height="' . $height . '" ' . ($autoplay ? 'data-autoplay' : '') . '>';
         $markup .= '</div>';
 
         if ($controls) {
-            $markup .= '<div class="btn-group d-block text-center mt-3">';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="play"><small><i class="fas fa-fw fa-play"></i></small></a>';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="pause"><small><i class="fas fa-fw fa-pause"></i></small></a>';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="stop"><small><i class="fas fa-fw fa-stop"></i></small></a>';
+            $markup .= '<div class="text-center mb-3">';
+            $markup .= '<div class="bg-teal-400 hover:bg-teal-700 h-8 w-8 p-3 inline-flex items-center justify-center rounded-full text-white text-xs shadow-lg">';
+            $markup .= '<a href="javascript:void(0)" class="animated fadeInRight" data-wavecontrol data-target="' . $uniqid . '" data-control="play"><i class="fas fa-fw fa-play"></i></a>';
+            $markup .= '<a href="javascript:void(0)" class="hidden animated fadeInRight" data-wavecontrol data-target="' . $uniqid . '" data-control="pause"><small><i class="fas fa-fw fa-pause"></i></small></a>';
+            $markup .= '</div>';
             $markup .= '</div>';
         }
 

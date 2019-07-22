@@ -33,45 +33,28 @@
     <div class="row justify-content-center">
         @if (isset($popular_samples) && count($popular_samples))
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        Les plus populaires
-                    </div>
+                <h1>Les plus populaires</h1>
 
-                    @foreach ($popular_samples as $sample)
-                        <div class="{{ $loop->index%2 ? 'white' : 'blue' }} p-3">
-                            @include('sample/_preview')
-                        </div>
-                    @endforeach
-                </div>
+                @foreach ($popular_samples as $sample)
+                    @include('sample/_preview')
+                @endforeach
             </div>
         @endif
         @if (isset($recent_samples) && count($recent_samples))
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        Les plus récents
-                    </div>
-
-                    @foreach ($recent_samples as $sample)
-                        <div class="{{ $loop->index%2 ? 'white' : 'blue' }} p-3">
-                            @include('sample/_preview')
-                        </div>
-                    @endforeach
-                </div>
+                <h1>Les plus récents</h1>
+                @foreach ($recent_samples as $sample)
+                    @include('sample/_preview')
+                @endforeach
             </div>
         @endif
         @isset($samples)
             <div class="col-md-6">
-                <div class="card">
-                    @foreach ($samples as $sample)
-                        <div class="{{ $loop->index%2 ? 'white' : 'blue' }} p-3">
-                            @include('sample/_preview')
-                        </div>
-                    @endforeach
-                    <div class="card-body">
-                        {{ $samples->links() }}
-                    </div>
+                @foreach ($samples as $sample)
+                    @include('sample/_preview')
+                @endforeach
+                <div class="card-body">
+                    {{ $samples->links() }}
                 </div>
             </div>
         @endisset

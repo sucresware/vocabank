@@ -11,7 +11,7 @@
             VocaBank
         @endif
     </title>
-    <meta name="description" content="VocaBank - Clone officiel de RisiBank, sauf qu'on a échangé les stickers par des samples">
+    <meta name="description" content="VocaBank - C'est comme RisiBank, sauf qu'on a échangé les stickers par des samples">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -24,18 +24,6 @@
     <meta name="theme-color" content="#3b4252">
     <meta name="msapplication-TileColor" content="#3b4252">
     <meta name="msapplication-TileImage" content="{{ url('/mstile-144x144.png') }}">
-
-    @if (config('app.env') === 'production')
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139755516-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'UA-139755516-1');
-        </script>
-    @endif
 
     @stack('css')
 </head>

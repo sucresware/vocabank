@@ -1,32 +1,24 @@
 @extends('layouts.app')
 
 @section('title')
-    Membres
+    Profil de {{ $user->name }}
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    Profil de {{ $user->name }}
-                </div>
-                    @forelse ($samples as $sample)
-                        <div class="{{ $loop->index%2 ? 'white' : 'blue' }} p-3">
-                            @include('sample/_preview')
-                        </div>
-                    @empty
-                        <div class="card-body">
-                            Aucun sample envoyé par l'utilisateur !
-                        </div>
-                    @endforelse
 
-                <div class="card-body">
-                    {{ $samples->links() }}
-                </div>
+<h1 class="mb-5 uppercase text-sm font-bold text-teal-600">
+    Profil de {{ $user->name }}
+</h1>
+
+<div class="flex flex-wrap">
+        @forelse ($samples as $sample)
+            <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/6 p-2">
+                @include('sample/_square')
             </div>
-        </div>
-    </div>
+        @empty
+            Aucun sample envoyé par l'utilisateur !
+        @endforelse
+
+        {{ $samples->links() }}
 </div>
 @endsection
