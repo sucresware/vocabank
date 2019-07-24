@@ -13,10 +13,7 @@ class SampleController extends Controller
 {
     public function index()
     {
-        $recent_samples = Sample::orderBy('created_at', 'DESC')->limit(5)->get();
-        $popular_samples = Sample::orderByViews()->limit(5)->get();
-
-        return view('sample.index', compact('recent_samples', 'popular_samples'));
+        return redirect()->route('samples.recent');
     }
 
     public function recent()
@@ -131,13 +128,16 @@ class SampleController extends Controller
     }
 
     public function edit($id)
-    { }
+    {
+    }
 
     public function update(Request $request, $id)
-    { }
+    {
+    }
 
     public function destroy($id)
-    { }
+    {
+    }
 
     public function listen(Sample $sample)
     {

@@ -21,8 +21,8 @@ Route::view('/terms', 'static/terms')->name('terms');
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
 
-Route::get('/samples/popular', 'SampleController@popular')->name('samples.popular');
 Route::get('/samples/recent', 'SampleController@recent')->name('samples.recent');
+Route::get('/samples/popular', 'SampleController@popular')->name('samples.popular');
 Route::get('/samples/search', 'SampleController@search')->name('samples.search');
 Route::get('/samples/random', 'SampleController@random')->name('samples.random');
 

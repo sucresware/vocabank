@@ -16,12 +16,12 @@
         "jasny/sso": "^0.3.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "mattketmo/email-checker": "^1.5",
         "molayli/laravel-cloudflare-real-ip": "^0.1.0",
         "realrashid/sweet-alert": "^1.1",
         "realripley00/bootstrap-4-form": "^1.1",
         "sentry/sentry-laravel": "1.0.2",
         "spatie/laravel-permission": "^2.37",
-        "mattketmo/email-checker": "^1.5",
         "spatie/regex": "^1.4",
         "timehunter/laravel-google-recaptcha-v3": "~2.2.16",
         "yish/imgur": "^1.0"
