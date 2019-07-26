@@ -21,8 +21,29 @@ html {
 
 wave {
     width: 100%;
+    overflow: hidden !important;
 }
 
+#logo:hover #logo-replay {
+    animation: spin .5s ease-in-out;
+}
+
+#logo-replay {
+    transform-origin: 34px 17px;
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+}
 
 // .card {
 //     border-radius: .25rem;

@@ -4,6 +4,7 @@ module.exports = {
     },
     variants: {
         opacity: ['responsive', 'hover', 'focus'],
+        cursor: ['hover'],
     },
     plugins: []
 }

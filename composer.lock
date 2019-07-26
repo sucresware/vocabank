@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a33a0efc90a81a4e48b5d31e49689c28",
+    "content-hash": "27d7b8ea58f208b7abba2070f7d2ebe0",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1569,6 +1569,51 @@
                 "throwaway"
             ],
             "time": "2018-08-29T06:39:00+00:00"
+        },
+        {
+            "name": "maximal/audio-waveform",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maximal/audio-waveform-php.git",
+                "reference": "6f513425b83f2d2a0d39b34118f0a1d99ab8d275"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maximal/audio-waveform-php/zipball/6f513425b83f2d2a0d39b34118f0a1d99ab8d275",
+                "reference": "6f513425b83f2d2a0d39b34118f0a1d99ab8d275",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "maximal\\audio\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MaximAL",
+                    "homepage": "http://maximals.ru",
+                    "role": "Author"
+                }
+            ],
+            "description": "Audio waveform generator on PHP with SoX",
+            "homepage": "https://github.com/maximal/audio-waveform-php#readme",
+            "keywords": [
+                "audio",
+                "generator",
+                "sox",
+                "waveform"
+            ],
+            "time": "2019-02-14T15:13:37+00:00"
         },
         {
             "name": "molayli/laravel-cloudflare-real-ip",

@@ -7,7 +7,9 @@ use App\Models\Sample;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use maximal\audio\Waveform;
 
 class SampleController extends Controller
 {
@@ -67,52 +69,65 @@ class SampleController extends Controller
         // $request->merge(['tags', Helper::stripAccents($request->tags)]);
 
         $validator = \Validator::make($request->all(), [
-            'name' => ['required', 'min:3', 'max:255'],
-            'vocaroo_link' => ['required', 'regex:' . '/http(?:s|):\/\/vocaroo.com\/i\/((?:\w|-)*)/m'],
-            'tags' => [
-                'required', 'regex:' . '/^(?:[a-zA-Z0-9]| )+$/m',
-                function ($attribute, $value, $fail) {
-                    $tags = explode(' ', $value);
-                    $tags = array_unique($tags);
-                    if (count($tags) < 3) {
-                        $fail('Tu dois spécifier au moins 3 tags!');
-                    }
-                    if (count($tags) > 10) {
-                        $fail('Maximum 10 tags !');
-                    }
-                },
-            ],
+            'name' => ['required', 'min:3', 'max:60'],
+            // 'vocaroo_link' => ['required', 'regex:' . '/http(?:s|):\/\/vocaroo.com\/i\/((?:\w|-)*)/m'],
+            // 'tags' => [
+            //     'required', 'regex:' . '/^(?:[a-zA-Z0-9]| )+$/m',
+            //     function ($attribute, $value, $fail) {
+            //         $tags = explode(' ', $value);
+            //         $tags = array_unique($tags);
+            //         if (count($tags) < 3) {
+            //             $fail('Tu dois spécifier au moins 3 tags!');
+            //         }
+            //         if (count($tags) > 10) {
+            //             $fail('Maximum 10 tags !');
+            //         }
+            //     },
+            // ],
+            'audio' => ['required', 'file', 'mimetypes:audio/mpeg,audio/mp3'],
             'thumbnail' => ['image'],
         ]);
         $validator->validate();
 
         $sample = new Sample([
             'name' => $request->name,
-            'vocaroo_link' => $request->vocaroo_link,
         ]);
         $sample->user()->associate(auth()->user());
         $sample->save();
 
         if ($request->hasFile('thumbnail')) {
-            $thumbnail_name = $sample->id . '_thumbnail' . time() . '.' . request()->thumbnail->getClientOriginalExtension();
-            $thumbnail_path = storage_path('app/temp/' . $thumbnail_name);
+            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+            Image::make($request->thumbnail)->fit(300)->save(Storage::path('public/samples/' . $thumbnail_name));
+            $sample->thumbnail = 'samples/' . $thumbnail_name;
+        }
 
-            Image::make(request()->thumbnail)->fit(300)->save($thumbnail_path);
-            $imgur = \Imgur::upload(File::get($thumbnail_path));
-            $sample->thumbnail_link = $imgur->link();
+        $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        $sample->audio = request()->audio->storeAs('samples', $audio_name);
 
-            File::delete($thumbnail_path);
-        } else {
-            $sample->thumbnail_link = '/img/default.png';
+        try {
+            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
+            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
+            $waveform = new Waveform(Storage::path($sample->audio));
+            $height = 512;
+            Waveform::$backgroundColor = [255, 255, 255, 0];
+            $waveform->getWaveform($waveform_temp_path, 2048, $height, true);
+            if ($waveform->getChannels() > 1) {
+                Image::make($waveform_temp_path)->crop(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
+            } else {
+                Image::make($waveform_temp_path)->resize(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
+            }
+            $sample->waveform = 'samples/' . $waveform_name;
+            File::delete($waveform_temp_path);
+        } catch (\Exception $e) {
         }
 
         $sample->save();
 
-        foreach (explode(' ', $request->tags) as $tag) {
-            Tag::firstOrCreate([
-                'name' => $tag,
-            ])->samples()->attach($sample);
-        }
+        // foreach (explode(' ', $request->tags) as $tag) {
+        //     Tag::firstOrCreate([
+        //         'name' => $tag,
+        //     ])->samples()->attach($sample);
+        // }
 
         return redirect()->route('samples.show', $sample);
     }
@@ -141,15 +156,11 @@ class SampleController extends Controller
 
     public function listen(Sample $sample)
     {
-        $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
+        views($sample)
+            ->delayInSession(1)
+            ->record();
 
-        $media_name = $sample->id . '_vocaroo_' . $sample->vocaroo_id . '.mp3';
-        $media_path = storage_path('app/temp/' . $media_name);
-        if (!File::exists($media_path)) {
-            File::put($media_path, file_get_contents($url));
-        }
-
-        return response()->file($media_path);
+        return response()->file(Storage::path($sample->audio));
 
         // $headers = get_headers($url, 1);
         // $length = array_reverse(array_sort($headers['Content-Length']))[0];

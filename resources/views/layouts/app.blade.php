@@ -36,7 +36,10 @@
         <div class="container mx-auto flex flex-wrap items-center">
             <div class="flex-1 pl-2 md:pl-0">
                 <div class="mb-3">
-                    <a class="text-gray-900 text-base xl:text-xl no-underline hover:no-underline font-bold" href="{{ route('home') }}"><img src="/svg/logo_white.svg" class="h-8"></a>
+                    <a class="text-gray-900 text-base xl:text-xl no-underline hover:no-underline font-bold" href="{{ route('home') }}" class="h-8">
+                        {{-- <img src="" id="logo" > --}}
+                        {!! File::get(base_path('/public/svg/logo_white.svg')) !!}
+                    </a>
                 </div>
                 <div class="container mx-auto flex flex-wrap">
                     <div class="pr-3"><a href="#" class="text-white font-bold">Explorer</a></div>
@@ -72,8 +75,8 @@
         <div class="mb-2"><img src="/svg/logo.svg" class="h-3 inline align-text-bottom"> &copy; 2019</div>
         <strong>VocaBank</strong>, parce qu'on entendait rien sur <a
             href="https://risibank.fr">RisiBank</a>.<br>
-            Partenaires : 4sucres.org — Olinux Records®<br>
-        <a href="#">API</a> — <a href="{{ route('terms') }}">Conditions générales d'utilisation</a>
+            Partenaires : <a class="text-gray-600 hover:text-gray-500" href="#">4sucres.org</a> — <a class="text-gray-600 hover:text-gray-500" href="#">Olinux Records®</a><br>
+        <a class="text-gray-600 hover:text-gray-500" href="#">API</a> — <a class="text-gray-600 hover:text-gray-500" href="{{ route('terms') }}">Conditions générales d'utilisation</a>
     </footer>
 
     @if (session('success'))

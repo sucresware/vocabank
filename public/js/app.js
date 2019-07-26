@@ -1932,11 +1932,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["sample"],
+  props: ["sample", "views"],
   data: function data() {
     return {
       showWaveform: true,
@@ -1950,8 +1977,9 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
   methods: {
     toggle: function toggle() {
       var vm = this;
-      this.showControls = true;
-      this.showWaveform = false;
+      this.showControls = !this.showControls;
+      this.showWaveform = !this.showWaveform;
+      if (this.showWaveform && !this.isPlaying) return;
 
       if (!this.waveSurfer) {
         this.waveSurfer = wavesurfer_js__WEBPACK_IMPORTED_MODULE_0___default.a.create({
@@ -37000,7 +37028,7 @@ process.umask = function() { return 0; };
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
- * Select2 4.0.7-rc.0
+ * Select2 4.0.7
  * https://select2.github.io
  *
  * Released under the MIT license
@@ -43160,10 +43188,19 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "hover:bg-gray-100" },
     [
       _c(
         "div",
-        { staticClass: "px-2 py-2 w-full flex items-center relative" },
+        {
+          staticClass:
+            "hover:cursor-pointer px-2 py-2 w-full flex items-center relative",
+          on: {
+            click: function($event) {
+              return _vm.toggle()
+            }
+          }
+        },
         [
           _c("fade-transition", { attrs: { duration: 150 } }, [
             _c(
@@ -43176,38 +43213,15 @@ var render = function() {
                     value: _vm.showWaveform,
                     expression: "showWaveform"
                   }
-                ]
+                ],
+                staticClass: "absolute px-5 top-0 bottom-0 left-0 right-0"
               },
               [
-                _c(
-                  "div",
-                  {
-                    staticClass: "absolute px-5 top-0 bottom-0 left-0 right-0"
-                  },
-                  [
-                    _c("img", {
-                      staticClass: "w-full h-full",
-                      staticStyle: { opacity: "0.20" },
-                      attrs: { src: "/img/waveform.png" }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "absolute px-5 top-0 bottom-0 left-0 right-0"
-                  },
-                  [
-                    _c("div", {
-                      staticClass: "w-full h-full",
-                      staticStyle: {
-                        background:
-                          "linear-gradient(0deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)"
-                      }
-                    })
-                  ]
-                )
+                _c("img", {
+                  staticClass: "w-full h-full",
+                  staticStyle: { opacity: "0.20" },
+                  attrs: { src: "/storage/" + _vm.sample.waveform }
+                })
               ]
             )
           ]),
@@ -43216,20 +43230,58 @@ var render = function() {
             _c("img", {
               staticClass:
                 "rounded-full border-2 border-gray-400 absolute object-cover top-0 bottom-0 left-0 right-0",
-              attrs: { src: _vm.sample.thumbnail_link }
+              attrs: {
+                src: _vm.sample.thumbnail
+                  ? "/storage/" + _vm.sample.thumbnail
+                  : "/img/default.png"
+              }
             }),
             _vm._v(" "),
             _c(
               "div",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.showControls,
+                    expression: "!showControls"
+                  }
+                ],
                 staticClass:
                   "opacity-0 hover:opacity-100 rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
-                staticStyle: { background: "rgba(0, 0, 0, 0.5)" },
-                on: {
-                  click: function($event) {
-                    return _vm.toggle()
+                staticStyle: { background: "rgba(0, 0, 0, 0.5)" }
+              },
+              [
+                _c("i", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isPlaying && !_vm.isLoading,
+                      expression: "!isPlaying && !isLoading"
+                    }
+                  ],
+                  key: "play-" + _vm.sample.id,
+                  staticClass: "text-xs fas fa-play"
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.showControls,
+                    expression: "showControls"
                   }
-                }
+                ],
+                staticClass:
+                  "rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
+                staticStyle: { background: "rgba(0, 0, 0, 0.5)" }
               },
               [
                 _c("i", {
@@ -43275,17 +43327,13 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "z-20 ml-3 truncate font-bold" }, [
-            _c(
-              "a",
-              {
-                staticClass: "hover:text-gray-600",
-                attrs: { href: "/samples/" + _vm.sample.id }
-              },
-              [_vm._v(_vm._s(_vm.sample.name))]
-            )
+            _vm._v("\n      " + _vm._s(_vm.sample.name) + "\n    ")
           ]),
           _vm._v(" "),
-          _vm._m(0),
+          _c("div", { staticClass: "z-20 ml-auto" }, [
+            _c("i", { staticClass: "fas fa-undo" }),
+            _vm._v("\n      " + _vm._s(_vm.views) + "\n    ")
+          ]),
           _vm._v(" "),
           _c("div", {
             staticClass: "absolute bottom-0 left-0 bg-teal-400",
@@ -43299,29 +43347,63 @@ var render = function() {
         "slide-up-down",
         { attrs: { active: _vm.showControls, duration: 200 } },
         [
-          _c("div", {
-            staticClass:
-              "w-full flex items-center relative border-gray-300 py-8",
-            staticStyle: { height: "30px", "border-bottom-width": "1px" },
-            attrs: { id: "wavesurfer-" + _vm.sample.id }
-          })
+          _c(
+            "div",
+            {
+              staticClass: "border-gray-300",
+              staticStyle: { "border-bottom-width": "1px" }
+            },
+            [
+              _c("div", {
+                staticClass: "w-full flex items-center relative py-8",
+                staticStyle: { height: "30px" },
+                attrs: { id: "wavesurfer-" + _vm.sample.id }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex flex-wrap px-3 mb-3 items-end" }, [
+                _c("div", { staticClass: "flex-auto" }, [
+                  _vm._v("\n          il y a 3 jours par\n          "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "text-gray-900 hover:text-gray-600",
+                      attrs: { href: "#" }
+                    },
+                    [_vm._v("YvonEnbaver")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "ml-auto" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass:
+                        "inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs",
+                      attrs: { href: "/samples/" + _vm.sample.id }
+                    },
+                    [_vm._v("Détails")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass:
+                        "inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs",
+                      attrs: { href: "/samples/" + _vm.sample.id }
+                    },
+                    [_c("i", { staticClass: "fas fa-copy" })]
+                  )
+                ])
+              ])
+            ]
+          )
         ]
       )
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "z-20 ml-auto" }, [
-      _c("i", { staticClass: "fas fa-undo" }),
-      _vm._v("\n      0\n    ")
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -56090,6 +56172,11 @@ Vue.use(vue2_transitions__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var app = new Vue({
   el: '#app'
 });
+
+window.onbeforeunload = function (event) {
+  var logo = document.getElementById("logo-replay");
+  logo.classList.add('spinner');
+};
 
 /***/ }),
 

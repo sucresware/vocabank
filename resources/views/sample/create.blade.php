@@ -11,7 +11,7 @@
             <div class="card">
                 <form method="POST" action="{{ route('samples.store') }}" enctype="multipart/form-data">
                     <div class="card-body dimmed-border-bottom">
-                        <h1 class="h6">Ajouter un sample</h1>
+                        <h1 class="h6">Ajouter un sample #balance-ton-mp3</h1>
                         @csrf
                         {{--  {!! GoogleReCaptchaV3::renderField('create_sample_id', 'create_sample_action') !!}  --}}
 
@@ -25,9 +25,20 @@
                                 <label class="custom-file-label" for="thumbnail" data-browse="Choisir un fichier">Aucun fichier choisi</label>
                             </div>
                         </div>
+
+                         <div class="form-group">
+                            <label for="audio" class="col-form-label">Fichier audio</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="audio" name="audio">
+                                <label class="custom-file-label" for="audio" data-browse="Choisir un fichier">Aucun fichier choisi</label>
+                            </div>
+                        </div>
+
+            @dump($errors)
+
                     </div>
                     <div class="card-body blue">
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" id="type_vocaroo" name="type" value="type_vocaroo" checked="checked">
                                 <label class="custom-control-label" for="type_vocaroo">Ajouter un lien Vocaroo</label>
@@ -42,7 +53,7 @@
                             </div>
                         </div>
 
-                        {!! BootForm::text('vocaroo_link', 'Lien de partage Vocaroo*') !!}
+                        {!! BootForm::text('vocaroo_link', 'Lien de partage Vocaroo*') !!} --}}
 
                         {{--  {!! BootForm::select('tags', 'Tags (au moins 3)*', [
                         ], old('tags'), ['class' => 'select2-tags', 'multiple' => 'multiple']) !!}  --}}

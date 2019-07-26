@@ -15,10 +15,11 @@ class CreateSamplesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->bigInteger('user_id')->unsigned();
-            $table->string('vocaroo_link');
-            $table->string('thumbnail_link')->nullable();
-            // $table->integer('views_count')->unsigned();
-            // $table->integer('score_count')->unsigned();
+
+            $table->string('audio')->nullable();
+            $table->string('waveform')->nullable();
+            $table->string('thumbnail')->nullable();
+
             $table->timestamps();
         });
     }

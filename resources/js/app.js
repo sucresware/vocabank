@@ -18,3 +18,8 @@ Vue.use(Transitions)
 const app = new Vue({
     el: '#app',
 });
+
+window.onbeforeunload = function (event) {
+    let logo = document.getElementById("logo-replay");
+    logo.classList.add('spinner')
+}

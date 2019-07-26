@@ -3301,6 +3301,34 @@ video {
   cursor: not-allowed;
 }
 
+.hover\:cursor-auto:hover{
+  cursor: auto;
+}
+
+.hover\:cursor-default:hover{
+  cursor: default;
+}
+
+.hover\:cursor-pointer:hover{
+  cursor: pointer;
+}
+
+.hover\:cursor-wait:hover{
+  cursor: wait;
+}
+
+.hover\:cursor-text:hover{
+  cursor: text;
+}
+
+.hover\:cursor-move:hover{
+  cursor: move;
+}
+
+.hover\:cursor-not-allowed:hover{
+  cursor: not-allowed;
+}
+
 .block{
   display: block;
 }
@@ -7603,6 +7631,28 @@ html {
 
 wave {
   width: 100%;
+  overflow: hidden !important;
+}
+
+#logo:hover #logo-replay {
+  -webkit-animation: spin 0.5s ease-in-out;
+          animation: spin 0.5s ease-in-out;
+}
+
+#logo-replay {
+  transform-origin: 34px 17px;
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
 }
 
 @media (min-width: 640px){
@@ -10250,34 +10300,6 @@ wave {
 
   .sm\:border-l{
     border-left-width: 1px;
-  }
-
-  .sm\:cursor-auto{
-    cursor: auto;
-  }
-
-  .sm\:cursor-default{
-    cursor: default;
-  }
-
-  .sm\:cursor-pointer{
-    cursor: pointer;
-  }
-
-  .sm\:cursor-wait{
-    cursor: wait;
-  }
-
-  .sm\:cursor-text{
-    cursor: text;
-  }
-
-  .sm\:cursor-move{
-    cursor: move;
-  }
-
-  .sm\:cursor-not-allowed{
-    cursor: not-allowed;
   }
 
   .sm\:block{
@@ -17218,34 +17240,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .md\:cursor-auto{
-    cursor: auto;
-  }
-
-  .md\:cursor-default{
-    cursor: default;
-  }
-
-  .md\:cursor-pointer{
-    cursor: pointer;
-  }
-
-  .md\:cursor-wait{
-    cursor: wait;
-  }
-
-  .md\:cursor-text{
-    cursor: text;
-  }
-
-  .md\:cursor-move{
-    cursor: move;
-  }
-
-  .md\:cursor-not-allowed{
-    cursor: not-allowed;
-  }
-
   .md\:block{
     display: block;
   }
@@ -24184,34 +24178,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .lg\:cursor-auto{
-    cursor: auto;
-  }
-
-  .lg\:cursor-default{
-    cursor: default;
-  }
-
-  .lg\:cursor-pointer{
-    cursor: pointer;
-  }
-
-  .lg\:cursor-wait{
-    cursor: wait;
-  }
-
-  .lg\:cursor-text{
-    cursor: text;
-  }
-
-  .lg\:cursor-move{
-    cursor: move;
-  }
-
-  .lg\:cursor-not-allowed{
-    cursor: not-allowed;
-  }
-
   .lg\:block{
     display: block;
   }
@@ -31148,34 +31114,6 @@ wave {
 
   .xl\:border-l{
     border-left-width: 1px;
-  }
-
-  .xl\:cursor-auto{
-    cursor: auto;
-  }
-
-  .xl\:cursor-default{
-    cursor: default;
-  }
-
-  .xl\:cursor-pointer{
-    cursor: pointer;
-  }
-
-  .xl\:cursor-wait{
-    cursor: wait;
-  }
-
-  .xl\:cursor-text{
-    cursor: text;
-  }
-
-  .xl\:cursor-move{
-    cursor: move;
-  }
-
-  .xl\:cursor-not-allowed{
-    cursor: not-allowed;
   }
 
   .xl\:block{

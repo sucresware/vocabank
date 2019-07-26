@@ -17,6 +17,7 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "mattketmo/email-checker": "^1.5",
+        "maximal/audio-waveform": "^1.2",
         "molayli/laravel-cloudflare-real-ip": "^0.1.0",
         "realrashid/sweet-alert": "^1.1",
         "realripley00/bootstrap-4-form": "^1.1",
