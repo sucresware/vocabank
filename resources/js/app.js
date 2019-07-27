@@ -12,6 +12,9 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 import SlideUpDown from 'vue-slide-up-down'
 Vue.component('slide-up-down', SlideUpDown)
 
+import InfiniteLoading from 'vue-infinite-loading';
+Vue.use(InfiniteLoading)
+
 import Transitions from 'vue2-transitions'
 Vue.use(Transitions)
 

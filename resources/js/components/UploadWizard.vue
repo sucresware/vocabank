@@ -14,7 +14,7 @@
               class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
               onclick="document.getElementById('audioInput').click()"
             >
-              <i class="fa fa-upload mr-1"></i> ou #séléctionne-ton-mp3
+              <i class="fa fa-upload mr-1"></i> ou #sélectionne-ton-mp3
             </a>
             <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
 
@@ -67,8 +67,8 @@
                   />
                   <div
                     class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="sampleError && sampleError.thumbnail !== undefined"
-                  >{{ sampleError.thumbnail[0] }}</div>
+                    v-if="formErrors && formErrors.thumbnail !== undefined"
+                  >{{ formErrors.thumbnail[0] }}</div>
                 </div>
               </div>
               <div class="ml-5 w-full">
@@ -81,11 +81,12 @@
                     type="text"
                     class="border-gray-300 border rounded w-full px-2 py-1"
                     v-model="sample.name"
+                    :disabled="formSubmitted"
                   />
                   <div
                     class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="sampleError && sampleError.name !== undefined"
-                  >{{ sampleError.name[0] }}</div>
+                    v-if="formErrors && formErrors.name !== undefined"
+                  >{{ formErrors.name[0] }}</div>
                 </div>
                 <div class="mb-3">
                   <div class="text-xs mb-1">
@@ -98,11 +99,12 @@
                     @keyup.enter="appendTag()"
                     @keyup.space="appendTag()"
                     v-model="currentTag"
+                    :disabled="formSubmitted"
                   />
                   <div
                     class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="sampleError && sampleError.tags !== undefined"
-                  >{{ sampleError.tags[0] }}</div>
+                    v-if="formErrors && formErrors.tags !== undefined"
+                  >{{ formErrors.tags[0] }}</div>
 
                   <div class="my-3">
                     <div
@@ -113,7 +115,7 @@
                     >{{ tag }}</div>
                   </div>
                 </div>
-                <div v-show="!moreFields" class="text-center text-xs mb-3">
+                <div v-show="!moreFields" class="text-center text-xs my-3">
                   <div class="bg-gray-400" style="height: 1px;"></div>
                   <div class="-mt-2">
                     <span
@@ -132,20 +134,30 @@
                       type="text"
                       class="border-gray-300 border rounded w-full px-2 py-1 h-32"
                       v-model="sample.description"
+                      :disabled="formSubmitted"
                     ></textarea>
                     <div
                       class="text-red-500 mt-3 text-xs font-bold"
-                      v-if="sampleError && sampleError.description !== undefined"
-                    >{{ sampleError.description[0] }}</div>
+                      v-if="formErrors && formErrors.description !== undefined"
+                    >{{ formErrors.description[0] }}</div>
                   </div>
                 </div>
                 <div class="text-right">
                   <a
                     href="#"
-                    class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400"
+                    :class="{
+                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
+                      'cursor-not-allowed bg-gray-400': formSubmitted,
+                      }"
+                    class="inline-block px-3 py-1 font-bold rounded-full"
                     v-on:click="submit"
                   >
-                    <i class="fa fa-upload mr-1"></i> Ajouter
+                    <span v-show="formSubmitted">
+                      <i class="fa fa-spinner fa-spin fa-fw"></i>
+                    </span>
+                    <span v-show="!formSubmitted">
+                      <i class="fa fa-upload mr-1"></i> Ajouter
+                    </span>
                   </a>
                 </div>
               </div>
@@ -161,6 +173,7 @@
 let uploadMaxSize = 10 * 1048576; // 10 Mo
 let mimesTypes = ["audio/mpeg", "audio/mp3"];
 import axios from "axios";
+import _ from "lodash";
 
 export default {
   data() {
@@ -181,7 +194,8 @@ export default {
       fileInput: "",
       uploadProgress: 0,
       uploadError: "",
-      sampleError: {},
+      formErrors: {},
+      formSubmitted: false,
       currentTag: ""
     };
   },
@@ -363,6 +377,7 @@ export default {
         formData = new FormData();
 
       if (!this.sample.id) return;
+      if (this.formSubmitted) return;
 
       formData.append("id", this.sample.id);
       formData.append("name", this.sample.name);
@@ -374,6 +389,8 @@ export default {
       formData.append("description", this.sample.description);
       formData.append("thumbnail", this.files.thumbnail);
 
+      vm.formSubmitted = true;
+
       axios
         .post("/samples", formData, {
           headers: { "Content-Type": "multipart/form-data" }
@@ -383,7 +400,8 @@ export default {
             window.location = "/samples/" + response.data.id;
           },
           error => {
-            this.sampleError = error.response.data.errors;
+            vm.formSubmitted = false;
+            vm.formErrors = error.response.data.errors;
           }
         );
     }

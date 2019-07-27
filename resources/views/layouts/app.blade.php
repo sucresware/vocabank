@@ -41,7 +41,7 @@
         @yield('content')
     </div>
 
-    <footer class="container w-full mx-auto text-gray-500 text-xs text-center mt-8">
+    <footer class="container w-full mx-auto text-gray-500 text-xs text-center my-8">
         <div class="mb-2"><img src="/svg/logo.svg" class="h-3 inline align-text-bottom"> &copy; 2019</div>
         <strong>VocaBank</strong>, parce qu'on entendait rien sur <a
             href="https://risibank.fr">RisiBank</a>.<br>

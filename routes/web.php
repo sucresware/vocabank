@@ -30,6 +30,10 @@ Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples
 Route::get('/samples/{sample}/download', 'SampleController@download')->name('samples.download');
 Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');
 
+Route::get('/samples/{sample}/next', 'SampleController@next')->name('samples.next');
+Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.prev');
+
 Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
+Route::get('/samples/check-unique', 'SampleController@checkUnique')->name('samples.check_unique');
 
 Route::resource('samples', 'SampleController');

@@ -19,23 +19,31 @@ class SampleController extends Controller
 
     public function recent()
     {
-        $samples = Sample::orderBy('created_at', 'DESC')->paginate(10);
+        $samples = Sample::public()->orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('sample.index', compact('samples'));
+        if (request()->ajax()) {
+            return $samples;
+        }
+
+        return view('sample.index', compact('samples'))->with('filter', 'recent');
     }
 
     public function popular()
     {
-        $samples = Sample::orderByViews()->paginate(10);
+        $samples = Sample::public()->orderByViews()->paginate(15);
 
-        return view('sample.index', compact('samples'));
+        if (request()->ajax()) {
+            return $samples;
+        }
+
+        return view('sample.index', compact('samples'))->with('filter', 'popular');
     }
 
     public function search(Request $request)
     {
         if ($request->q) {
             $q = explode(' ', $request->q);
-            $samples = Sample::query();
+            $samples = Sample::public();
 
             foreach ($q as $q_) {
                 $samples = $samples->whereHas('tags', function ($query) use ($q_) {
@@ -43,7 +51,7 @@ class SampleController extends Controller
                 });
             }
 
-            $samples = $samples->paginate(10);
+            $samples = $samples->paginate(15);
 
             return view('sample.index', compact('samples'))->with('q', $request->q);
         } else {
@@ -53,7 +61,7 @@ class SampleController extends Controller
 
     public function random()
     {
-        $sample = Sample::limit(1)->inRandomOrder()->first();
+        $sample = Sample::public()->limit(1)->inRandomOrder()->first();
 
         return redirect()->route('samples.show', $sample);
     }
@@ -63,16 +71,52 @@ class SampleController extends Controller
         return view('sample.create');
     }
 
+    public function show(Sample $sample)
+    {
+        if ($sample->status != Sample::STATUS_PUBLIC) {
+            abort(403);
+        }
+
+        return view('sample.show', compact('sample'));
+    }
+
+    public function next(Sample $sample)
+    {
+        $next_sample = $sample->next;
+
+        if ($next_sample) {
+            return redirect()->route('samples.show', $next_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
+    public function prev(Sample $sample)
+    {
+        $prev_sample = $sample->prev;
+
+        if ($prev_sample) {
+            return redirect()->route('samples.show', $prev_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
     public function store(Request $request)
     {
         request()->validate([
             'id'        => ['required'],
-            'name'      => ['required', 'min:3', 'max:60'],
+            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name'],
             'tags'      => ['required', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
         ]);
 
         $sample = Sample::findOrFail(request()->id);
+
+        if ($sample->status != Sample::STATUS_DRAFT);
+
+        $sample->name = $request->name;
+        $sample->description = $request->description;
 
         if ($request->hasFile('thumbnail')) {
             $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
@@ -102,18 +146,14 @@ class SampleController extends Controller
         // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
         // $sample->audio = request()->audio->storeAs('samples', $audio_name);
 
-        $sample->save();
-
         foreach ($request->tags as $tag) {
             Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
         }
 
-        return $sample;
-    }
+        $sample->status = Sample::STATUS_PUBLIC;
+        $sample->save();
 
-    public function show(Sample $sample)
-    {
-        return view('sample.show', compact('sample'));
+        return $sample;
     }
 
     public function iframe(Sample $sample)
@@ -207,5 +247,14 @@ class SampleController extends Controller
         $sample->save();
 
         return $sample;
+    }
+
+    public function checkUnique()
+    {
+        request()->validate([
+            'name' => ['required', 'unique:samples,name'],
+        ]);
+
+        return true;
     }
 }

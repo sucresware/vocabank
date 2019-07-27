@@ -32,4 +32,19 @@ class Sample extends Model implements ViewableContract
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function scopePublic($query)
+    {
+        return $query->whereStatus(static::STATUS_PUBLIC);
+    }
+
+    public function getNextAttribute()
+    {
+        return static::public()->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
+    }
+
+    public function getPrevAttribute()
+    {
+        return static::public()->where('id', '<', $this->id)->orderBy('id', 'desc')->first();
+    }
 }

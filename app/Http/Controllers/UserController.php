@@ -16,7 +16,11 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $samples = $user->samples()->orderBy('created_at', 'DESC')->paginate(10);
+        $samples = $user->samples()->public()->orderBy('created_at', 'DESC')->paginate(12);
+
+        if (request()->ajax()) {
+            return $samples;
+        }
 
         return view('user.show', compact('user', 'samples'));
     }

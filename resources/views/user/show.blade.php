@@ -19,15 +19,16 @@
         </div>
     </div>
     <div class="pl-5 flex-1">
-        <div class="bg-white border rounded shadow mb-3">
-            @forelse ($samples as $sample)
-                <sample-preview :sample="{{ $sample }}" :views="{{ views($sample)->count() }}"></sample-preview>
-            @empty
-                Aucun sample envoyé par l'utilisateur !
-            @endforelse
-        </div>
-
-        {{ $samples->links() }}
+        @if (count($samples))
+            <samples-index
+            :paginator="{{ $samples->toJson() }}"
+            :infinite="false"
+            ></samples-index>
+        @else
+            <div class="bg-white border rounded shadow mb-3 p-3 text-gray-500">
+                Aucun sample envoyé par le membre.
+            </div>
+        @endif
     </div>
 </div>
 @endsection

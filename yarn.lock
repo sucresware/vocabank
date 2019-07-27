@@ -5729,6 +5729,10 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
+v-debounce@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/v-debounce/-/v-debounce-0.1.2.tgz#cab75df7def2783215bf449ef85c69c2decf0a55"
+
 v8-compile-cache@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.0.3.tgz#00f7494d2ae2b688cfe2899df6ed2c54bef91dbe"
@@ -5748,6 +5752,10 @@ vm-browserify@^1.0.1:
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
+
+vue-infinite-loading@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/vue-infinite-loading/-/vue-infinite-loading-2.4.4.tgz#8a9defb9ceeea797c057cb36bdf558a4b2ce409f"
 
 vue-loader@^15.4.2:
   version "15.7.1"

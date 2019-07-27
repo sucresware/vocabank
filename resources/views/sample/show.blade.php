@@ -7,9 +7,11 @@
 @section('content')
 
     <div class="flex mb-5 justify-between items-center">
-        <div>
-            <a href="#" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-left"></i></a>
-        </div>
+        @if ($sample->prev)
+            <div>
+                <a href="{{ route('samples.prev', $sample) }}" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-left"></i></a>
+            </div>
+        @endif
         <div class="mx-5 flex-1">
             <div class="bg-white border rounded shadow mb-3">
                 <div class="flex flex-wrap">
@@ -21,9 +23,9 @@
                     </div>
                     <div class="flex-1">
                         <sample-player :sample="{{ $sample }}"></sample-player>
-
-                        <div class="p-5">
-                            <div class="flex flex-wrap mb-1">
+                        <div class="p-5 pt-0">
+                            <div class="my-3 mt-0 bg-gray-200" style="height: 1px;"></div>
+                            <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-gray-500">
                                     Nom
                                 </div>
@@ -31,38 +33,49 @@
                                     {{ $sample->name }}
                                 </div>
                             </div>
-                            <div class="flex flex-wrap mb-1">
+                            @if ($sample->description)
+                            <div class="flex flex-wrap mb-2">
+                                <div class="w-48 text-gray-500">
+                                    Description
+                                </div>
+                                <div class="flex-1 ">
+                                    {{ nl2br($sample->description) }}
+                                </div>
+                            </div>
+                            @endif
+                            <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-gray-500">
                                     Tags
                                 </div>
-                                <div class="flex-1 font-bold">
+                                <div class="flex-1 ">
                                     @foreach($sample->tags as $tag)
-                                        <a href="{{ route('samples.search') }}?q={{ $tag->name }}">{{ $tag->name }}</a>
+                                        <a href="{{ route('samples.search') }}?q={{ $tag->name }}" class="text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 mr-1 inline-block">{{ $tag->name }}</a>
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="flex flex-wrap mb-1">
+                            <div class="my-3 bg-gray-200" style="height: 1px;"></div>
+                            <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-gray-500">
                                     Date d'ajout
                                 </div>
-                                <div class="flex-1 font-bold">
+                                <div class="flex-1 ">
                                     {{ $sample->created_at->format('d/m/Y à H:i') }}
                                 </div>
                             </div>
-                            <div class="flex flex-wrap mb-1">
+                            <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-gray-500">
                                     Auteur
                                 </div>
-                                <div class="flex-1 font-bold">
-                                    <a href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</a>
+                                <div class="flex-1 ">
+                                    <a class="text-gray-600 hover:text-gray-500" href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</a>
                                 </div>
                             </div>
-                            <div class="flex flex-wrap mb-1">
+                            <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-gray-500">
                                     Vues
                                 </div>
                                 <div class="flex-1">
-                                    <span class="font-bold">{{ views($sample)->count() }}</span> ({{ views($sample)->unique()->count() }})
+                                    <span class="">{{ views($sample)->count() }}</span> ({{ views($sample)->unique()->count() }})
                                 </div>
                             </div>
                             <div class="mt-10">
@@ -75,9 +88,11 @@
                 </div>
             </div>
         </div>
+        @if ($sample->next)
         <div>
-            <a href="#" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-right"></i></a>
+            <a href="{{ route('samples.next', $sample) }}" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-right"></i></a>
         </div>
+        @endif
     </div>
 
 
