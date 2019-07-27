@@ -57,7 +57,7 @@
         {{ views }}
       </div>
 
-      <div class="absolute bottom-0 left-0 bg-teal-400" style="height: 3px;"></div>
+      <div class="absolute bottom-0 left-0 bg-teal-500" style="height: 3px;"></div>
     </div>
     <!-- <div
       style="height: 30px; border-bottom-width: 1px;"

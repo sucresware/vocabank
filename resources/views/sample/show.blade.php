@@ -5,78 +5,81 @@
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    Sample <strong>#{{ $sample->id }}</strong>
-                </div>
-                <div class="card-body blue text-center dimmed-border-bottom">
-                    <img src="{{ $sample->thumbnail_link }}" class="img-fluid rounded mb-4 shadow" style="max-height: 150px; width: 150px;">
-                    {!! $sample->render() !!}
-                </div>
-                <div class="card-body white row no-gutters dimmed-border-bottom">
-                    <div class="col-3 pr-2">
-                        <strong>Nom</strong>
+
+    <div class="flex mb-5 justify-between items-center">
+        <div>
+            <a href="#" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-left"></i></a>
+        </div>
+        <div class="mx-5 flex-1">
+            <div class="bg-white border rounded shadow mb-3">
+                <div class="flex flex-wrap">
+                    <div class="overflow-hidden flex relative">
+                        <img src="{{ $sample->thumbnail ? '/storage/' . $sample->thumbnail : '/img/default.png' }}" class="object-cover h-full" style="filter: blur(10px); transform: scale(1.1);">
+                        <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                            <img src="{{ $sample->thumbnail ? '/storage/' . $sample->thumbnail : '/img/default.png' }}" class="h-48 w-48 shadow-lg rounded-full">
+                        </div>
                     </div>
-                    <div class="col-9">
-                        {{ $sample->name }}
-                    </div>
-                </div>
-                <div class="card-body blue row no-gutters dimmed-border-bottom">
-                    <div class="col-3 pr-2">
-                        <strong>Tags</strong>
-                    </div>
-                    <div class="col-9">
-                        @foreach($sample->tags as $tag)
-                            <a href="{{ route('samples.search') }}?q={{ $tag->name }}">{{ $tag->name }}</a>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="card-body white row no-gutters dimmed-border-bottom">
-                    <div class="col-3 pr-2">
-                        <strong>Ajouté</strong>
-                    </div>
-                    <div class="col-9">
-                        le {{ $sample->created_at->format('d/m/Y à H:i') }} par <a href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</a>
-                    </div>
-                </div>
-                <div class="card-body blue row no-gutters dimmed-border-bottom">
-                    <div class="col-3 pr-2">
-                        <strong>Vues</strong>
-                    </div>
-                    <div class="col-9">
-                        {{ views($sample)->count() }}
-                    </div>
-                </div>
-                <div class="card-body white row no-gutters dimmed-border-bottom">
-                    <div class="col-3 pr-2">
-                        <strong>Vues uniques</strong>
-                    </div>
-                    <div class="col-9">
-                        {{ views($sample)->unique()->count() }}
-                    </div>
-                </div>
-                <div class="card-body blue row no-gutters dimmed-border-bottom align-items-center">
-                    <div class="col-3 pr-2">
-                        <strong>Partage</strong>
-                    </div>
-                    <div class="col-9">
-                        <div class="input-group">
-                            <input id="s{{ $sample->id }}" value="{{ route('samples.show', $sample) }}" class="form-control">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" data-clipboard-target="#s{{ $sample->id }}" data-clipboard><i class="fas fa-link fa-fw mr-1"></i> Copier le lien</button>
+                    <div class="flex-1">
+                        <sample-player :sample="{{ $sample }}"></sample-player>
+
+                        <div class="p-5">
+                            <div class="flex flex-wrap mb-1">
+                                <div class="w-48 text-gray-500">
+                                    Nom
+                                </div>
+                                <div class="flex-1 font-bold">
+                                    {{ $sample->name }}
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mb-1">
+                                <div class="w-48 text-gray-500">
+                                    Tags
+                                </div>
+                                <div class="flex-1 font-bold">
+                                    @foreach($sample->tags as $tag)
+                                        <a href="{{ route('samples.search') }}?q={{ $tag->name }}">{{ $tag->name }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mb-1">
+                                <div class="w-48 text-gray-500">
+                                    Date d'ajout
+                                </div>
+                                <div class="flex-1 font-bold">
+                                    {{ $sample->created_at->format('d/m/Y à H:i') }}
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mb-1">
+                                <div class="w-48 text-gray-500">
+                                    Auteur
+                                </div>
+                                <div class="flex-1 font-bold">
+                                    <a href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</a>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mb-1">
+                                <div class="w-48 text-gray-500">
+                                    Vues
+                                </div>
+                                <div class="flex-1">
+                                    <span class="font-bold">{{ views($sample)->count() }}</span> ({{ views($sample)->unique()->count() }})
+                                </div>
+                            </div>
+                            <div class="mt-10">
+                                <a href="#" class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400"><i class="fa fa-copy mr-1"></i> Copier le lien</a>
+                                <a href="#" class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400"><i class="fa fa-heart"></i></a>
+                                <a href="{{ route('samples.download', $sample) }}" class="inline-block mr-1 px-3 py-1 font-bold rounded-full hover:bg-gray-200"><i class="fa fa-download mr-1"></i> Télécharger</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body white text-center">
-                    <a href="{{ route('samples.download', $sample) }}" class="btn btn-primary">Télécharger</a>
-                    <a href="mailto:contact@4sucres.org" class="btn btn-outline-danger">Signaler</a>
-                </div>
             </div>
         </div>
+        <div>
+            <a href="#" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fas fa-angle-right"></i></a>
+        </div>
     </div>
+
+
 </div>
 @endsection

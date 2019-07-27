@@ -10,6 +10,16 @@ class Sample extends Model implements ViewableContract
 {
     use Viewable;
 
+    const STATUS_DRAFT = 0;
+    const STATUS_PROCESSING = 1;
+    const STATUS_PUBLIC = 2;
+    const STATUS_UNLISTED = 3;
+    const STATUS_REMOVED = 4;
+
+    protected $casts = [
+        'options' => 'array',
+    ];
+
     protected $guarded = [];
 
     public function user()

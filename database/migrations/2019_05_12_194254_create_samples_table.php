@@ -13,12 +13,17 @@ class CreateSamplesTable extends Migration
     {
         Schema::create('samples', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
             $table->bigInteger('user_id')->unsigned();
+
+            $table->string('name');
+            $table->unsignedInteger('status')->default(Sample::STATUS_DRAFT);
 
             $table->string('audio')->nullable();
             $table->string('waveform')->nullable();
             $table->string('thumbnail')->nullable();
+
+            $table->text('description')->nullable();
+            $table->json('options')->nullable();
 
             $table->timestamps();
         });

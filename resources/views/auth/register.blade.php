@@ -1,40 +1,59 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Inscription</div>
+@section('title')
+    Connexion
+@endsection
 
-                <div class="card-body">
-                    {!! BootForm::horizontal([
-                        'url' => route('register'),
-                        'method' => 'post',
-                        'left_column_class' => 'col-md-3',
-                        'left_column_offset_class' => 'col-md-offset-3',
-                        'right_column_class' => 'col-md-8'
-                    ]) !!}
-                        @csrf
-
-                        {!! BootForm::text('name', 'Pseudo*', old('name'), ['help_text' => "Attention, contrairement à 4sucres.org, tu peux pas le changer après."]) !!}
-                        {!! BootForm::text('email', 'Adresse email*', old('email'), ['help_text' => "Ton email ne sera jamais partagé ou affiché publiquement."]) !!}
-                        {!! BootForm::password('password', 'Mot de passe*', ['help_text' => "6 caractères minimum, c'est important pour la sécurité."]) !!}
-
-                       <div class="card-footer bg-light">
-                        <div class="text-center mb-3">
-                            <small>En t'inscrivant et en utilisant nos services, tu déclares avoir lu et accepter sans réserve les <a href="{{ route('terms') }}">Conditions générales d'utilisation</a>.</small>
-                        </div>
-
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Inscription</button>
-                        </div>
-                    </div>
-
-                    {!! BootForm::close() !!}
+@section('body')
+<body class="bg-gray-800 text-gray-200 w-full h-screen text-sm">
+    <div class="flex w-full h-screen items-center justify-center">
+        <div class="w-1/6">
+            <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48">
+        </div>
+        <div class="w-1/6">
+            <div class="flex text-center mb-5">
+                <a href="{{ route('login') }}" class="w-1/2 pb-3 text-gray-600 hover:text-gray-400">
+                    Connexion
+                </a>
+                <div class="w-1/2 pb-3 text-white font-bold border-teal-500" style="border-bottom-width: 2px;">
+                    Inscription
                 </div>
             </div>
+
+
+            <form action="{{ route('register') }}" method="post">
+                @csrf
+
+                <input type="text" placeholder="Pseudo" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="name" value="{{ old('name') }}">
+
+                @if ($errors->has('name'))
+                    <div class="text-red-500 mb-3 text-xs font-bold">
+                        {{ $errors->first('name') }}
+                    </div>
+                @endif
+
+                <input type="text" placeholder="Adresse e-mail" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="email" value="{{ old('email') }}">
+
+                @if ($errors->has('email'))
+                    <div class="text-red-500 mb-3 text-xs font-bold">
+                        {{ $errors->first('email') }}
+                    </div>
+                @endif
+
+                <input type="password" placeholder="Mot de passe" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="password">
+
+                @if ($errors->has('password'))
+                    <div class="text-red-500 mb-3 text-xs font-bold">
+                        <strong>{{ $errors->first('password') }}
+                    </div>
+                @endif
+
+                <div class="text-right">
+                    <button type="submit" class="hover:bg-gray-700 text-white text-center px-3 py-1 font-bold rounded-full"><i class="fa fa-sign-in-alt mr-1"></i> Créer un compte</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
+</body>
+
 @endsection

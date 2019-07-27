@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
         User::firstOrCreate([
             'email' => 'sr@mgk.dev',
         ], [
-            'name' => 'YvonEnbaver',
+            'name'     => 'YvonEnbaver',
             'password' => \Hash::make('1234'),
         ])->assignRole('admin');
     }

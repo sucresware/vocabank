@@ -1,1 +1,1 @@
-<sample-component :sample="{{ $sample }}" :views="{{ views($sample)->count() }}"></sample-component>
+<sample-preview :sample="{{ $sample }}" :views="{{ views($sample)->count() }}"></sample-preview>

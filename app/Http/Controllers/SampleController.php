@@ -84,7 +84,7 @@ class SampleController extends Controller
             //         }
             //     },
             // ],
-            'audio' => ['required', 'file', 'mimetypes:audio/mpeg,audio/mp3'],
+            'audio'     => ['required', 'file', 'mimetypes:audio/mpeg,audio/mp3'],
             'thumbnail' => ['image'],
         ]);
         $validator->validate();
@@ -97,7 +97,7 @@ class SampleController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
-            Image::make($request->thumbnail)->fit(300)->save(Storage::path('public/samples/' . $thumbnail_name));
+            Image::make($request->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
             $sample->thumbnail = 'samples/' . $thumbnail_name;
         }
 
@@ -209,5 +209,9 @@ class SampleController extends Controller
         //     'Content-Disposition' => trim($headers['Content-Disposition'], ':'),
         //     'Pragma' => 'public',
         // ]);
+    }
+
+    public function preflight()
+    {
     }
 }

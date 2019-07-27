@@ -29,4 +29,7 @@ Route::get('/samples/random', 'SampleController@random')->name('samples.random')
 Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples.listen');
 Route::get('/samples/{sample}/download', 'SampleController@download')->name('samples.download');
 Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');
+
+Route::put('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
+
 Route::resource('samples', 'SampleController');
