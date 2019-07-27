@@ -2273,6 +2273,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var uploadMaxSize = 10 * 1048576; // 10 Mo
 
 var mimesTypes = ["audio/mpeg", "audio/mp3"];
@@ -2283,89 +2304,158 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
       dropzone: true,
       moreFields: false,
       sample: {
+        id: "",
         thumbnail: "/img/default.png",
-        name: null,
+        name: "",
         tags: [],
-        description: null
+        description: ""
       },
       files: {
-        audio: null,
-        thumbnail: null
+        audio: "",
+        thumbnail: ""
       },
-      fileInput: null,
+      fileInput: "",
       uploadProgress: 0,
-      uploadError: null,
-      currentTag: null
+      uploadError: "",
+      sampleError: {},
+      currentTag: ""
     };
   },
   mounted: function mounted() {
     var vm = this,
-        el = document.getElementById("dropzone");
-    el.addEventListener("dragenter", function (e) {
+        dropzone = document.getElementById("dropzone"),
+        thumbnail = document.getElementById("thumbnail");
+    dropzone.addEventListener("dragenter", function (e) {
       e.preventDefault();
-      el.classList.add("border-teal-400");
-      el.classList.add("bg-gray-100");
+      dropzone.classList.add("border-teal-400");
+      dropzone.classList.add("bg-gray-100");
     });
-    el.addEventListener("dragover", function (e) {
+    dropzone.addEventListener("dragover", function (e) {
       e.preventDefault();
-      el.classList.add("border-teal-400");
-      el.classList.add("bg-gray-100");
+      dropzone.classList.add("border-teal-400");
+      dropzone.classList.add("bg-gray-100");
     });
-    el.addEventListener("dragleave", function (e) {
+    dropzone.addEventListener("dragleave", function (e) {
       e.preventDefault();
-      el.classList.remove("border-teal-400");
-      el.classList.remove("bg-gray-100");
+      dropzone.classList.remove("border-teal-400");
+      dropzone.classList.remove("bg-gray-100");
     });
-    el.addEventListener("drop", function (e) {
+    dropzone.addEventListener("drop", function (e) {
       e.preventDefault();
-      el.classList.remove("border-teal-400");
-      el.classList.remove("bg-gray-100");
-      el.classList.remove("border-red-500");
+      dropzone.classList.remove("border-teal-400");
+      dropzone.classList.remove("bg-gray-100");
+      dropzone.classList.remove("border-red-500");
       vm.uploadError = null;
       vm.processAudioFile(e.dataTransfer.files[0]);
+    });
+    thumbnail.addEventListener("dragenter", function (e) {
+      e.preventDefault();
+      thumbnail.classList.add("border-teal-400");
+      thumbnail.classList.add("opacity-100");
+      thumbnail.classList.add("bg-gray-100");
+    });
+    thumbnail.addEventListener("dragover", function (e) {
+      e.preventDefault();
+      thumbnail.classList.add("border-teal-400");
+      thumbnail.classList.add("opacity-100");
+      thumbnail.classList.add("bg-gray-100");
+    });
+    thumbnail.addEventListener("dragleave", function (e) {
+      e.preventDefault();
+      thumbnail.classList.remove("border-teal-400");
+      thumbnail.classList.remove("bg-gray-100");
+      thumbnail.classList.remove("opacity-100");
+    });
+    thumbnail.addEventListener("drop", function (e) {
+      e.preventDefault();
+      thumbnail.classList.remove("border-teal-400");
+      thumbnail.classList.remove("bg-gray-100");
+      thumbnail.classList.remove("opacity-100");
+      thumbnail.classList.remove("border-red-500");
+      vm.uploadError = null;
+      vm.processThumbnailFile(e.dataTransfer.files[0]);
     });
   },
   methods: {
     onAudioInputChange: function onAudioInputChange(e) {
       this.processAudioFile(e.target.files[0]);
     },
-    processAudioFile: function processAudioFile(uploadedFile) {
+    processAudioFile: function processAudioFile(file) {
       var vm = this,
           el = document.getElementById("dropzone");
 
-      if (uploadedFile.size > uploadMaxSize) {
+      if (file.size > uploadMaxSize) {
         el.classList.add("border-red-500");
         this.uploadError = "La taille du fichier doit être inférieure à 10 Mo.";
         return;
       }
 
-      if (mimesTypes.indexOf(uploadedFile.type) === -1) {
+      if (mimesTypes.indexOf(file.type) === -1) {
         el.classList.add("border-red-500");
-        this.uploadError = "Le format du fichier est invalide (" + uploadedFile.type + ")";
+        this.uploadError = "Le format du fichier est invalide (" + file.type + ")";
         return;
       }
 
-      this.files.audio = uploadedFile;
-      this.sample.name = uploadedFile.name;
+      this.files.audio = file;
+      this.sample.name = file.name.substring(0, file.name.lastIndexOf("."));
       this.dropzone = false;
       this.uploadAudioFile();
     },
     uploadAudioFile: function uploadAudioFile() {
-      var formData = new FormData();
+      var vm = this,
+          formData = new FormData();
       formData.append("audio", this.files.audio);
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/samples/preflight", formData, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples/preflight", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
         onUploadProgress: function onUploadProgress(progressEvent) {
-          return console.log(progressEvent.loaded, progressEvent.total);
+          vm.uploadProgress = Math.round(progressEvent.loaded / progressEvent.total * 100);
         }
+      }).then(function (response) {
+        vm.sample.id = response.data.id;
+      }, function (error) {
+        document.getElementById("dropzone").classList.add("border-red-500");
+
+        if (error.response) {
+          vm.uploadError = error.response.data.errors.audio[0];
+        }
+
+        vm.dropzone = true;
       });
     },
-    appendTag: function appendTag() {
-      var safeTag = this.currentTag.trim().replace(" ", "-");
+    onThumbnailInputChange: function onThumbnailInputChange(e) {
+      this.processThumbnailFile(e.target.files[0]);
+    },
+    processThumbnailFile: function processThumbnailFile(file) {
+      var vm = this,
+          el = document.getElementById("thumbnail");
 
-      if (safeTag && safeTag != "" && this.sample.tags.indexOf(safeTag) == -1) {
+      if (file.size > 2 * 1048576) {
+        el.classList.add("border-red-500");
+        return;
+      }
+
+      var extension = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
+
+      if (extension != "gif" && extension != "png" && extension != "bmp" && extension != "jpeg" && extension != "jpg") {
+        el.classList.add("border-red-500");
+        return;
+      }
+
+      this.files.thumbnail = file;
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        vm.sample.thumbnail = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    appendTag: function appendTag() {
+      var safeTag = this.currentTag.trim().replace(/  */gi, "-");
+
+      if (safeTag && safeTag != "" && this.sample.tags.indexOf(safeTag) == -1 && safeTag.length < 30 && this.sample.tags.length < 10) {
         this.sample.tags.push(safeTag);
       }
 
@@ -2373,6 +2463,29 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
     },
     removeTag: function removeTag(i) {
       this.sample.tags.splice(i, 1);
+    },
+    submit: function submit() {
+      var _this = this;
+
+      var vm = this,
+          formData = new FormData();
+      if (!this.sample.id) return;
+      formData.append("id", this.sample.id);
+      formData.append("name", this.sample.name);
+      this.sample.tags.forEach(function (tag, i) {
+        formData.append("tags[" + i + "]", tag);
+      });
+      formData.append("description", this.sample.description);
+      formData.append("thumbnail", this.files.thumbnail);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(function (response) {
+        window.location = "/samples/" + response.data.id;
+      }, function (error) {
+        _this.sampleError = error.response.data.errors;
+      });
     }
   }
 });
@@ -43979,13 +44092,42 @@ var render = function() {
                 _c("div", { staticClass: "mb-10" }, [
                   _c("div", { staticClass: "flex items-center" }, [
                     _c("div", { staticClass: "mr-3" }, [
-                      _c("i", { staticClass: "fa fa-fw fa-spinner fa-spin" })
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.uploadProgress < 100,
+                            expression: "uploadProgress < 100"
+                          }
+                        ],
+                        staticClass: "fa fa-fw fa-spinner fa-spin"
+                      }),
+                      _vm._v(" "),
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.uploadProgress >= 100,
+                            expression: "uploadProgress >= 100"
+                          }
+                        ],
+                        staticClass: "fa fa-fw fa-check-circle"
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "flex-1" }, [
                       _vm.files.audio
                         ? _c("div", { staticClass: "text-xs mb-1" }, [
-                            _vm._v(_vm._s(_vm.files.audio.name))
+                            _vm._v(
+                              "\n                  " +
+                                _vm._s(_vm.files.audio.name) +
+                                "\n                  "
+                            ),
+                            _c("span", { staticClass: "text-gray-500" }, [
+                              _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
+                            ])
                           ])
                         : _vm._e(),
                       _vm._v(" "),
@@ -44020,35 +44162,31 @@ var render = function() {
                         {
                           staticClass:
                             "opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
-                          staticStyle: { background: "rgba(0, 0, 0, 0.5)" }
+                          staticStyle: { background: "rgba(0, 0, 0, 0.5)" },
+                          attrs: {
+                            onclick:
+                              "document.getElementById('thumbnailInput').click()",
+                            id: "thumbnail"
+                          }
                         },
                         [_c("i", { staticClass: "text-xs fas fa-upload" })]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
-                          staticStyle: {
-                            background: "rgba(0, 0, 0, 0.5)",
-                            display: "none"
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "text-xs fas fa-play" }),
-                          _vm._v(" "),
-                          _c("i", {
-                            staticClass: "text-xs fas fa-pause",
-                            staticStyle: { display: "none" }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            staticClass: "text-xs fas fa-circle-notch fa-spin",
-                            staticStyle: { display: "none" }
-                          })
-                        ]
-                      )
+                      _c("input", {
+                        staticClass: "hidden",
+                        attrs: { type: "file", id: "thumbnailInput" },
+                        on: { change: _vm.onThumbnailInputChange }
+                      }),
+                      _vm._v(" "),
+                      _vm.sampleError && _vm.sampleError.thumbnail !== undefined
+                        ? _c(
+                            "div",
+                            {
+                              staticClass: "text-red-500 mt-3 text-xs font-bold"
+                            },
+                            [_vm._v(_vm._s(_vm.sampleError.thumbnail[0]))]
+                          )
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -44082,7 +44220,17 @@ var render = function() {
                             _vm.$set(_vm.sample, "name", $event.target.value)
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.sampleError && _vm.sampleError.name !== undefined
+                        ? _c(
+                            "div",
+                            {
+                              staticClass: "text-red-500 mt-3 text-xs font-bold"
+                            },
+                            [_vm._v(_vm._s(_vm.sampleError.name[0]))]
+                          )
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "mb-3" }, [
@@ -44103,7 +44251,7 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "border-gray-300 border rounded w-full px-2 py-1 mb-3",
+                          "border-gray-300 border rounded w-full px-2 py-1",
                         attrs: { type: "text" },
                         domProps: { value: _vm.currentTag },
                         on: {
@@ -44148,9 +44296,19 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _vm.sampleError && _vm.sampleError.tags !== undefined
+                        ? _c(
+                            "div",
+                            {
+                              staticClass: "text-red-500 mt-3 text-xs font-bold"
+                            },
+                            [_vm._v(_vm._s(_vm.sampleError.tags[0]))]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c(
                         "div",
-                        { staticClass: "mb-3" },
+                        { staticClass: "my-3" },
                         _vm._l(_vm.sample.tags, function(tag, i) {
                           return _c(
                             "div",
@@ -44256,7 +44414,19 @@ var render = function() {
                                 )
                               }
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.sampleError &&
+                          _vm.sampleError.description !== undefined
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "text-red-500 mt-3 text-xs font-bold"
+                                },
+                                [_vm._v(_vm._s(_vm.sampleError.description[0]))]
+                              )
+                            : _vm._e()
                         ])
                       ]
                     ),
@@ -44267,7 +44437,8 @@ var render = function() {
                         {
                           staticClass:
                             "inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400",
-                          attrs: { href: "#" }
+                          attrs: { href: "#" },
+                          on: { click: _vm.submit }
                         },
                         [
                           _c("i", { staticClass: "fa fa-upload mr-1" }),

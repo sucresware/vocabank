@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Models\Sample;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -66,43 +65,20 @@ class SampleController extends Controller
 
     public function store(Request $request)
     {
-        // $request->merge(['tags', Helper::stripAccents($request->tags)]);
-
-        $validator = \Validator::make($request->all(), [
-            'name' => ['required', 'min:3', 'max:60'],
-            // 'vocaroo_link' => ['required', 'regex:' . '/http(?:s|):\/\/vocaroo.com\/i\/((?:\w|-)*)/m'],
-            // 'tags' => [
-            //     'required', 'regex:' . '/^(?:[a-zA-Z0-9]| )+$/m',
-            //     function ($attribute, $value, $fail) {
-            //         $tags = explode(' ', $value);
-            //         $tags = array_unique($tags);
-            //         if (count($tags) < 3) {
-            //             $fail('Tu dois spécifier au moins 3 tags!');
-            //         }
-            //         if (count($tags) > 10) {
-            //             $fail('Maximum 10 tags !');
-            //         }
-            //     },
-            // ],
-            'audio'     => ['required', 'file', 'mimetypes:audio/mpeg,audio/mp3'],
-            'thumbnail' => ['image'],
+        request()->validate([
+            'id'        => ['required'],
+            'name'      => ['required', 'min:3', 'max:60'],
+            'tags'      => ['required', 'array'],
+            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
         ]);
-        $validator->validate();
 
-        $sample = new Sample([
-            'name' => $request->name,
-        ]);
-        $sample->user()->associate(auth()->user());
-        $sample->save();
+        $sample = Sample::findOrFail(request()->id);
 
         if ($request->hasFile('thumbnail')) {
             $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
             Image::make($request->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
             $sample->thumbnail = 'samples/' . $thumbnail_name;
         }
-
-        $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
-        $sample->audio = request()->audio->storeAs('samples', $audio_name);
 
         try {
             $waveform_name = $sample->id . '_waveform_' . time() . '.png';
@@ -118,18 +94,21 @@ class SampleController extends Controller
             }
             $sample->waveform = 'samples/' . $waveform_name;
             File::delete($waveform_temp_path);
+            // TODO: Store waveforme to remote storage
         } catch (\Exception $e) {
         }
 
+        // TODO: Move audio from temp storage to remote
+        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        // $sample->audio = request()->audio->storeAs('samples', $audio_name);
+
         $sample->save();
 
-        // foreach (explode(' ', $request->tags) as $tag) {
-        //     Tag::firstOrCreate([
-        //         'name' => $tag,
-        //     ])->samples()->attach($sample);
-        // }
+        foreach ($request->tags as $tag) {
+            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+        }
 
-        return redirect()->route('samples.show', $sample);
+        return $sample;
     }
 
     public function show(Sample $sample)
@@ -213,5 +192,20 @@ class SampleController extends Controller
 
     public function preflight()
     {
+        request()->validate([
+            'audio' => ['required', 'file', 'max:10240', 'mimetypes:audio/mpeg,audio/mp3'],
+        ]);
+
+        $sample = auth()->user()->samples()->create(
+            ['name' => request()->file('audio')->getClientOriginalName()]
+        );
+
+        $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
+
+        $sample->audio = $storage_path;
+        $sample->save();
+
+        return $sample;
     }
 }

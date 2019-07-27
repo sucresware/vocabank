@@ -4,11 +4,12 @@ namespace App\Models;
 
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
+use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Database\Eloquent\Model;
 
 class Sample extends Model implements ViewableContract
 {
-    use Viewable;
+    use Viewable, HasSettingsTable;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
