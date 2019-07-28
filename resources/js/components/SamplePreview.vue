@@ -54,7 +54,7 @@
       </div>
       <div class="z-20 ml-auto">
         <i class="fas fa-undo"></i>
-        {{ views }}
+        {{ sample.views }}
       </div>
 
       <div class="absolute bottom-0 left-0 bg-teal-500" style="height: 3px;"></div>

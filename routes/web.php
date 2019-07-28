@@ -34,6 +34,6 @@ Route::get('/samples/{sample}/next', 'SampleController@next')->name('samples.nex
 Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.prev');
 
 Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
-Route::get('/samples/check-unique', 'SampleController@checkUnique')->name('samples.check_unique');
+Route::post('/samples/preflight/youtube', 'SampleController@preflightYouTube')->name('samples.preflight.youtube');
 
 Route::resource('samples', 'SampleController');

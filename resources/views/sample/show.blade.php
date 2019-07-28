@@ -75,7 +75,7 @@
                                     Vues
                                 </div>
                                 <div class="flex-1">
-                                    <span class="">{{ views($sample)->count() }}</span> ({{ views($sample)->unique()->count() }})
+                                    <span class="">{{ $sample->views }}</span> ({{ views($sample)->unique()->count() }})
                                 </div>
                             </div>
                             <div class="mt-10">

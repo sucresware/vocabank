@@ -23,6 +23,10 @@ class Sample extends Model implements ViewableContract
 
     protected $guarded = [];
 
+    protected $appends = [
+        'views',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -46,5 +50,10 @@ class Sample extends Model implements ViewableContract
     public function getPrevAttribute()
     {
         return static::public()->where('id', '<', $this->id)->orderBy('id', 'desc')->first();
+    }
+
+    public function getViewsAttribute()
+    {
+        return $this->views()->count();
     }
 }

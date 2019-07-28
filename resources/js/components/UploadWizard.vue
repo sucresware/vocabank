@@ -1,7 +1,31 @@
 <template>
   <div>
+    <div class="flex text-center mb-5">
+      <button
+        :class="{
+        'font-bold border-teal-500': importType == 'mp3',
+        'text-gray-600 hover:text-gray-500': importType != 'mp3'
+        }"
+        class="pb-3 px-5"
+        style="border-bottom-width: 2px;"
+        v-on:click="importType = 'mp3'"
+      >
+        <i class="fa fa-upload mr-1"></i> #balance-ton-mp3
+      </button>
+      <button
+        :class="{
+        'font-bold border-teal-500': importType == 'youtube',
+        'text-gray-600 hover:text-gray-500': importType != 'youtube'
+        }"
+        class="pb-3 px-5"
+        style="border-bottom-width: 2px;"
+        v-on:click="importType = 'youtube'"
+      >
+        <i class="fab fa-youtube mr-1"></i> Importer depuis YouTube
+      </button>
+    </div>
     <div class="bg-white shadow p-10 mb-5">
-      <slide-up-down :active="dropzone" :duration="300">
+      <slide-up-down :active="step == 1 && importType == 'mp3'" :duration="300">
         <div
           class="border-gray-300 border-dashed border-2 w-full flex rounded items-center justify-center text-center"
           style="height: 50vh;"
@@ -23,7 +47,78 @@
           </div>
         </div>
       </slide-up-down>
-      <slide-up-down :active="!dropzone" :duration="300">
+      <slide-up-down :active="step == 1 && importType == 'youtube'" :duration="300">
+        <slide-up-down :active="!youtubeImportedVideo" :duration="300">
+          <div class="mb-3">
+            <div class="text-xs mb-1">
+              Lien YouTube
+              <span class="text-red-500">*</span>
+            </div>
+            <input
+              type="text"
+              class="border-gray-300 border rounded w-full px-2 py-1"
+              :disabled="formSubmitted"
+              v-model="youtubeURL"
+            />
+            <div
+              class="text-red-500 mt-3 text-xs font-bold"
+              v-if="formErrors && formErrors.youtubeURL !== undefined"
+            >{{ formErrors.youtubeURL[0] }}</div>
+            <div class="text-right mt-5">
+              <button
+                :class="{
+                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
+                      'cursor-not-allowed bg-gray-400': formSubmitted,
+                      }"
+                class="inline-block px-3 py-1 font-bold rounded-full"
+                v-on:click="processYouTubeURL"
+              >
+                <span v-show="formSubmitted">
+                  <i class="fa fa-spinner fa-spin fa-fw"></i>
+                </span>
+                <span v-show="!formSubmitted">
+                  <i class="fa fa-upload mr-1"></i> Importer
+                </span>
+              </button>
+            </div>
+          </div>
+        </slide-up-down>
+        <slide-up-down :active="youtubeImportedVideo != ''" :duration="300">
+          <div class="mb-3">
+            <div class="flex border-red-600 pl-5" style="border-left-width: 2px;">
+              <img :src="youtubeImportedVideo.thumbnail_url" class="h-16 rounded shadow-lg" />
+              <div class="pl-5">
+                <div class="font-bold">{{ youtubeImportedVideo.title }}</div>
+                {{ youtubeImportedVideo.author_name }}
+              </div>
+            </div>
+            <div class="text-right mt-5">
+              <button
+                class="inline-block px-3 py-1 font-bold rounded-full hover:bg-gray-200"
+                v-on:click="youtubeImportedVideo = ''; youtubeURL = ''"
+              >
+                <span>Annuler</span>
+              </button>
+              <button
+                :class="{
+                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
+                      'cursor-not-allowed bg-gray-400': formSubmitted,
+                      }"
+                class="inline-block px-3 py-1 font-bold rounded-full"
+                v-on:click="processYouTubeURL"
+              >
+                <span v-show="formSubmitted">
+                  <i class="fa fa-spinner fa-spin fa-fw"></i>
+                </span>
+                <span v-show="!formSubmitted">
+                  <i class="fa fa-upload mr-1"></i> Valider
+                </span>
+              </button>
+            </div>
+          </div>
+        </slide-up-down>
+      </slide-up-down>
+      <slide-up-down :active="step == 2" :duration="300">
         <div>
           <div class="mx-auto w-1/2">
             <div class="mb-10">
@@ -178,7 +273,9 @@ import _ from "lodash";
 export default {
   data() {
     return {
-      dropzone: true,
+      importType: "mp3",
+      step: 1,
+      youtubeURL: "",
       moreFields: false,
       sample: {
         id: "",
@@ -196,6 +293,7 @@ export default {
       uploadError: "",
       formErrors: {},
       formSubmitted: false,
+      youtubeImportedVideo: "",
       currentTag: ""
     };
   },
@@ -289,7 +387,7 @@ export default {
 
       this.files.audio = file;
       this.sample.name = file.name.substring(0, file.name.lastIndexOf("."));
-      this.dropzone = false;
+      this.step = 2;
 
       this.uploadAudioFile();
     },
@@ -316,9 +414,27 @@ export default {
             if (error.response) {
               vm.uploadError = error.response.data.errors.audio[0];
             }
-            vm.dropzone = true;
+            vm.step = 1;
           }
         );
+    },
+    processYouTubeURL() {
+      let vm = this,
+        formData = new FormData();
+      formData.append("youtubeURL", this.youtubeURL);
+      vm.formSubmitted = true;
+
+      axios.post("/samples/preflight/youtube", formData).then(
+        response => {
+          vm.youtubeImportedVideo = response.data;
+          vm.formSubmitted = false;
+          vm.formErrors = {};
+        },
+        error => {
+          vm.formSubmitted = false;
+          vm.formErrors = error.response.data.errors;
+        }
+      );
     },
     onThumbnailInputChange(e) {
       this.processThumbnailFile(e.target.files[0]);

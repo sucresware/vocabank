@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Sample;
 use App\Models\Tag;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use maximal\audio\Waveform;
+use Spatie\Regex\Regex;
+use YoutubeDl\Exception\CopyrightException;
+use YoutubeDl\Exception\NotFoundException;
+use YoutubeDl\Exception\PrivateVideoException;
+use YoutubeDl\YoutubeDl;
 
 class SampleController extends Controller
 {
@@ -249,12 +255,109 @@ class SampleController extends Controller
         return $sample;
     }
 
-    public function checkUnique()
+    public function preflightYouTube()
     {
         request()->validate([
-            'name' => ['required', 'unique:samples,name'],
+            'youtubeURL' => ['required'],
         ]);
 
-        return true;
+        $pattern = '/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/m';
+        $match = Regex::match($pattern, request()->youtubeURL);
+
+        if (!$match->hasMatch()) {
+            return response()->json([
+                'errors' => [
+                    'youtubeURL' => [
+                        'Le format du lien est invalide',
+                    ],
+                ],
+            ], 422);
+        }
+
+        try {
+            $client = new Client();
+            $res = $client->get('https://www.googleapis.com/youtube/v3/videos?id=' . $match->group(1) . '&key=' . config('services.youtube.key') . '&part=snippet,contentDetails');
+
+            $data = json_decode($res->getBody()->getContents());
+            // dump($data->items[0]);
+
+            $duration = now()->add($data->items[0]->contentDetails->duration)->diffInSeconds();
+
+            dump($duration);
+
+            if ($duration > 300) {
+                return response()->json([
+                    'errors' => [
+                        'youtubeURL' => [
+                            'La durée de la vidéo doit être inférieure à 5 minutes',
+                        ],
+                    ],
+                ], 422);
+            }
+
+            // $tags = $data->items[0]->tags
+
+            return response()->json([
+                'id'            => $data->items[0]->id,
+                'title'         => $data->items[0]->snippet->title,
+                'author_name'   => $data->items[0]->snippet->channelTitle,
+                'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => [
+                    'youtubeURL' => [
+                        // 'Impossible de récupérer les informations de la vidéo',
+                        $e->getMessage(),
+                    ],
+                ],
+            ], 422);
+        }
+
+        exit;
+
+        // $dl = new YoutubeDl([
+        //     'extract-audio' => true,
+        //     'audio-format'  => 'mp3',
+        //     'audio-quality' => 0, // best
+        //     'output'        => '%(title)s.%(ext)s',
+        // ]);
+        // $dl->setDownloadPath(storage_path('app/temp'));
+
+        // // $dl->
+        // // Enable debugging
+        // /*$dl->debug(function ($type, $buffer) {
+        //     if (\Symfony\Component\Process\Process::ERR === $type) {
+        //         echo 'ERR > ' . $buffer;
+        //     } else {
+        //         echo 'OUT > ' . $buffer;
+        //     }
+        // });*/
+        // try {
+        //     $video = $dl->download(request()->youtubeURL);
+        //     echo $video->getTitle(); // Will return Phonebloks
+        // } catch (NotFoundException $e) {
+        //     return response(['Video not found']);
+        // } catch (PrivateVideoException $e) {
+        //     return response(['Video is private']);
+        // } catch (CopyrightException $e) {
+        //     return response(['The YouTube account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
+        // } catch (\Exception $e) {
+        //     dump($e);
+
+        //     return response(['Failed to download']);
+        // }
+
+        // $sample = auth()->user()->samples()->create(
+        //     ['name' => request()->file('audio')->getClientOriginalName()]
+        // );
+
+        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        // $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
+
+        // $sample->audio = $storage_path;
+        // $sample->save();
+
+        // return $sample;
     }
 }
