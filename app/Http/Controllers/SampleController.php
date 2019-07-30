@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Sample;
 use App\Models\Tag;
+use BoyHagemann\Waveform\Generator\Svg;
+use BoyHagemann\Waveform\Waveform;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use maximal\audio\Waveform;
+use maximal\audio\Waveform as SoX;
 use Spatie\Regex\Regex;
 use YoutubeDl\Exception\CopyrightException;
 use YoutubeDl\Exception\NotFoundException;
@@ -130,24 +132,6 @@ class SampleController extends Controller
             $sample->thumbnail = 'samples/' . $thumbnail_name;
         }
 
-        try {
-            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
-            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
-            $waveform = new Waveform(Storage::path($sample->audio));
-            $height = 512;
-            Waveform::$backgroundColor = [255, 255, 255, 0];
-            $waveform->getWaveform($waveform_temp_path, 2048, $height, true);
-            if ($waveform->getChannels() > 1) {
-                Image::make($waveform_temp_path)->crop(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
-            } else {
-                Image::make($waveform_temp_path)->resize(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
-            }
-            $sample->waveform = 'samples/' . $waveform_name;
-            File::delete($waveform_temp_path);
-            // TODO: Store waveforme to remote storage
-        } catch (\Exception $e) {
-        }
-
         // TODO: Move audio from temp storage to remote
         // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
         // $sample->audio = request()->audio->storeAs('samples', $audio_name);
@@ -250,6 +234,25 @@ class SampleController extends Controller
         $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
 
         $sample->audio = $storage_path;
+
+        try {
+            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
+            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
+            $waveform = new SoX(Storage::path($sample->audio));
+            $height = 512;
+            SoX::$backgroundColor = [255, 255, 255, 0];
+            $waveform->getWaveform($waveform_temp_path, 2048, $height, true);
+            if ($waveform->getChannels() > 1) {
+                Image::make($waveform_temp_path)->crop(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
+            } else {
+                Image::make($waveform_temp_path)->resize(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
+            }
+            $sample->waveform = 'samples/' . $waveform_name;
+            File::delete($waveform_temp_path);
+            // TODO: Store waveform to remote storage
+        } catch (\Exception $e) {
+        }
+
         $sample->save();
 
         return $sample;
@@ -279,11 +282,7 @@ class SampleController extends Controller
             $res = $client->get('https://www.googleapis.com/youtube/v3/videos?id=' . $match->group(1) . '&key=' . config('services.youtube.key') . '&part=snippet,contentDetails');
 
             $data = json_decode($res->getBody()->getContents());
-            // dump($data->items[0]);
-
             $duration = now()->add($data->items[0]->contentDetails->duration)->diffInSeconds();
-
-            dump($duration);
 
             if ($duration > 300) {
                 return response()->json([
@@ -295,14 +294,18 @@ class SampleController extends Controller
                 ], 422);
             }
 
-            // $tags = $data->items[0]->tags
-
-            return response()->json([
-                'id'            => $data->items[0]->id,
-                'title'         => $data->items[0]->snippet->title,
-                'author_name'   => $data->items[0]->snippet->channelTitle,
-                'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url,
+            $sample = auth()->user()->samples()->create([
+                'name'          => $data->items[0]->snippet->title,
+                'youtube_video' => [
+                    'id'            => $data->items[0]->id,
+                    'title'         => $data->items[0]->snippet->title,
+                    'author_name'   => $data->items[0]->snippet->channelTitle,
+                    'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url,
+                    'duration'      => $duration,
+                ],
             ]);
+
+            return $sample;
         } catch (\Exception $e) {
             return response()->json([
                 'errors' => [
@@ -313,51 +316,56 @@ class SampleController extends Controller
                 ],
             ], 422);
         }
+    }
 
-        exit;
+    public function processYouTube(Sample $sample)
+    {
+        $audio_name = $sample->id . '_youtube_' . time() . '.mp3';
 
-        // $dl = new YoutubeDl([
-        //     'extract-audio' => true,
-        //     'audio-format'  => 'mp3',
-        //     'audio-quality' => 0, // best
-        //     'output'        => '%(title)s.%(ext)s',
-        // ]);
-        // $dl->setDownloadPath(storage_path('app/temp'));
+        $dl = new YoutubeDl([
+            'extract-audio' => true,
+            'audio-format'  => 'mp3',
+            'audio-quality' => 0, // best
+            'output'        => $audio_name,
+        ]);
+        $dl->setDownloadPath(storage_path('app/temp'));
 
-        // // $dl->
-        // // Enable debugging
-        // /*$dl->debug(function ($type, $buffer) {
-        //     if (\Symfony\Component\Process\Process::ERR === $type) {
-        //         echo 'ERR > ' . $buffer;
-        //     } else {
-        //         echo 'OUT > ' . $buffer;
-        //     }
-        // });*/
-        // try {
-        //     $video = $dl->download(request()->youtubeURL);
-        //     echo $video->getTitle(); // Will return Phonebloks
-        // } catch (NotFoundException $e) {
-        //     return response(['Video not found']);
-        // } catch (PrivateVideoException $e) {
-        //     return response(['Video is private']);
-        // } catch (CopyrightException $e) {
-        //     return response(['The YouTube account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
-        // } catch (\Exception $e) {
-        //     dump($e);
+        try {
+            $dl->download('https://www.youtube.com/watch?v=' . $sample->youtube_video['id']);
+        } catch (NotFoundException $e) {
+            return response(['Video not found']);
+        } catch (PrivateVideoException $e) {
+            return response(['Video is private']);
+        } catch (CopyrightException $e) {
+            return response(['The YouTube account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
+        } catch (\Exception $e) {
+            return response([$e->getMessage()]);
+        }
 
-        //     return response(['Failed to download']);
-        // }
+        $sample->audio = 'temp/' . $audio_name;
 
-        // $sample = auth()->user()->samples()->create(
-        //     ['name' => request()->file('audio')->getClientOriginalName()]
-        // );
+        try {
+            $waveform_name = $sample->id . '_waveform_' . time() . '.svg';
+            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
 
-        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
-        // $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
+            $waveform = Waveform::fromFilename(Storage::path($sample->audio));
+            $waveform->setGenerator(new Svg())
+                    ->setWidth(2048)
+                    ->setHeight(512);
 
-        // $sample->audio = $storage_path;
-        // $sample->save();
+            $waveform_svg = $waveform->generate();
+            file_put_contents($waveform_temp_path, $waveform_svg);
+            $sample->waveform = 'samples/' . $waveform_name;
+            // File::delete($waveform_temp_path);
+            // TODO: Store waveform to remote storage
+        } catch (\Exception $e) {
+            dd($e->getMessage());
 
-        // return $sample;
+            return response([$e->getMessage()]);
+        }
+
+        $sample->save();
+
+        return $sample;
     }
 }

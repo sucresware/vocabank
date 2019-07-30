@@ -1,265 +1,235 @@
 <template>
-  <div>
-    <div class="flex text-center mb-5">
-      <button
-        :class="{
-        'font-bold border-teal-500': importType == 'mp3',
-        'text-gray-600 hover:text-gray-500': importType != 'mp3'
-        }"
-        class="pb-3 px-5"
-        style="border-bottom-width: 2px;"
-        v-on:click="importType = 'mp3'"
-      >
-        <i class="fa fa-upload mr-1"></i> #balance-ton-mp3
-      </button>
-      <button
-        :class="{
-        'font-bold border-teal-500': importType == 'youtube',
-        'text-gray-600 hover:text-gray-500': importType != 'youtube'
-        }"
-        class="pb-3 px-5"
-        style="border-bottom-width: 2px;"
-        v-on:click="importType = 'youtube'"
-      >
-        <i class="fab fa-youtube mr-1"></i> Importer depuis YouTube
-      </button>
-    </div>
-    <div class="bg-white shadow p-10 mb-5">
-      <slide-up-down :active="step == 1 && importType == 'mp3'" :duration="300">
-        <div
-          class="border-gray-300 border-dashed border-2 w-full flex rounded items-center justify-center text-center"
-          style="height: 50vh;"
-          id="dropzone"
-        >
-          <div>
-            <div class="font-bold text-xl mb-5">#balance-ton-mp3</div>
-            <a
-              href="#"
-              class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
-              onclick="document.getElementById('audioInput').click()"
-            >
-              <i class="fa fa-upload mr-1"></i> ou #sélectionne-ton-mp3
-            </a>
-            <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
-
-            <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
-            <div class="text-xs">(format mp3 — max. 10 Mo)</div>
-          </div>
+  <div class="flex w-full justify-center">
+    <div class="w-1/2">
+      <slide-up-down :active="step == 1" :duration="300">
+        <div class="flex flex-wrap">
+          <button
+            :class="{
+          'font-bold border-teal-500': importType == 'mp3',
+          'text-gray-600 hover:text-gray-500': importType != 'mp3'
+          }"
+            class="flex-auto pb-3 px-4"
+            style="border-bottom-width: 2px;"
+            v-on:click="importType = 'mp3'"
+          >
+            <i class="fa fa-upload mr-1"></i> #balance-ton-mp3
+          </button>
+          <button
+            :class="{
+          'font-bold border-teal-500': importType == 'youtube',
+          'text-gray-600 hover:text-gray-500': importType != 'youtube'
+          }"
+            class="flex-auto pb-3 px-4"
+            style="border-bottom-width: 2px;"
+            v-on:click="importType = 'youtube'"
+          >
+            <i class="fab fa-youtube mr-1"></i> Importer depuis YouTube
+          </button>
         </div>
       </slide-up-down>
-      <slide-up-down :active="step == 1 && importType == 'youtube'" :duration="300">
-        <slide-up-down :active="!youtubeImportedVideo" :duration="300">
+      <div class="bg-white shadow p-10 mb-5">
+        <slide-up-down :active="step == 1 && importType == 'mp3'" :duration="300">
+          <div
+            class="border-gray-300 border-dashed border-2 w-full flex rounded items-center justify-center text-center"
+            style="height: 50vh;"
+            id="dropzone"
+          >
+            <div>
+              <div class="font-bold text-xl mb-5">#balance-ton-mp3</div>
+              <a
+                href="#"
+                class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
+                onclick="document.getElementById('audioInput').click()"
+              >
+                <i class="fa fa-upload mr-1"></i> ou #sélectionne-ton-mp3
+              </a>
+              <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
+
+              <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
+              <div class="text-xs">(format mp3 — max. 10 Mo)</div>
+            </div>
+          </div>
+        </slide-up-down>
+        <slide-up-down :active="step == 1 && importType == 'youtube'" :duration="300">
+          <div class="text-xs mb-1">
+            Lien YouTube
+            <span class="text-red-500">*</span>
+          </div>
+          <input
+            type="text"
+            class="border-gray-300 border rounded w-full px-2 py-1"
+            :disabled="formSubmitted"
+            v-model="youtubeURL"
+          />
+          <div
+            class="text-red-500 mt-3 text-xs font-bold"
+            v-if="formErrors && formErrors.youtubeURL !== undefined"
+          >{{ formErrors.youtubeURL[0] }}</div>
+          <div class="text-right mt-5">
+            <button
+              :class="{
+                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
+                      'cursor-not-allowed bg-gray-400': formSubmitted,
+                      }"
+              class="inline-block px-3 py-1 font-bold rounded-full"
+              v-on:click="processYouTubeURL"
+            >
+              <span v-show="formSubmitted">
+                <i class="fa fa-spinner fa-spin fa-fw"></i>
+              </span>
+              <span v-show="!formSubmitted">
+                <i class="fa fa-upload mr-1"></i> Importer
+              </span>
+            </button>
+          </div>
+        </slide-up-down>
+        <slide-up-down :active="step == 2" :duration="300">
+          <div class="mx-auto relative h-32 w-32 mb-5">
+            <img
+              :src="sample.thumbnail == '' ? sample.youtube_video.thumbnail_url : sample.thumbnail"
+              class="w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg"
+            />
+
+            <div
+              class="opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center"
+              style="background: rgba(0, 0, 0, 0.5);"
+              onclick="document.getElementById('thumbnailInput').click()"
+              id="thumbnail"
+            >
+              <i class="text-xs fas fa-upload"></i>
+            </div>
+            <input
+              type="file"
+              id="thumbnailInput"
+              v-on:change="onThumbnailInputChange"
+              class="hidden"
+            />
+            <div
+              class="text-red-500 mt-3 text-xs font-bold"
+              v-if="formErrors && formErrors.thumbnail !== undefined"
+            >{{ formErrors.thumbnail[0] }}</div>
+          </div>
           <div class="mb-3">
             <div class="text-xs mb-1">
-              Lien YouTube
+              Sample
+              <span class="text-red-500">*</span>
+            </div>
+            <div class="flex items-center border-gray-300 border rounded w-full px-3 py-2 relative">
+              <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
+                <img
+                  :src="'/storage/' + sample.waveform"
+                  class="w-full h-full"
+                  style="opacity: 0.2;"
+                />
+              </div>
+              <div class="mr-3">
+                <i class="fa fa-fw fa-spinner fa-spin" v-show="!processingComplete"></i>
+                <i class="fa fa-fw fa-check-circle text-teal-400" v-show="processingComplete"></i>
+              </div>
+              <div class="flex-1" v-if="importType == 'mp3'">
+                <div class="text-xs mb-1">
+                  {{ files.audio.name }}
+                  <span class="text-gray-500">({{ uploadProgress }}%)</span>
+                </div>
+                <div class="border-gray-300 border rounded w-full h-2 relative">
+                  <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
+                </div>
+              </div>
+              <div
+                class="flex-1 flex items-center"
+                v-if="importType == 'youtube' && sample.youtube_video != ''"
+              >
+                <div>
+                  <img :src="sample.youtube_video.thumbnail_url" class="h-10 rounded mr-3" />
+                </div>
+                <div class="flex-1 text-xs">
+                  <i class="fab fa-youtube mr-1"></i>
+                  <span class="font-bold">{{ sample.youtube_video.title }}</span>
+                  <br />
+                  {{ sample.youtube_video.author_name }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="text-xs mb-1">
+              Nom
               <span class="text-red-500">*</span>
             </div>
             <input
               type="text"
               class="border-gray-300 border rounded w-full px-2 py-1"
+              v-model="sample.name"
               :disabled="formSubmitted"
-              v-model="youtubeURL"
             />
             <div
               class="text-red-500 mt-3 text-xs font-bold"
-              v-if="formErrors && formErrors.youtubeURL !== undefined"
-            >{{ formErrors.youtubeURL[0] }}</div>
-            <div class="text-right mt-5">
-              <button
-                :class="{
-                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
-                      'cursor-not-allowed bg-gray-400': formSubmitted,
-                      }"
-                class="inline-block px-3 py-1 font-bold rounded-full"
-                v-on:click="processYouTubeURL"
-              >
-                <span v-show="formSubmitted">
-                  <i class="fa fa-spinner fa-spin fa-fw"></i>
-                </span>
-                <span v-show="!formSubmitted">
-                  <i class="fa fa-upload mr-1"></i> Importer
-                </span>
-              </button>
-            </div>
+              v-if="formErrors && formErrors.name !== undefined"
+            >{{ formErrors.name[0] }}</div>
           </div>
-        </slide-up-down>
-        <slide-up-down :active="youtubeImportedVideo != ''" :duration="300">
           <div class="mb-3">
-            <div class="flex border-red-600 pl-5" style="border-left-width: 2px;">
-              <img :src="youtubeImportedVideo.thumbnail_url" class="h-16 rounded shadow-lg" />
-              <div class="pl-5">
-                <div class="font-bold">{{ youtubeImportedVideo.title }}</div>
-                {{ youtubeImportedVideo.author_name }}
-              </div>
+            <div class="text-xs mb-1">
+              Tags
+              <span class="text-red-500">*</span>
             </div>
-            <div class="text-right mt-5">
-              <button
-                class="inline-block px-3 py-1 font-bold rounded-full hover:bg-gray-200"
-                v-on:click="youtubeImportedVideo = ''; youtubeURL = ''"
-              >
-                <span>Annuler</span>
-              </button>
-              <button
-                :class="{
-                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
-                      'cursor-not-allowed bg-gray-400': formSubmitted,
+            <input
+              type="text"
+              class="border-gray-300 border rounded w-full px-2 py-1"
+              @keyup.enter="appendTag()"
+              @keyup.space="appendTag()"
+              v-model="currentTag"
+              :disabled="formSubmitted"
+            />
+            <div
+              class="text-red-500 mt-3 text-xs font-bold"
+              v-if="formErrors && formErrors.tags !== undefined"
+            >{{ formErrors.tags[0] }}</div>
+
+            <div class="my-3">
+              <div
+                class="text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block"
+                v-for="(tag, i) in sample.tags"
+                :key="i"
+                v-on:click="removeTag(i)"
+              >{{ tag }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="mb-3">
+              <div class="text-xs mb-1">Description</div>
+              <textarea
+                type="text"
+                class="border-gray-300 border rounded w-full px-2 py-1 h-32"
+                v-model="sample.description"
+                :disabled="formSubmitted"
+              ></textarea>
+              <div
+                class="text-red-500 mt-3 text-xs font-bold"
+                v-if="formErrors && formErrors.description !== undefined"
+              >{{ formErrors.description[0] }}</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <a
+              href="#"
+              :class="{
+                      'bg-gray-300 hover:bg-gray-400': !formSubmitted && processingComplete,
+                      'cursor-not-allowed bg-gray-400': formSubmitted || !processingComplete,
                       }"
-                class="inline-block px-3 py-1 font-bold rounded-full"
-                v-on:click="processYouTubeURL"
-              >
-                <span v-show="formSubmitted">
-                  <i class="fa fa-spinner fa-spin fa-fw"></i>
-                </span>
-                <span v-show="!formSubmitted">
-                  <i class="fa fa-upload mr-1"></i> Valider
-                </span>
-              </button>
-            </div>
+              class="inline-block px-3 py-1 font-bold rounded-full"
+              v-on:click="submit"
+            >
+              <span v-show="formSubmitted || !processingComplete">
+                <i class="fa fa-spinner fa-spin fa-fw"></i>
+              </span>
+              <span v-show="!formSubmitted && processingComplete">
+                <i class="fa fa-upload mr-1"></i> Ajouter
+              </span>
+            </a>
           </div>
         </slide-up-down>
-      </slide-up-down>
-      <slide-up-down :active="step == 2" :duration="300">
-        <div>
-          <div class="mx-auto w-1/2">
-            <div class="mb-10">
-              <div class="flex items-center">
-                <div class="mr-3">
-                  <i class="fa fa-fw fa-spinner fa-spin" v-show="uploadProgress < 100"></i>
-                  <i class="fa fa-fw fa-check-circle" v-show="uploadProgress >= 100"></i>
-                </div>
-                <div class="flex-1">
-                  <div class="text-xs mb-1" v-if="files.audio">
-                    {{ files.audio.name }}
-                    <span class="text-gray-500">({{ uploadProgress }}%)</span>
-                  </div>
-                  <div class="border-gray-300 border rounded w-full h-2">
-                    <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex w-full justify-center">
-              <div>
-                <div class="relative h-32 w-32">
-                  <img
-                    :src="sample.thumbnail"
-                    class="w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0"
-                  />
-                  <div
-                    class="opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center"
-                    style="background: rgba(0, 0, 0, 0.5);"
-                    onclick="document.getElementById('thumbnailInput').click()"
-                    id="thumbnail"
-                  >
-                    <i class="text-xs fas fa-upload"></i>
-                  </div>
-                  <input
-                    type="file"
-                    id="thumbnailInput"
-                    v-on:change="onThumbnailInputChange"
-                    class="hidden"
-                  />
-                  <div
-                    class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="formErrors && formErrors.thumbnail !== undefined"
-                  >{{ formErrors.thumbnail[0] }}</div>
-                </div>
-              </div>
-              <div class="ml-5 w-full">
-                <div class="mb-3">
-                  <div class="text-xs mb-1">
-                    Nom
-                    <span class="text-red-500">*</span>
-                  </div>
-                  <input
-                    type="text"
-                    class="border-gray-300 border rounded w-full px-2 py-1"
-                    v-model="sample.name"
-                    :disabled="formSubmitted"
-                  />
-                  <div
-                    class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="formErrors && formErrors.name !== undefined"
-                  >{{ formErrors.name[0] }}</div>
-                </div>
-                <div class="mb-3">
-                  <div class="text-xs mb-1">
-                    Tags
-                    <span class="text-red-500">*</span>
-                  </div>
-                  <input
-                    type="text"
-                    class="border-gray-300 border rounded w-full px-2 py-1"
-                    @keyup.enter="appendTag()"
-                    @keyup.space="appendTag()"
-                    v-model="currentTag"
-                    :disabled="formSubmitted"
-                  />
-                  <div
-                    class="text-red-500 mt-3 text-xs font-bold"
-                    v-if="formErrors && formErrors.tags !== undefined"
-                  >{{ formErrors.tags[0] }}</div>
-
-                  <div class="my-3">
-                    <div
-                      class="text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block"
-                      v-for="(tag, i) in sample.tags"
-                      :key="i"
-                      v-on:click="removeTag(i)"
-                    >{{ tag }}</div>
-                  </div>
-                </div>
-                <div v-show="!moreFields" class="text-center text-xs my-3">
-                  <div class="bg-gray-400" style="height: 1px;"></div>
-                  <div class="-mt-2">
-                    <span
-                      class="bg-white px-2 text-gray-600 cursor-pointer"
-                      v-on:click="moreFields = !moreFields"
-                    >
-                      plus
-                      <i class="fa fa-angle-down"></i>
-                    </span>
-                  </div>
-                </div>
-                <div v-show="moreFields">
-                  <div class="mb-3">
-                    <div class="text-xs mb-1">Description</div>
-                    <textarea
-                      type="text"
-                      class="border-gray-300 border rounded w-full px-2 py-1 h-32"
-                      v-model="sample.description"
-                      :disabled="formSubmitted"
-                    ></textarea>
-                    <div
-                      class="text-red-500 mt-3 text-xs font-bold"
-                      v-if="formErrors && formErrors.description !== undefined"
-                    >{{ formErrors.description[0] }}</div>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <a
-                    href="#"
-                    :class="{
-                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
-                      'cursor-not-allowed bg-gray-400': formSubmitted,
-                      }"
-                    class="inline-block px-3 py-1 font-bold rounded-full"
-                    v-on:click="submit"
-                  >
-                    <span v-show="formSubmitted">
-                      <i class="fa fa-spinner fa-spin fa-fw"></i>
-                    </span>
-                    <span v-show="!formSubmitted">
-                      <i class="fa fa-upload mr-1"></i> Ajouter
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </slide-up-down>
+      </div>
     </div>
   </div>
 </template>
@@ -275,14 +245,16 @@ export default {
     return {
       importType: "mp3",
       step: 1,
-      youtubeURL: "",
-      moreFields: false,
+      youtubeURL: "https://www.youtube.com/watch?v=0VOClq2B0gA",
       sample: {
         id: "",
         thumbnail: "/img/default.png",
+        waveform: "",
         name: "",
         tags: [],
-        description: ""
+        description: "",
+        settings: {},
+        youtube_video: ""
       },
       files: {
         audio: "",
@@ -290,6 +262,7 @@ export default {
       },
       fileInput: "",
       uploadProgress: 0,
+      processingComplete: false,
       uploadError: "",
       formErrors: {},
       formSubmitted: false,
@@ -298,8 +271,7 @@ export default {
     };
   },
   mounted() {
-    let vm = this,
-      dropzone = document.getElementById("dropzone"),
+    let dropzone = document.getElementById("dropzone"),
       thumbnail = document.getElementById("thumbnail");
 
     dropzone.addEventListener("dragenter", e => {
@@ -327,8 +299,8 @@ export default {
       dropzone.classList.remove("bg-gray-100");
 
       dropzone.classList.remove("border-red-500");
-      vm.uploadError = null;
-      vm.processAudioFile(e.dataTransfer.files[0]);
+      this.uploadError = null;
+      this.processAudioFile(e.dataTransfer.files[0]);
     });
 
     thumbnail.addEventListener("dragenter", e => {
@@ -360,8 +332,8 @@ export default {
       thumbnail.classList.remove("opacity-100");
 
       thumbnail.classList.remove("border-red-500");
-      vm.uploadError = null;
-      vm.processThumbnailFile(e.dataTransfer.files[0]);
+      this.uploadError = null;
+      this.processThumbnailFile(e.dataTransfer.files[0]);
     });
   },
   methods: {
@@ -369,8 +341,7 @@ export default {
       this.processAudioFile(e.target.files[0]);
     },
     processAudioFile(file) {
-      let vm = this,
-        el = document.getElementById("dropzone");
+      let el = document.getElementById("dropzone");
 
       if (file.size > uploadMaxSize) {
         el.classList.add("border-red-500");
@@ -392,47 +363,61 @@ export default {
       this.uploadAudioFile();
     },
     uploadAudioFile() {
-      let vm = this,
-        formData = new FormData();
+      let formData = new FormData();
       formData.append("audio", this.files.audio);
 
       axios
         .post("/samples/preflight", formData, {
           headers: { "Content-Type": "multipart/form-data" },
           onUploadProgress: progressEvent => {
-            vm.uploadProgress = Math.round(
+            this.uploadProgress = Math.round(
               (progressEvent.loaded / progressEvent.total) * 100
             );
           }
         })
         .then(
           response => {
-            vm.sample.id = response.data.id;
+            this.processingComplete = true;
+            this.sample.id = response.data.id;
+            this.sample.waveform = response.data.waveform;
           },
           error => {
             document.getElementById("dropzone").classList.add("border-red-500");
             if (error.response) {
-              vm.uploadError = error.response.data.errors.audio[0];
+              this.uploadError = error.response.data.errors.audio[0];
             }
-            vm.step = 1;
+            this.step = 1;
           }
         );
     },
     processYouTubeURL() {
-      let vm = this,
-        formData = new FormData();
+      if (this.formSubmitted) return;
+
+      let formData = new FormData();
       formData.append("youtubeURL", this.youtubeURL);
-      vm.formSubmitted = true;
+
+      this.formSubmitted = true;
 
       axios.post("/samples/preflight/youtube", formData).then(
         response => {
-          vm.youtubeImportedVideo = response.data;
-          vm.formSubmitted = false;
-          vm.formErrors = {};
+          this.sample.id = response.data.id;
+          this.sample.name = response.data.name;
+          this.sample.youtube_video = response.data.youtube_video;
+          this.sample.thumbnail = "";
+          this.step = 2;
+          this.formSubmitted = false;
+          this.formErrors = {};
+
+          axios
+            .get("/samples/" + response.data.id + "/process-youtube")
+            .then(response => {
+              this.processingComplete = true;
+              this.sample.waveform = response.data.waveform;
+            });
         },
         error => {
-          vm.formSubmitted = false;
-          vm.formErrors = error.response.data.errors;
+          this.formSubmitted = false;
+          this.formErrors = error.response.data.errors;
         }
       );
     },
@@ -440,8 +425,7 @@ export default {
       this.processThumbnailFile(e.target.files[0]);
     },
     processThumbnailFile(file) {
-      let vm = this,
-        el = document.getElementById("thumbnail");
+      let el = document.getElementById("thumbnail");
 
       if (file.size > 2 * 1048576) {
         el.classList.add("border-red-500");
@@ -467,7 +451,7 @@ export default {
 
       let reader = new FileReader();
       reader.onload = e => {
-        vm.sample.thumbnail = e.target.result;
+        this.sample.thumbnail = e.target.result;
       };
       reader.readAsDataURL(file);
     },
@@ -489,11 +473,10 @@ export default {
       this.sample.tags.splice(i, 1);
     },
     submit() {
-      let vm = this,
-        formData = new FormData();
+      let formData = new FormData();
 
       if (!this.sample.id) return;
-      if (this.formSubmitted) return;
+      if (this.formSubmitted || !this.processingComplete) return;
 
       formData.append("id", this.sample.id);
       formData.append("name", this.sample.name);
@@ -505,7 +488,7 @@ export default {
       formData.append("description", this.sample.description);
       formData.append("thumbnail", this.files.thumbnail);
 
-      vm.formSubmitted = true;
+      this.formSubmitted = true;
 
       axios
         .post("/samples", formData, {
@@ -516,8 +499,8 @@ export default {
             window.location = "/samples/" + response.data.id;
           },
           error => {
-            vm.formSubmitted = false;
-            vm.formErrors = error.response.data.errors;
+            this.formSubmitted = false;
+            this.formErrors = error.response.data.errors;
           }
         );
     }

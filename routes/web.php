@@ -35,5 +35,6 @@ Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.pre
 
 Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
 Route::post('/samples/preflight/youtube', 'SampleController@preflightYouTube')->name('samples.preflight.youtube');
+Route::get('/samples/{sample}/process-youtube', 'SampleController@processYouTube')->name('samples.process.youtube');
 
 Route::resource('samples', 'SampleController');

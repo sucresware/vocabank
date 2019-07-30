@@ -25,6 +25,7 @@ class CreateSamplesTable extends Migration
 
             $table->text('description')->nullable();
             $table->json('settings')->nullable();
+            $table->json('youtube_video')->nullable();
 
             $table->timestamps();
         });

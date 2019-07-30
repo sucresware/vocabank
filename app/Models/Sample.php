@@ -18,7 +18,7 @@ class Sample extends Model implements ViewableContract
     const STATUS_REMOVED = 4;
 
     protected $casts = [
-        'options' => 'array',
+        'youtube_video' => 'array',
     ];
 
     protected $guarded = [];
