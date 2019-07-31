@@ -18,6 +18,7 @@ class CreateSamplesTable extends Migration
 
             $table->string('name');
             $table->unsignedInteger('status')->default(Sample::STATUS_DRAFT);
+            $table->unsignedInteger('duration')->default(0);
 
             $table->string('audio')->nullable();
             $table->string('waveform')->nullable();

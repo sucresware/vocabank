@@ -12,15 +12,14 @@
                     </a>
                 </div>
                 <div class="container mx-auto flex flex-wrap">
-                    <div class="pr-3"><a href="#" class="text-white font-bold">Explorer</a></div>
-                    <div class="px-3"><a href="{{ route('users.index') }}" class="text-gray-600 hover:text-gray-400">Membres</a></div>
+                    <div class="pr-3"><a href="{{ route('samples.recent') }}" class="{{ active_class(if_route('samples.recent') || if_route('samples.popular'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Explorer</a></div>
+                    <div class="px-3"><a href="{{ route('users.index') }}" class="{{ active_class(if_route('users.index'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Membres</a></div>
                     @guest
-                        <div class="px-3"><a href="{{ route('register') }}" class="text-gray-600 hover:text-gray-400">Inscription</a></div>
-                        <div class="pl-3"><a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-400">Connexion</a></div>
+                        <div class="px-3"><a href="{{ route('register') }}" class="{{ active_class(if_route('register'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Inscription</a></div>
+                        <div class="pl-3"><a href="{{ route('login') }}" class="{{ active_class(if_route('login'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Connexion</a></div>
                     @else
-                        <div class="px-3"><a href="{{ route('samples.create') }}" class="text-gray-600 hover:text-gray-400">Ajouter</a></div>
-                        <div class="px-3"><a href="{{ route('users.show', auth()->user()) }}" class="text-gray-600 hover:text-gray-400">Profil</a></div>
-                        <div class="px-3"><a href="#" class="text-gray-600 hover:text-gray-400">Favoris</a></div>
+                        <div class="px-3"><a href="{{ route('samples.create') }}" class="{{ active_class(if_route('samples.create'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Ajouter</a></div>
+                        <div class="px-3"><a href="{{ route('users.show', auth()->user()) }}" class="{{ active_class(if_route('users.show', auth()->user()) , 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }}">Profil</a></div>
                         <div class="pl-3"><a href="#" class="text-gray-600 hover:text-gray-400" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Déconnexion</a></div>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                     @endguest
@@ -29,7 +28,7 @@
             <div class="pr-2 md:pr-0 w:1/6">
                 <form action="{{ route('samples.search') }}" method="get">
                     <input type="text" placeholder="Recherche" class="bg-gray-700 rounded-full px-4 py-1 text-white" name="q" value="{{ old('q', $q ?? '') }}">
-                    <button type="submit"><i class="text-gray-600 hover:text-gray-400 -ml-10 fa fa-search"></i></button>
+                    <button type="submit"><i class="{{ active_class(if_route('samples.recent') || if_route('samples.popular'), 'text-white font-bold', 'text-gray-600 hover:text-gray-400') }} -ml-10 fa fa-search"></i></button>
                 </form>
             </div>
         </div>

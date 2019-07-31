@@ -1900,53 +1900,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["sample"],
+  props: ["sample", "autoload", "autoplay"],
   data: function data() {
     return {
       waveSurfer: null,
-      isLoading: false,
+      isLoading: true,
       isPlaying: false
     };
   },
   mounted: function mounted() {
-    var vm = this;
-    this.waveSurfer = wavesurfer_js__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-      container: document.getElementById("wavesurfer-" + this.sample.id),
-      waveColor: "#a0aec0",
-      progressColor: "#00CDCD",
-      cursorWidth: "0px",
-      height: 30,
-      normalize: true,
-      backend: "MediaElement",
-      responsive: true
-    });
-    this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
-    this.waveSurfer.setVolume(0.7);
-    this.isLoading = true;
-    this.waveSurfer.on("ready", function () {
-      vm.isLoading = false;
-      vm.isPlaying = true;
-      vm.waveSurfer.play();
-    });
-    this.waveSurfer.on("play", function () {
-      return vm.isPlaying = true;
-    });
-    this.waveSurfer.on("pause", function () {
-      return vm.isPlaying = false;
-    });
-    this.waveSurfer.on("finish", function () {
-      return vm.isPlaying = false;
-    });
+    if (typeof this.autoload == "undefined") this.autoload = true;
+    if (typeof this.autoplay == "undefined") this.autoplay = true;
+    if (this.autoload) this.load();
   },
   methods: {
+    load: function load() {
+      var vm = this;
+      this.waveSurfer = wavesurfer_js__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+        container: this.$refs.wavesurfer,
+        waveColor: "#a0aec0",
+        progressColor: "#00CDCD",
+        cursorWidth: "0px",
+        height: 30,
+        normalize: true,
+        backend: "MediaElement",
+        responsive: true
+      });
+      this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
+      this.waveSurfer.setVolume(0.7);
+      this.isLoading = true;
+      this.waveSurfer.on("ready", function () {
+        vm.isLoading = false;
+
+        if (vm.autoplay) {
+          vm.isPlaying = true;
+          vm.waveSurfer.play();
+        }
+      });
+      this.waveSurfer.on("play", function () {
+        return vm.isPlaying = true;
+      });
+      this.waveSurfer.on("pause", function () {
+        return vm.isPlaying = false;
+      });
+      this.waveSurfer.on("finish", function () {
+        return vm.isPlaying = false;
+      });
+    },
     toggle: function toggle() {
       this.isPlaying = !this.isPlaying;
       this.waveSurfer.playPause();
@@ -1967,9 +1971,6 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var wavesurfer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! wavesurfer.js */ "./node_modules/wavesurfer.js/dist/wavesurfer.min.js");
 /* harmony import */ var wavesurfer_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(wavesurfer_js__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
 //
 //
 //
@@ -2270,10 +2271,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _SamplePlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SamplePlayer */ "./resources/js/components/SamplePlayer.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -2510,17 +2512,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 var uploadMaxSize = 10 * 1048576; // 10 Mo
 
 var mimesTypes = ["audio/mpeg", "audio/mp3"];
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    SamplePlayer: _SamplePlayer__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       importType: "mp3",
       step: 1,
-      youtubeURL: "https://www.youtube.com/watch?v=0VOClq2B0gA",
+      youtubeURL: "",
       sample: {
         id: "",
         thumbnail: "/img/default.png",
@@ -2632,7 +2641,7 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
 
       var formData = new FormData();
       formData.append("audio", this.files.audio);
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples/preflight", formData, {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples/preflight", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -2643,6 +2652,9 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
         _this2.processingComplete = true;
         _this2.sample.id = response.data.id;
         _this2.sample.waveform = response.data.waveform;
+        _this2.sample.audio = response.data.audio;
+
+        _this2.$refs.samplePlayer.load();
       }, function (error) {
         document.getElementById("dropzone").classList.add("border-red-500");
 
@@ -2660,7 +2672,7 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
       var formData = new FormData();
       formData.append("youtubeURL", this.youtubeURL);
       this.formSubmitted = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples/preflight/youtube", formData).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples/preflight/youtube", formData).then(function (response) {
         _this3.sample.id = response.data.id;
         _this3.sample.name = response.data.name;
         _this3.sample.youtube_video = response.data.youtube_video;
@@ -2668,9 +2680,11 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
         _this3.step = 2;
         _this3.formSubmitted = false;
         _this3.formErrors = {};
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/samples/" + response.data.id + "/process-youtube").then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/samples/" + response.data.id + "/process-youtube").then(function (response) {
           _this3.processingComplete = true;
-          _this3.sample.waveform = response.data.waveform;
+          _this3.sample.audio = response.data.audio;
+
+          _this3.$refs.samplePlayer.load();
         });
       }, function (error) {
         _this3.formSubmitted = false;
@@ -2732,7 +2746,7 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
       formData.append("description", this.sample.description);
       formData.append("thumbnail", this.files.thumbnail);
       this.formSubmitted = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples", formData, {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -44018,9 +44032,9 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", {
+      ref: "wavesurfer",
       staticClass: "w-full flex items-center relative py-8",
-      staticStyle: { height: "30px" },
-      attrs: { id: "wavesurfer-" + _vm.sample.id }
+      staticStyle: { height: "30px" }
     })
   ])
 }
@@ -44079,7 +44093,7 @@ var render = function() {
               [
                 _c("img", {
                   staticClass: "w-full h-full",
-                  staticStyle: { opacity: "0.20" },
+                  staticStyle: { opacity: "0.30" },
                   attrs: { src: "/storage/" + _vm.sample.waveform }
                 })
               ]
@@ -44187,7 +44201,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "z-20 ml-3 truncate font-bold" }, [
-            _vm._v("\n      " + _vm._s(_vm.sample.name) + "\n    ")
+            _vm._v(_vm._s(_vm.sample.name))
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "z-20 ml-auto" }, [
@@ -44669,130 +44683,152 @@ var render = function() {
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c("div", { staticClass: "text-xs mb-1" }, [
-                    _vm._v("\n            Sample\n            "),
-                    _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center border-gray-300 border rounded w-full px-3 py-2 relative"
-                    },
-                    [
-                      _vm.sample.waveform
-                        ? _c(
-                            "div",
-                            {
-                              staticClass:
-                                "absolute px-5 top-0 bottom-0 left-0 right-0"
-                            },
-                            [
-                              _c("img", {
-                                staticClass: "w-full h-full",
-                                staticStyle: { opacity: "0.2" },
-                                attrs: {
-                                  src: "/storage/" + _vm.sample.waveform
-                                }
-                              })
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mr-3" }, [
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: !_vm.processingComplete,
-                              expression: "!processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-spinner fa-spin"
-                        }),
-                        _vm._v(" "),
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.processingComplete,
-                              expression: "processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-check-circle text-teal-400"
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _vm.importType == "mp3"
-                        ? _c("div", { staticClass: "flex-1" }, [
-                            _c("div", { staticClass: "text-xs mb-1" }, [
-                              _vm._v(
-                                "\n                " +
-                                  _vm._s(_vm.files.audio.name) +
-                                  "\n                "
-                              ),
-                              _c("span", { staticClass: "text-gray-500" }, [
-                                _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
+                _c(
+                  "div",
+                  { staticClass: "mb-3" },
+                  [
+                    _c("div", { staticClass: "text-xs mb-1" }, [
+                      _vm._v("\n            Sample\n            "),
+                      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+                    ]),
+                    _vm._v(" "),
+                    _c("sample-player", {
+                      ref: "samplePlayer",
+                      attrs: {
+                        sample: _vm.sample,
+                        autoload: false,
+                        autoplay: false
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "flex items-center border-gray-300 border rounded w-full px-3 py-2 relative"
+                      },
+                      [
+                        _vm.sample.waveform
+                          ? _c(
                               "div",
                               {
                                 staticClass:
-                                  "border-gray-300 border rounded w-full h-2 relative"
+                                  "absolute px-5 top-0 bottom-0 left-0 right-0"
                               },
                               [
-                                _c("div", {
-                                  staticClass: "h-full bg-teal-400",
-                                  style: { width: _vm.uploadProgress + "%" }
+                                _c("img", {
+                                  staticClass: "w-full h-full",
+                                  staticStyle: { opacity: "0.2" },
+                                  attrs: {
+                                    src: "/storage/" + _vm.sample.waveform
+                                  }
                                 })
                               ]
                             )
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.importType == "youtube" &&
-                      _vm.sample.youtube_video != ""
-                        ? _c(
-                            "div",
-                            { staticClass: "flex-1 flex items-center" },
-                            [
-                              _c("div", [
-                                _c("img", {
-                                  staticClass: "h-10 rounded mr-3",
-                                  attrs: {
-                                    src: _vm.sample.youtube_video.thumbnail_url
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "flex-1 text-xs" }, [
-                                _c("i", { staticClass: "fab fa-youtube mr-1" }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "font-bold" }, [
-                                  _vm._v(_vm._s(_vm.sample.youtube_video.title))
-                                ]),
-                                _vm._v(" "),
-                                _c("br"),
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "mr-3" }, [
+                          _c("i", {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: !_vm.processingComplete,
+                                expression: "!processingComplete"
+                              }
+                            ],
+                            staticClass: "fa fa-fw fa-spinner fa-spin"
+                          }),
+                          _vm._v(" "),
+                          _c("i", {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.processingComplete,
+                                expression: "processingComplete"
+                              }
+                            ],
+                            staticClass:
+                              "fa fa-fw fa-check-circle text-teal-400"
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm.importType == "mp3"
+                          ? _c("div", { staticClass: "flex-1" }, [
+                              _c("div", { staticClass: "text-xs mb-1" }, [
                                 _vm._v(
                                   "\n                " +
-                                    _vm._s(
-                                      _vm.sample.youtube_video.author_name
-                                    ) +
-                                    "\n              "
-                                )
-                              ])
-                            ]
-                          )
-                        : _vm._e()
-                    ]
-                  )
-                ]),
+                                    _vm._s(_vm.files.audio.name) +
+                                    "\n                "
+                                ),
+                                _c("span", { staticClass: "text-gray-500" }, [
+                                  _vm._v(
+                                    "(" + _vm._s(_vm.uploadProgress) + "%)"
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "border-gray-300 border rounded w-full h-2 relative"
+                                },
+                                [
+                                  _c("div", {
+                                    staticClass: "h-full bg-teal-400",
+                                    style: { width: _vm.uploadProgress + "%" }
+                                  })
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.importType == "youtube" &&
+                        _vm.sample.youtube_video != ""
+                          ? _c(
+                              "div",
+                              { staticClass: "flex-1 flex items-center" },
+                              [
+                                _c("div", [
+                                  _c("img", {
+                                    staticClass: "h-10 rounded mr-3",
+                                    attrs: {
+                                      src:
+                                        _vm.sample.youtube_video.thumbnail_url
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "flex-1 text-xs" }, [
+                                  _c("i", {
+                                    staticClass: "fab fa-youtube mr-1"
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "font-bold" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.sample.youtube_video.title)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                " +
+                                      _vm._s(
+                                        _vm.sample.youtube_video.author_name
+                                      ) +
+                                      "\n              "
+                                  )
+                                ])
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    )
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c("div", { staticClass: "mb-3" }, [
                   _c("div", { staticClass: "text-xs mb-1" }, [

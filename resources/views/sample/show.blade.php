@@ -80,7 +80,6 @@
                             </div>
                             <div class="mt-10">
                                 <a href="#" class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400"><i class="fa fa-copy mr-1"></i> Copier le lien</a>
-                                <a href="#" class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400"><i class="fa fa-heart"></i></a>
                                 <a href="{{ route('samples.download', $sample) }}" class="inline-block mr-1 px-3 py-1 font-bold rounded-full hover:bg-gray-200"><i class="fa fa-download mr-1"></i> Télécharger</a>
                             </div>
                         </div>

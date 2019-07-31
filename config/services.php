@@ -46,4 +46,11 @@ return [
     'youtube' => [
         'key' => env('YOUTUBE_KEY', 'AIzaSyDYwPzLevXauI-kTSVXTLroLyHEONuF9Rw'),
     ],
+
+    'foursucres' => [
+        'client_id'     => env('4SUCRES_CLIENT_ID'),
+        'client_secret' => env('4SUCRES_CLIENT_SECRET'),
+        'redirect'      => env('4SUCRES_CLIENT_REDIRECT_URL'),
+        'server_url'    => env('4SUCRES_SERVER_URL'),
+    ],
 ];

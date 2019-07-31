@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ConvertToMP3Job;
+use App\Jobs\GenerateWaveformJob;
 use App\Models\Sample;
 use App\Models\Tag;
-use BoyHagemann\Waveform\Generator\Svg;
-use BoyHagemann\Waveform\Waveform;
+use FFMpeg\FFMpeg;
+use FFMpeg\Format\Audio\Mp3;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use maximal\audio\Waveform as SoX;
 use Spatie\Regex\Regex;
 use YoutubeDl\Exception\CopyrightException;
 use YoutubeDl\Exception\NotFoundException;
@@ -110,42 +111,6 @@ class SampleController extends Controller
         return redirect()->route('home');
     }
 
-    public function store(Request $request)
-    {
-        request()->validate([
-            'id'        => ['required'],
-            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name'],
-            'tags'      => ['required', 'array'],
-            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
-        ]);
-
-        $sample = Sample::findOrFail(request()->id);
-
-        if ($sample->status != Sample::STATUS_DRAFT);
-
-        $sample->name = $request->name;
-        $sample->description = $request->description;
-
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
-            Image::make($request->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
-            $sample->thumbnail = 'samples/' . $thumbnail_name;
-        }
-
-        // TODO: Move audio from temp storage to remote
-        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
-        // $sample->audio = request()->audio->storeAs('samples', $audio_name);
-
-        foreach ($request->tags as $tag) {
-            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
-        }
-
-        $sample->status = Sample::STATUS_PUBLIC;
-        $sample->save();
-
-        return $sample;
-    }
-
     public function iframe(Sample $sample)
     {
         return view('sample.iframe', compact('sample'));
@@ -232,30 +197,14 @@ class SampleController extends Controller
 
         $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
         $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
-
         $sample->audio = $storage_path;
-
-        try {
-            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
-            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
-            $waveform = new SoX(Storage::path($sample->audio));
-            $height = 512;
-            SoX::$backgroundColor = [255, 255, 255, 0];
-            $waveform->getWaveform($waveform_temp_path, 2048, $height, true);
-            if ($waveform->getChannels() > 1) {
-                Image::make($waveform_temp_path)->crop(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
-            } else {
-                Image::make($waveform_temp_path)->resize(2048, $height / 2, 0, 0)->save(Storage::path('public/samples/' . $waveform_name));
-            }
-            $sample->waveform = 'samples/' . $waveform_name;
-            File::delete($waveform_temp_path);
-            // TODO: Store waveform to remote storage
-        } catch (\Exception $e) {
-        }
-
         $sample->save();
 
-        return $sample;
+        ConvertToMP3Job::withChain([
+            new GenerateWaveformJob($sample->id),
+        ])->dispatch($sample->id);
+
+        return Sample::findOrFail($sample->id);
     }
 
     public function preflightYouTube()
@@ -300,7 +249,7 @@ class SampleController extends Controller
                     'id'            => $data->items[0]->id,
                     'title'         => $data->items[0]->snippet->title,
                     'author_name'   => $data->items[0]->snippet->channelTitle,
-                    'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url,
+                    'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url ?? $data->items[0]->snippet->thumbnails->default->url,
                     'duration'      => $duration,
                 ],
             ]);
@@ -345,25 +294,61 @@ class SampleController extends Controller
         $sample->audio = 'temp/' . $audio_name;
 
         try {
-            $waveform_name = $sample->id . '_waveform_' . time() . '.svg';
-            $waveform_temp_path = storage_path('app/temp/' . $waveform_name);
+            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
 
-            $waveform = Waveform::fromFilename(Storage::path($sample->audio));
-            $waveform->setGenerator(new Svg())
-                    ->setWidth(2048)
-                    ->setHeight(512);
+            $ffmpeg = FFMpeg::create();
+            $audio = $ffmpeg->open(Storage::path($sample->audio));
+            $audio->save((new Mp3()), storage_path('app/temp', $audio_name));
 
-            $waveform_svg = $waveform->generate();
-            file_put_contents($waveform_temp_path, $waveform_svg);
+            $ffprobe = FFMpeg\FFProbe::create();
+            $sample->duration = $ffprobe
+    ->format(storage_path('app/temp', $audio_name)) // extracts file informations
+    ->get('duration');             // returns the duration property
+
+            $waveform = $audio->waveform(1920, 128, ['#a0aec0']);
+            $waveform->save(Storage::path('public/samples/' . $waveform_name));
             $sample->waveform = 'samples/' . $waveform_name;
-            // File::delete($waveform_temp_path);
-            // TODO: Store waveform to remote storage
         } catch (\Exception $e) {
-            dd($e->getMessage());
+        }
+        $sample->save();
 
-            return response([$e->getMessage()]);
+        return $sample;
+    }
+
+    public function store(Request $request)
+    {
+        request()->validate([
+            'id'        => ['required'],
+            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name'],
+            'tags'      => ['required', 'array'],
+            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
+        ]);
+
+        $sample = Sample::findOrFail(request()->id);
+
+        if ($sample->status != Sample::STATUS_DRAFT);
+
+        $sample->name = $request->name;
+        $sample->description = $request->description;
+
+        $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+        if ($request->hasFile('thumbnail')) {
+            Image::make($request->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
+            $sample->thumbnail = 'samples/' . $thumbnail_name;
+        } elseif (isset($sample->youtube_video['thumbnail_url'])) {
+            Image::make(file_get_contents($sample->youtube_video['thumbnail_url']))->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
+            $sample->thumbnail = 'samples/' . $thumbnail_name;
         }
 
+        // TODO: Move audio from temp storage to remote
+        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        // $sample->audio = request()->audio->storeAs('samples', $audio_name);
+
+        foreach ($request->tags as $tag) {
+            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+        }
+
+        $sample->status = Sample::STATUS_PUBLIC;
         $sample->save();
 
         return $sample;

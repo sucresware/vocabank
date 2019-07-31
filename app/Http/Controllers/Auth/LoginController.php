@@ -34,4 +34,21 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function loginWithFourSucres()
+    {
+        return \Socialite::with('foursucres')->redirect();
+    }
+
+    public function loginWithFourSucresCallback()
+    {
+        try {
+            $user = \Socialite::with('foursucres')->user();
+            dd($user);
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+
+            // return redirect(route('login'));
+        }
+    }
 }

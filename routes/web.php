@@ -15,6 +15,9 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
+Route::get('/login/4sucres', 'Auth\LoginController@loginWithFourSucres');
+Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresCallback');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::view('/terms', 'static/terms')->name('terms');
 

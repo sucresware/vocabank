@@ -6,7 +6,7 @@
     >
       <fade-transition :duration="150">
         <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-show="showWaveform">
-          <img :src="'/storage/' + sample.waveform" class="w-full h-full" style="opacity: 0.20" />
+          <img :src="'/storage/' + sample.waveform" class="w-full h-full" style="opacity: 0.30" />
         </div>
       </fade-transition>
 
@@ -48,10 +48,7 @@
           ></i>
         </div>
       </div>
-      <div class="z-20 ml-3 truncate font-bold">
-        <!-- <a :href="'/samples/' + sample.id" class="hover:text-gray-600"></a> -->
-        {{ sample.name }}
-      </div>
+      <div class="z-20 ml-3 truncate font-bold">{{ sample.name }}</div>
       <div class="z-20 ml-auto">
         <i class="fas fa-undo"></i>
         {{ sample.views }}

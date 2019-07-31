@@ -15,6 +15,8 @@
     <meta name="description"
         content="VocaBank - C'est comme RisiBank, sauf qu'on a échangé les stickers par des samples">
 
+    @stack('head')
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -29,6 +31,7 @@
     <meta name="msapplication-TileImage" content="{{ url('/mstile-144x144.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
     @stack('css')
+
 </head>
 
 @yield('body')

@@ -9,6 +9,7 @@
     <div class="flex w-full h-screen items-center justify-center">
         <div class="w-1/6">
             <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48">
+            <a href="/login/4sucres" class="hover:bg-gray-700 text-white text-center px-3 py-1 font-bold rounded-full"><i class="fa fa-sign-in-alt mr-1"></i> Connexion avec 4sucres</a>
         </div>
         <div class="w-1/6">
             <div class="flex text-center mb-5">

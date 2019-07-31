@@ -114,6 +114,9 @@
               Sample
               <span class="text-red-500">*</span>
             </div>
+
+            <sample-player :sample="sample" :autoload="false" :autoplay="false" ref="samplePlayer"></sample-player>
+
             <div class="flex items-center border-gray-300 border rounded w-full px-3 py-2 relative">
               <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
                 <img
@@ -235,17 +238,21 @@
 </template>
 
 <script>
+import SamplePlayer from "./SamplePlayer";
 let uploadMaxSize = 10 * 1048576; // 10 Mo
 let mimesTypes = ["audio/mpeg", "audio/mp3"];
 import axios from "axios";
 import _ from "lodash";
 
 export default {
+  components: {
+    SamplePlayer
+  },
   data() {
     return {
       importType: "mp3",
       step: 1,
-      youtubeURL: "https://www.youtube.com/watch?v=0VOClq2B0gA",
+      youtubeURL: "",
       sample: {
         id: "",
         thumbnail: "/img/default.png",
@@ -380,6 +387,9 @@ export default {
             this.processingComplete = true;
             this.sample.id = response.data.id;
             this.sample.waveform = response.data.waveform;
+            this.sample.audio = response.data.audio;
+
+            this.$refs.samplePlayer.load();
           },
           error => {
             document.getElementById("dropzone").classList.add("border-red-500");
@@ -412,7 +422,8 @@ export default {
             .get("/samples/" + response.data.id + "/process-youtube")
             .then(response => {
               this.processingComplete = true;
-              this.sample.waveform = response.data.waveform;
+              this.sample.audio = response.data.audio;
+              this.$refs.samplePlayer.load();
             });
         },
         error => {

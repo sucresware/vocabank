@@ -32,11 +32,7 @@
         </div>
       </div>
     </div>
-    <div
-      style="height: 30px;"
-      class="w-full flex items-center relative py-8"
-      :id="'wavesurfer-' + sample.id"
-    ></div>
+    <div style="height: 30px;" class="w-full flex items-center relative py-8" ref="wavesurfer"></div>
   </div>
 </template>
 
@@ -45,42 +41,50 @@ let $ = require("jquery");
 import WaveSurfer from "wavesurfer.js";
 
 export default {
-  props: ["sample"],
+  props: ["sample", "autoload", "autoplay"],
   data() {
     return {
       waveSurfer: null,
-      isLoading: false,
+      isLoading: true,
       isPlaying: false
     };
   },
   mounted() {
-    let vm = this;
+    if (typeof this.autoload == "undefined") this.autoload = true;
+    if (typeof this.autoplay == "undefined") this.autoplay = true;
 
-    this.waveSurfer = WaveSurfer.create({
-      container: document.getElementById("wavesurfer-" + this.sample.id),
-      waveColor: "#a0aec0",
-      progressColor: "#00CDCD",
-      cursorWidth: "0px",
-      height: 30,
-      normalize: true,
-      backend: "MediaElement",
-      responsive: true
-    });
-    this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
-    this.waveSurfer.setVolume(0.7);
-    this.isLoading = true;
-
-    this.waveSurfer.on("ready", function() {
-      vm.isLoading = false;
-      vm.isPlaying = true;
-      vm.waveSurfer.play();
-    });
-
-    this.waveSurfer.on("play", () => (vm.isPlaying = true));
-    this.waveSurfer.on("pause", () => (vm.isPlaying = false));
-    this.waveSurfer.on("finish", () => (vm.isPlaying = false));
+    if (this.autoload) this.load();
   },
   methods: {
+    load() {
+      let vm = this;
+
+      this.waveSurfer = WaveSurfer.create({
+        container: this.$refs.wavesurfer,
+        waveColor: "#a0aec0",
+        progressColor: "#00CDCD",
+        cursorWidth: "0px",
+        height: 30,
+        normalize: true,
+        backend: "MediaElement",
+        responsive: true
+      });
+      this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
+      this.waveSurfer.setVolume(0.7);
+      this.isLoading = true;
+
+      this.waveSurfer.on("ready", function() {
+        vm.isLoading = false;
+        if (vm.autoplay) {
+          vm.isPlaying = true;
+          vm.waveSurfer.play();
+        }
+      });
+
+      this.waveSurfer.on("play", () => (vm.isPlaying = true));
+      this.waveSurfer.on("pause", () => (vm.isPlaying = false));
+      this.waveSurfer.on("finish", () => (vm.isPlaying = false));
+    },
     toggle() {
       this.isPlaying = !this.isPlaying;
       this.waveSurfer.playPause();

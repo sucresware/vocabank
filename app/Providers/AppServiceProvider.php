@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Auth\FourSucresProvider;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,5 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
+        $socialite->extend(
+        'foursucres',
+        function ($app) use ($socialite) {
+            $config = $app['config']['services.foursucres'];
+
+            return $socialite->buildProvider(FourSucresProvider::class, $config);
+        }
+    );
     }
 }
