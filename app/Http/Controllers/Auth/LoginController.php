@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -37,18 +40,33 @@ class LoginController extends Controller
 
     public function loginWithFourSucres()
     {
-        return \Socialite::with('foursucres')->redirect();
+        return Socialite::with('foursucres')->redirect();
     }
 
     public function loginWithFourSucresCallback()
     {
         try {
-            $user = \Socialite::with('foursucres')->user();
-            dd($user);
-        } catch (\Exception $e) {
-            dump($e->getMessage());
+            $socialite_user = Socialite::with('foursucres')->user();
 
-            // return redirect(route('login'));
+            $user = User::where('4sucres_id', $socialite_user->getId())->first();
+
+            if (!$user && $socialite_user->getEmail()) {
+                $user = User::where('email', $socialite_user->getEmail())->first();
+            }
+
+            if (!$user) {
+                $user = User::create([
+                    'name'       => $socialite_user->getName(),
+                    'email'      => $socialite_user->getEmail(),
+                    '4sucres_id' => $socialite_user->getId(),
+                ]);
+            }
+
+            Auth::login($user);
+
+            return redirect('home');
+        } catch (\Exception $e) {
+            return redirect(route('login'))->with('error', 'Une erreur est survenue. Veuillez réessayer. ' . $e->getMessage());
         }
     }
 }

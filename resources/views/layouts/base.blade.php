@@ -34,6 +34,28 @@
 
 </head>
 
+<body class="@yield('body-classes')">
+
 @yield('body')
+
+@if (session('success'))
+    @php alert()->success(null, session('success'))->persistent(); @endphp
+@endif
+
+@if (session('info'))
+    @php alert()->info(null, session('info'))->persistent(); @endphp
+@endif
+
+@if (session('error'))
+    @php alert()->error(null, session('error'))->persistent(); @endphp
+@endif
+
+@include('sweetalert::alert')
+{!! GoogleReCaptchaV3::init() !!}
+<script src="{{ mix('/js/app.js') }}"></script>
+
+@stack('js')
+
+</body>
 
 </html>

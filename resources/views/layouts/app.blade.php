@@ -1,7 +1,8 @@
 @extends('layouts/base')
 
+@section('body-classes' , 'bg-gray-100 text-gray-700 text-sm')
+
 @section('body')
-<body class="bg-gray-100 text-gray-700 text-sm">
     <nav id="header" class="bg-gray-800 w-full py-3 shadow-lg">
         <div class="container mx-auto flex flex-wrap items-center">
             <div class="flex-1 pl-2 md:pl-0">
@@ -48,22 +49,4 @@
         <a class="text-gray-600 hover:text-gray-500" href="#">API</a> — <a class="text-gray-600 hover:text-gray-500" href="{{ route('terms') }}">Conditions générales d'utilisation</a>
     </footer>
 
-    @if (session('success'))
-        @php alert()->success(null, session('success'))->persistent(); @endphp
-    @endif
-
-    @if (session('info'))
-        @php alert()->info(null, session('info'))->persistent(); @endphp
-    @endif
-
-    @if (session('error'))
-        @php alert()->error(null, session('error'))->persistent(); @endphp
-    @endif
-
-    @include('sweetalert::alert')
-    {!! GoogleReCaptchaV3::init() !!}
-    <script src="{{ mix('/js/app.js') }}"></script>
-
-    @stack('js')
-</body>
 @endsection
