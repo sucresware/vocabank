@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+
+/** Font **/
+
+@import url('https://rsms.me/inter/inter.css');
+
+html {
+    font-family: 'Inter', sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+    html {
+        font-family: 'Inter var', sans-serif;
+    }
+}
+
+/** Buttons **/
+
+.btn {
+    @apply inline-block mr-1 px-3 py-1 font-bold text-center rounded-full;
+}
+
+.btn-lg {
+    @apply px-4 py-2;
+}
+
+.btn-gray {
+    @apply bg-gray-300;
+}
+
+.btn-gray:hover {
+    @apply bg-gray-400;
+}
+
+.btn-white:hover {
+    @apply bg-gray-200;
+}
+
+.btn-teal {
+    @apply bg-teal-300;
+}
+
+.btn-teal:hover {
+    @apply bg-teal-400;
+}
+
+.btn-dark {
+    @apply text-white bg-gray-700;
+}
+
+.btn-dark:hover {
+    @apply text-white bg-gray-600;
+}
+
+wave {
+    width: 100%;
+    overflow: hidden !important;
+}
+
+/** Logo **/
+
+#logo:hover #logo-replay {
+    animation: spin .5s ease-in-out;
+}
+
+#logo-replay {
+    transform-origin: 34px 17px;
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+}
+
+@tailwind utilities;

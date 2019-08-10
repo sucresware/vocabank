@@ -1,89 +1,64 @@
 <template>
   <div class="flex w-full justify-center">
     <div class="w-1/2">
-      <slide-up-down :active="step == 1" :duration="300">
-        <div class="flex flex-wrap">
-          <button
-            :class="{
-          'font-bold border-teal-500': importType == 'mp3',
-          'text-gray-600 hover:text-gray-500': importType != 'mp3'
-          }"
-            class="flex-auto pb-3 px-4"
-            style="border-bottom-width: 2px;"
-            v-on:click="importType = 'mp3'"
-          >
-            <i class="fa fa-upload mr-1"></i> #balance-ton-mp3
-          </button>
-          <button
-            :class="{
-          'font-bold border-teal-500': importType == 'youtube',
-          'text-gray-600 hover:text-gray-500': importType != 'youtube'
-          }"
-            class="flex-auto pb-3 px-4"
-            style="border-bottom-width: 2px;"
-            v-on:click="importType = 'youtube'"
-          >
-            <i class="fab fa-youtube mr-1"></i> Importer depuis YouTube
-          </button>
-        </div>
-      </slide-up-down>
-      <div class="bg-white shadow p-10 mb-5">
-        <slide-up-down :active="step == 1 && importType == 'mp3'" :duration="300">
+      <div class="bg-white shadow mb-5">
+        <slide-up-down :active="step == 1" :duration="300">
           <div
-            class="border-gray-300 border-dashed border-2 w-full flex rounded items-center justify-center text-center"
-            style="height: 50vh;"
-            id="dropzone"
+            class="bg-gray-800 text-gray-200 text-white h-64 w-full flex items-center justify-center text-center"
           >
-            <div>
-              <div class="font-bold text-xl mb-5">#balance-ton-mp3</div>
-              <a
-                href="#"
-                class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
-                onclick="document.getElementById('audioInput').click()"
-              >
-                <i class="fa fa-upload mr-1"></i> ou #sélectionne-ton-mp3
-              </a>
-              <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
-
-              <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
-              <div class="text-xs">(format mp3 — max. 10 Mo)</div>
+            <div class="border-gray-400 border-dashed border-2 rounded px-10 py-5" id="dropzone">
+              <span class="text-center font-bold">#balance-ton-mp3</span>
             </div>
           </div>
-        </slide-up-down>
-        <slide-up-down :active="step == 1 && importType == 'youtube'" :duration="300">
-          <div class="text-xs mb-1">
-            Lien YouTube
-            <span class="text-red-500">*</span>
-          </div>
-          <input
-            type="text"
-            class="border-gray-300 border rounded w-full px-2 py-1"
-            :disabled="formSubmitted"
-            v-model="youtubeURL"
-          />
-          <div
-            class="text-red-500 mt-3 text-xs font-bold"
-            v-if="formErrors && formErrors.youtubeURL !== undefined"
-          >{{ formErrors.youtubeURL[0] }}</div>
-          <div class="text-right mt-5">
+          <div class="p-10 text-center">
+            <a
+              href="#"
+              class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
+              onclick="document.getElementById('audioInput').click()"
+            >
+              <i class="fa fa-upload mr-1"></i> Choisir un fichier
+            </a>
+            <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
+            <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
+
+            <div class="text-center mb-6 mt-2 px-32">
+              <div class="bg-gray-300" style="height: 1px;"></div>
+              <div class="-mt-3">
+                <span class="bg-white px-2">ou</span>
+              </div>
+            </div>
+
+            <input
+              type="text"
+              placeholder="Coller un lien YouTube"
+              class="bg-gray-200 rounded-full px-4 py-1 text-center"
+              :disabled="formSubmitted"
+              v-model="youtubeURL"
+            />
             <button
               :class="{
                       'bg-gray-300 hover:bg-gray-400': !formSubmitted,
                       'cursor-not-allowed bg-gray-400': formSubmitted,
                       }"
-              class="inline-block px-3 py-1 font-bold rounded-full"
+              class="inline px-3 py-1 font-bold rounded-full"
               v-on:click="processYouTubeURL"
             >
               <span v-show="formSubmitted">
                 <i class="fa fa-spinner fa-spin fa-fw"></i>
               </span>
               <span v-show="!formSubmitted">
-                <i class="fa fa-upload mr-1"></i> Importer
+                <i class="fab fa-youtube fa-fw"></i>
               </span>
             </button>
+
+            <div
+              class="text-red-500 mt-3 text-xs font-bold"
+              v-if="formErrors && formErrors.youtubeURL !== undefined"
+            >{{ formErrors.youtubeURL[0] }}</div>
           </div>
         </slide-up-down>
-        <slide-up-down :active="step == 2" :duration="300">
+
+        <slide-up-down :active="step == 2" :duration="300" class="p-5">
           <div class="mx-auto relative h-32 w-32 mb-5">
             <img
               :src="sample.thumbnail == '' ? sample.youtube_video.thumbnail_url : sample.thumbnail"
@@ -285,25 +260,21 @@ export default {
       e.preventDefault();
 
       dropzone.classList.add("border-teal-400");
-      dropzone.classList.add("bg-gray-100");
     });
     dropzone.addEventListener("dragover", e => {
       e.preventDefault();
 
       dropzone.classList.add("border-teal-400");
-      dropzone.classList.add("bg-gray-100");
     });
     dropzone.addEventListener("dragleave", e => {
       e.preventDefault();
 
       dropzone.classList.remove("border-teal-400");
-      dropzone.classList.remove("bg-gray-100");
     });
     dropzone.addEventListener("drop", e => {
       e.preventDefault();
 
       dropzone.classList.remove("border-teal-400");
-      dropzone.classList.remove("bg-gray-100");
 
       dropzone.classList.remove("border-red-500");
       this.uploadError = null;
@@ -406,6 +377,7 @@ export default {
       let formData = new FormData();
       formData.append("youtubeURL", this.youtubeURL);
 
+      this.importType = "youtube";
       this.formSubmitted = true;
 
       axios.post("/samples/preflight/youtube", formData).then(

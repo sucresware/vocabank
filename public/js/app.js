@@ -2490,31 +2490,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 var uploadMaxSize = 10 * 1048576; // 10 Mo
 
@@ -2562,22 +2537,18 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
     dropzone.addEventListener("dragenter", function (e) {
       e.preventDefault();
       dropzone.classList.add("border-teal-400");
-      dropzone.classList.add("bg-gray-100");
     });
     dropzone.addEventListener("dragover", function (e) {
       e.preventDefault();
       dropzone.classList.add("border-teal-400");
-      dropzone.classList.add("bg-gray-100");
     });
     dropzone.addEventListener("dragleave", function (e) {
       e.preventDefault();
       dropzone.classList.remove("border-teal-400");
-      dropzone.classList.remove("bg-gray-100");
     });
     dropzone.addEventListener("drop", function (e) {
       e.preventDefault();
       dropzone.classList.remove("border-teal-400");
-      dropzone.classList.remove("bg-gray-100");
       dropzone.classList.remove("border-red-500");
       _this.uploadError = null;
 
@@ -2671,6 +2642,7 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
       if (this.formSubmitted) return;
       var formData = new FormData();
       formData.append("youtubeURL", this.youtubeURL);
+      this.importType = "youtube";
       this.formSubmitted = true;
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples/preflight/youtube", formData).then(function (response) {
         _this3.sample.id = response.data.id;
@@ -44407,148 +44379,86 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "flex w-full justify-center" }, [
-    _c(
-      "div",
-      { staticClass: "w-1/2" },
-      [
-        _c(
-          "slide-up-down",
-          { attrs: { active: _vm.step == 1, duration: 300 } },
-          [
-            _c("div", { staticClass: "flex flex-wrap" }, [
+    _c("div", { staticClass: "w-1/2" }, [
+      _c(
+        "div",
+        { staticClass: "bg-white shadow mb-5" },
+        [
+          _c(
+            "slide-up-down",
+            { attrs: { active: _vm.step == 1, duration: 300 } },
+            [
               _c(
-                "button",
+                "div",
                 {
-                  staticClass: "flex-auto pb-3 px-4",
-                  class: {
-                    "font-bold border-teal-500": _vm.importType == "mp3",
-                    "text-gray-600 hover:text-gray-500": _vm.importType != "mp3"
-                  },
-                  staticStyle: { "border-bottom-width": "2px" },
-                  on: {
-                    click: function($event) {
-                      _vm.importType = "mp3"
-                    }
-                  }
+                  staticClass:
+                    "bg-gray-800 text-gray-200 text-white h-64 w-full flex items-center justify-center text-center"
                 },
                 [
-                  _c("i", { staticClass: "fa fa-upload mr-1" }),
-                  _vm._v(" #balance-ton-mp3\n        ")
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-gray-400 border-dashed border-2 rounded px-10 py-5",
+                      attrs: { id: "dropzone" }
+                    },
+                    [
+                      _c("span", { staticClass: "text-center font-bold" }, [
+                        _vm._v("#balance-ton-mp3")
+                      ])
+                    ]
+                  )
                 ]
               ),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "flex-auto pb-3 px-4",
-                  class: {
-                    "font-bold border-teal-500": _vm.importType == "youtube",
-                    "text-gray-600 hover:text-gray-500":
-                      _vm.importType != "youtube"
-                  },
-                  staticStyle: { "border-bottom-width": "2px" },
-                  on: {
-                    click: function($event) {
-                      _vm.importType = "youtube"
+              _c("div", { staticClass: "p-10 text-center" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5",
+                    attrs: {
+                      href: "#",
+                      onclick: "document.getElementById('audioInput').click()"
                     }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fab fa-youtube mr-1" }),
-                  _vm._v(" Importer depuis YouTube\n        ")
-                ]
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "bg-white shadow p-10 mb-5" },
-          [
-            _c(
-              "slide-up-down",
-              {
-                attrs: {
-                  active: _vm.step == 1 && _vm.importType == "mp3",
-                  duration: 300
-                }
-              },
-              [
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-upload mr-1" }),
+                    _vm._v(" Choisir un fichier\n          ")
+                  ]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "hidden",
+                  attrs: { type: "file", id: "audioInput" },
+                  on: { change: _vm.onAudioInputChange }
+                }),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
-                    staticClass:
-                      "border-gray-300 border-dashed border-2 w-full flex rounded items-center justify-center text-center",
-                    staticStyle: { height: "50vh" },
-                    attrs: { id: "dropzone" }
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.uploadError,
+                        expression: "uploadError"
+                      }
+                    ],
+                    staticClass: "text-red-500 mb-3 font-bold"
                   },
-                  [
-                    _c("div", [
-                      _c("div", { staticClass: "font-bold text-xl mb-5" }, [
-                        _vm._v("#balance-ton-mp3")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5",
-                          attrs: {
-                            href: "#",
-                            onclick:
-                              "document.getElementById('audioInput').click()"
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-upload mr-1" }),
-                          _vm._v(" ou #sélectionne-ton-mp3\n            ")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        staticClass: "hidden",
-                        attrs: { type: "file", id: "audioInput" },
-                        on: { change: _vm.onAudioInputChange }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.uploadError,
-                              expression: "uploadError"
-                            }
-                          ],
-                          staticClass: "text-red-500 mb-3 font-bold"
-                        },
-                        [_vm._v(_vm._s(_vm.uploadError))]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text-xs" }, [
-                        _vm._v("(format mp3 — max. 10 Mo)")
-                      ])
-                    ])
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "slide-up-down",
-              {
-                attrs: {
-                  active: _vm.step == 1 && _vm.importType == "youtube",
-                  duration: 300
-                }
-              },
-              [
-                _c("div", { staticClass: "text-xs mb-1" }, [
-                  _vm._v("\n          Lien YouTube\n          "),
-                  _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+                  [_vm._v(_vm._s(_vm.uploadError))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-center mb-6 mt-2 px-32" }, [
+                  _c("div", {
+                    staticClass: "bg-gray-300",
+                    staticStyle: { height: "1px" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "-mt-3" }, [
+                    _c("span", { staticClass: "bg-white px-2" }, [_vm._v("ou")])
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -44560,9 +44470,12 @@ var render = function() {
                       expression: "youtubeURL"
                     }
                   ],
-                  staticClass:
-                    "border-gray-300 border rounded w-full px-2 py-1",
-                  attrs: { type: "text", disabled: _vm.formSubmitted },
+                  staticClass: "bg-gray-200 rounded-full px-4 py-1 text-center",
+                  attrs: {
+                    type: "text",
+                    placeholder: "Coller un lien YouTube",
+                    disabled: _vm.formSubmitted
+                  },
                   domProps: { value: _vm.youtubeURL },
                   on: {
                     input: function($event) {
@@ -44574,499 +44487,471 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "inline px-3 py-1 font-bold rounded-full",
+                    class: {
+                      "bg-gray-300 hover:bg-gray-400": !_vm.formSubmitted,
+                      "cursor-not-allowed bg-gray-400": _vm.formSubmitted
+                    },
+                    on: { click: _vm.processYouTubeURL }
+                  },
+                  [
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.formSubmitted,
+                            expression: "formSubmitted"
+                          }
+                        ]
+                      },
+                      [_c("i", { staticClass: "fa fa-spinner fa-spin fa-fw" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.formSubmitted,
+                            expression: "!formSubmitted"
+                          }
+                        ]
+                      },
+                      [_c("i", { staticClass: "fab fa-youtube fa-fw" })]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
                 _vm.formErrors && _vm.formErrors.youtubeURL !== undefined
                   ? _c(
                       "div",
                       { staticClass: "text-red-500 mt-3 text-xs font-bold" },
                       [_vm._v(_vm._s(_vm.formErrors.youtubeURL[0]))]
                     )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("div", { staticClass: "text-right mt-5" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "inline-block px-3 py-1 font-bold rounded-full",
-                      class: {
-                        "bg-gray-300 hover:bg-gray-400": !_vm.formSubmitted,
-                        "cursor-not-allowed bg-gray-400": _vm.formSubmitted
-                      },
-                      on: { click: _vm.processYouTubeURL }
-                    },
-                    [
-                      _c(
-                        "span",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.formSubmitted,
-                              expression: "formSubmitted"
-                            }
-                          ]
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fa fa-spinner fa-spin fa-fw"
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: !_vm.formSubmitted,
-                              expression: "!formSubmitted"
-                            }
-                          ]
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-upload mr-1" }),
-                          _vm._v(" Importer\n            ")
-                        ]
-                      )
-                    ]
-                  )
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "slide-up-down",
-              { attrs: { active: _vm.step == 2, duration: 300 } },
-              [
-                _c("div", { staticClass: "mx-auto relative h-32 w-32 mb-5" }, [
-                  _c("img", {
-                    staticClass:
-                      "w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg",
-                    attrs: {
-                      src:
-                        _vm.sample.thumbnail == ""
-                          ? _vm.sample.youtube_video.thumbnail_url
-                          : _vm.sample.thumbnail
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
-                      staticStyle: { background: "rgba(0, 0, 0, 0.5)" },
-                      attrs: {
-                        onclick:
-                          "document.getElementById('thumbnailInput').click()",
-                        id: "thumbnail"
-                      }
-                    },
-                    [_c("i", { staticClass: "text-xs fas fa-upload" })]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "hidden",
-                    attrs: { type: "file", id: "thumbnailInput" },
-                    on: { change: _vm.onThumbnailInputChange }
-                  }),
-                  _vm._v(" "),
-                  _vm.formErrors && _vm.formErrors.thumbnail !== undefined
-                    ? _c(
-                        "div",
-                        { staticClass: "text-red-500 mt-3 text-xs font-bold" },
-                        [_vm._v(_vm._s(_vm.formErrors.thumbnail[0]))]
-                      )
-                    : _vm._e()
-                ]),
+                  : _vm._e()
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "slide-up-down",
+            {
+              staticClass: "p-5",
+              attrs: { active: _vm.step == 2, duration: 300 }
+            },
+            [
+              _c("div", { staticClass: "mx-auto relative h-32 w-32 mb-5" }, [
+                _c("img", {
+                  staticClass:
+                    "w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg",
+                  attrs: {
+                    src:
+                      _vm.sample.thumbnail == ""
+                        ? _vm.sample.youtube_video.thumbnail_url
+                        : _vm.sample.thumbnail
+                  }
+                }),
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "mb-3" },
-                  [
-                    _c("div", { staticClass: "text-xs mb-1" }, [
-                      _vm._v("\n            Sample\n            "),
-                      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
-                    ]),
-                    _vm._v(" "),
-                    _c("sample-player", {
-                      ref: "samplePlayer",
-                      attrs: {
-                        sample: _vm.sample,
-                        autoload: false,
-                        autoplay: false
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "flex items-center border-gray-300 border rounded w-full px-3 py-2 relative"
-                      },
-                      [
-                        _vm.sample.waveform
-                          ? _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "absolute px-5 top-0 bottom-0 left-0 right-0"
-                              },
-                              [
-                                _c("img", {
-                                  staticClass: "w-full h-full",
-                                  staticStyle: { opacity: "0.2" },
-                                  attrs: {
-                                    src: "/storage/" + _vm.sample.waveform
-                                  }
-                                })
-                              ]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mr-3" }, [
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: !_vm.processingComplete,
-                                expression: "!processingComplete"
-                              }
-                            ],
-                            staticClass: "fa fa-fw fa-spinner fa-spin"
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.processingComplete,
-                                expression: "processingComplete"
-                              }
-                            ],
-                            staticClass:
-                              "fa fa-fw fa-check-circle text-teal-400"
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _vm.importType == "mp3"
-                          ? _c("div", { staticClass: "flex-1" }, [
-                              _c("div", { staticClass: "text-xs mb-1" }, [
-                                _vm._v(
-                                  "\n                " +
-                                    _vm._s(_vm.files.audio.name) +
-                                    "\n                "
-                                ),
-                                _c("span", { staticClass: "text-gray-500" }, [
-                                  _vm._v(
-                                    "(" + _vm._s(_vm.uploadProgress) + "%)"
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "border-gray-300 border rounded w-full h-2 relative"
-                                },
-                                [
-                                  _c("div", {
-                                    staticClass: "h-full bg-teal-400",
-                                    style: { width: _vm.uploadProgress + "%" }
-                                  })
-                                ]
-                              )
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.importType == "youtube" &&
-                        _vm.sample.youtube_video != ""
-                          ? _c(
-                              "div",
-                              { staticClass: "flex-1 flex items-center" },
-                              [
-                                _c("div", [
-                                  _c("img", {
-                                    staticClass: "h-10 rounded mr-3",
-                                    attrs: {
-                                      src:
-                                        _vm.sample.youtube_video.thumbnail_url
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "flex-1 text-xs" }, [
-                                  _c("i", {
-                                    staticClass: "fab fa-youtube mr-1"
-                                  }),
-                                  _vm._v(" "),
-                                  _c("span", { staticClass: "font-bold" }, [
-                                    _vm._v(
-                                      _vm._s(_vm.sample.youtube_video.title)
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("br"),
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(
-                                        _vm.sample.youtube_video.author_name
-                                      ) +
-                                      "\n              "
-                                  )
-                                ])
-                              ]
-                            )
-                          : _vm._e()
-                      ]
-                    )
-                  ],
-                  1
+                  {
+                    staticClass:
+                      "opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
+                    staticStyle: { background: "rgba(0, 0, 0, 0.5)" },
+                    attrs: {
+                      onclick:
+                        "document.getElementById('thumbnailInput').click()",
+                      id: "thumbnail"
+                    }
+                  },
+                  [_c("i", { staticClass: "text-xs fas fa-upload" })]
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c("div", { staticClass: "text-xs mb-1" }, [
-                    _vm._v("\n            Nom\n            "),
-                    _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.sample.name,
-                        expression: "sample.name"
-                      }
-                    ],
-                    staticClass:
-                      "border-gray-300 border rounded w-full px-2 py-1",
-                    attrs: { type: "text", disabled: _vm.formSubmitted },
-                    domProps: { value: _vm.sample.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.sample, "name", $event.target.value)
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm.formErrors && _vm.formErrors.name !== undefined
-                    ? _c(
-                        "div",
-                        { staticClass: "text-red-500 mt-3 text-xs font-bold" },
-                        [_vm._v(_vm._s(_vm.formErrors.name[0]))]
-                      )
-                    : _vm._e()
-                ]),
+                _c("input", {
+                  staticClass: "hidden",
+                  attrs: { type: "file", id: "thumbnailInput" },
+                  on: { change: _vm.onThumbnailInputChange }
+                }),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
+                _vm.formErrors && _vm.formErrors.thumbnail !== undefined
+                  ? _c(
+                      "div",
+                      { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                      [_vm._v(_vm._s(_vm.formErrors.thumbnail[0]))]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "mb-3" },
+                [
                   _c("div", { staticClass: "text-xs mb-1" }, [
-                    _vm._v("\n            Tags\n            "),
+                    _vm._v("\n            Sample\n            "),
                     _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.currentTag,
-                        expression: "currentTag"
-                      }
-                    ],
-                    staticClass:
-                      "border-gray-300 border rounded w-full px-2 py-1",
-                    attrs: { type: "text", disabled: _vm.formSubmitted },
-                    domProps: { value: _vm.currentTag },
-                    on: {
-                      keyup: [
-                        function($event) {
-                          if (
-                            !$event.type.indexOf("key") &&
-                            _vm._k(
-                              $event.keyCode,
-                              "enter",
-                              13,
-                              $event.key,
-                              "Enter"
-                            )
-                          ) {
-                            return null
-                          }
-                          return _vm.appendTag()
-                        },
-                        function($event) {
-                          if (
-                            !$event.type.indexOf("key") &&
-                            _vm._k($event.keyCode, "space", 32, $event.key, [
-                              " ",
-                              "Spacebar"
-                            ])
-                          ) {
-                            return null
-                          }
-                          return _vm.appendTag()
-                        }
-                      ],
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.currentTag = $event.target.value
-                      }
+                  _c("sample-player", {
+                    ref: "samplePlayer",
+                    attrs: {
+                      sample: _vm.sample,
+                      autoload: false,
+                      autoplay: false
                     }
                   }),
-                  _vm._v(" "),
-                  _vm.formErrors && _vm.formErrors.tags !== undefined
-                    ? _c(
-                        "div",
-                        { staticClass: "text-red-500 mt-3 text-xs font-bold" },
-                        [_vm._v(_vm._s(_vm.formErrors.tags[0]))]
-                      )
-                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "my-3" },
-                    _vm._l(_vm.sample.tags, function(tag, i) {
-                      return _c(
-                        "div",
-                        {
-                          key: i,
-                          staticClass:
-                            "text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block",
-                          on: {
-                            click: function($event) {
-                              return _vm.removeTag(i)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(tag))]
-                      )
-                    }),
-                    0
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c("div", { staticClass: "mb-3" }, [
-                    _c("div", { staticClass: "text-xs mb-1" }, [
-                      _vm._v("Description")
-                    ]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.sample.description,
-                          expression: "sample.description"
-                        }
-                      ],
-                      staticClass:
-                        "border-gray-300 border rounded w-full px-2 py-1 h-32",
-                      attrs: { type: "text", disabled: _vm.formSubmitted },
-                      domProps: { value: _vm.sample.description },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.sample,
-                            "description",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.formErrors && _vm.formErrors.description !== undefined
-                      ? _c(
-                          "div",
-                          {
-                            staticClass: "text-red-500 mt-3 text-xs font-bold"
-                          },
-                          [_vm._v(_vm._s(_vm.formErrors.description[0]))]
-                        )
-                      : _vm._e()
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "text-right" }, [
-                  _c(
-                    "a",
                     {
                       staticClass:
-                        "inline-block px-3 py-1 font-bold rounded-full",
-                      class: {
-                        "bg-gray-300 hover:bg-gray-400":
-                          !_vm.formSubmitted && _vm.processingComplete,
-                        "cursor-not-allowed bg-gray-400":
-                          _vm.formSubmitted || !_vm.processingComplete
-                      },
-                      attrs: { href: "#" },
-                      on: { click: _vm.submit }
+                        "flex items-center border-gray-300 border rounded w-full px-3 py-2 relative"
                     },
                     [
-                      _c(
-                        "span",
-                        {
-                          directives: [
+                      _vm.sample.waveform
+                        ? _c(
+                            "div",
                             {
-                              name: "show",
-                              rawName: "v-show",
-                              value:
-                                _vm.formSubmitted || !_vm.processingComplete,
-                              expression: "formSubmitted || !processingComplete"
-                            }
-                          ]
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fa fa-spinner fa-spin fa-fw"
-                          })
-                        ]
-                      ),
+                              staticClass:
+                                "absolute px-5 top-0 bottom-0 left-0 right-0"
+                            },
+                            [
+                              _c("img", {
+                                staticClass: "w-full h-full",
+                                staticStyle: { opacity: "0.2" },
+                                attrs: {
+                                  src: "/storage/" + _vm.sample.waveform
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c(
-                        "span",
-                        {
+                      _c("div", { staticClass: "mr-3" }, [
+                        _c("i", {
                           directives: [
                             {
                               name: "show",
                               rawName: "v-show",
-                              value:
-                                !_vm.formSubmitted && _vm.processingComplete,
-                              expression: "!formSubmitted && processingComplete"
+                              value: !_vm.processingComplete,
+                              expression: "!processingComplete"
                             }
-                          ]
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-upload mr-1" }),
-                          _vm._v(" Ajouter\n            ")
-                        ]
-                      )
+                          ],
+                          staticClass: "fa fa-fw fa-spinner fa-spin"
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.processingComplete,
+                              expression: "processingComplete"
+                            }
+                          ],
+                          staticClass: "fa fa-fw fa-check-circle text-teal-400"
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _vm.importType == "mp3"
+                        ? _c("div", { staticClass: "flex-1" }, [
+                            _c("div", { staticClass: "text-xs mb-1" }, [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(_vm.files.audio.name) +
+                                  "\n                "
+                              ),
+                              _c("span", { staticClass: "text-gray-500" }, [
+                                _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "border-gray-300 border rounded w-full h-2 relative"
+                              },
+                              [
+                                _c("div", {
+                                  staticClass: "h-full bg-teal-400",
+                                  style: { width: _vm.uploadProgress + "%" }
+                                })
+                              ]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.importType == "youtube" &&
+                      _vm.sample.youtube_video != ""
+                        ? _c(
+                            "div",
+                            { staticClass: "flex-1 flex items-center" },
+                            [
+                              _c("div", [
+                                _c("img", {
+                                  staticClass: "h-10 rounded mr-3",
+                                  attrs: {
+                                    src: _vm.sample.youtube_video.thumbnail_url
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "flex-1 text-xs" }, [
+                                _c("i", { staticClass: "fab fa-youtube mr-1" }),
+                                _vm._v(" "),
+                                _c("span", { staticClass: "font-bold" }, [
+                                  _vm._v(_vm._s(_vm.sample.youtube_video.title))
+                                ]),
+                                _vm._v(" "),
+                                _c("br"),
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(
+                                      _vm.sample.youtube_video.author_name
+                                    ) +
+                                    "\n              "
+                                )
+                              ])
+                            ]
+                          )
+                        : _vm._e()
                     ]
                   )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "text-xs mb-1" }, [
+                  _vm._v("\n            Nom\n            "),
+                  _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.sample.name,
+                      expression: "sample.name"
+                    }
+                  ],
+                  staticClass:
+                    "border-gray-300 border rounded w-full px-2 py-1",
+                  attrs: { type: "text", disabled: _vm.formSubmitted },
+                  domProps: { value: _vm.sample.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.sample, "name", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.formErrors && _vm.formErrors.name !== undefined
+                  ? _c(
+                      "div",
+                      { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                      [_vm._v(_vm._s(_vm.formErrors.name[0]))]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "text-xs mb-1" }, [
+                  _vm._v("\n            Tags\n            "),
+                  _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentTag,
+                      expression: "currentTag"
+                    }
+                  ],
+                  staticClass:
+                    "border-gray-300 border rounded w-full px-2 py-1",
+                  attrs: { type: "text", disabled: _vm.formSubmitted },
+                  domProps: { value: _vm.currentTag },
+                  on: {
+                    keyup: [
+                      function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.appendTag()
+                      },
+                      function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k($event.keyCode, "space", 32, $event.key, [
+                            " ",
+                            "Spacebar"
+                          ])
+                        ) {
+                          return null
+                        }
+                        return _vm.appendTag()
+                      }
+                    ],
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.currentTag = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.formErrors && _vm.formErrors.tags !== undefined
+                  ? _c(
+                      "div",
+                      { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                      [_vm._v(_vm._s(_vm.formErrors.tags[0]))]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "my-3" },
+                  _vm._l(_vm.sample.tags, function(tag, i) {
+                    return _c(
+                      "div",
+                      {
+                        key: i,
+                        staticClass:
+                          "text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block",
+                        on: {
+                          click: function($event) {
+                            return _vm.removeTag(i)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(tag))]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("div", { staticClass: "mb-3" }, [
+                  _c("div", { staticClass: "text-xs mb-1" }, [
+                    _vm._v("Description")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.sample.description,
+                        expression: "sample.description"
+                      }
+                    ],
+                    staticClass:
+                      "border-gray-300 border rounded w-full px-2 py-1 h-32",
+                    attrs: { type: "text", disabled: _vm.formSubmitted },
+                    domProps: { value: _vm.sample.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.sample, "description", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.formErrors && _vm.formErrors.description !== undefined
+                    ? _c(
+                        "div",
+                        { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                        [_vm._v(_vm._s(_vm.formErrors.description[0]))]
+                      )
+                    : _vm._e()
                 ])
-              ]
-            )
-          ],
-          1
-        )
-      ],
-      1
-    )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-right" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "inline-block px-3 py-1 font-bold rounded-full",
+                    class: {
+                      "bg-gray-300 hover:bg-gray-400":
+                        !_vm.formSubmitted && _vm.processingComplete,
+                      "cursor-not-allowed bg-gray-400":
+                        _vm.formSubmitted || !_vm.processingComplete
+                    },
+                    attrs: { href: "#" },
+                    on: { click: _vm.submit }
+                  },
+                  [
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.formSubmitted || !_vm.processingComplete,
+                            expression: "formSubmitted || !processingComplete"
+                          }
+                        ]
+                      },
+                      [_c("i", { staticClass: "fa fa-spinner fa-spin fa-fw" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.formSubmitted && _vm.processingComplete,
+                            expression: "!formSubmitted && processingComplete"
+                          }
+                        ]
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-upload mr-1" }),
+                        _vm._v(" Ajouter\n            ")
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        ],
+        1
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -57772,6 +57657,17 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/js sync recursive \\.vue$/":
 /*!***********************************!*\
   !*** ./resources/js sync \.vue$/ ***!
@@ -58187,26 +58083,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
-/*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/*!***********************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/css/app.css ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! D:\laragon\www\vocabank-4sucres\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\laragon\www\vocabank-4sucres\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! D:\laragon\www\vocabank-4sucres\resources\css\app.css */"./resources/css/app.css");
 
 
 /***/ })
