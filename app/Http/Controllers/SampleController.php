@@ -343,7 +343,7 @@ class SampleController extends Controller
         // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
         // $sample->audio = request()->audio->storeAs('samples', $audio_name);
 
-        foreach ($request->tags as $tag) {
+        foreach ($request->tags ?? [] as $tag) {
             Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
         }
 

@@ -50,3 +50,20 @@ Route::post('/samples/preflight/youtube', 'SampleController@preflightYouTube')->
 Route::get('/samples/{sample}/process-youtube', 'SampleController@processYouTube')->name('samples.process.youtube');
 
 Route::resource('samples', 'SampleController');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/light-toggler', function () {
+        switch (auth()->user()->getSetting('layout.theme', 'theme-vocabank')) {
+            case 'theme-vocabank':
+                auth()->user()->setSetting('layout.theme', 'theme-legacy');
+
+            break;
+            case 'theme-legacy':
+                auth()->user()->setSetting('layout.theme', 'theme-vocabank');
+
+            break;
+        }
+
+        return ['success' => true];
+    });
+});

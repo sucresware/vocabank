@@ -1,6 +1,12 @@
 @extends('layouts/base')
 
-@section('body-classes' , 'theme-vocabank')
+@section('body-classes')
+    @auth
+        {{ auth()->user()->getSetting('layout.theme', 'theme-vocabank') }}
+    @else
+        theme-vocabank
+    @endauth
+@endsection
 
 @section('body')
     <nav id="header">

@@ -20,10 +20,39 @@ class User extends Authenticatable
 
     protected $casts = [
         'fourSucres_account' => 'array',
+        'settings'           => 'array',
     ];
 
     public function samples()
     {
         return $this->hasMany(Sample::class);
+    }
+
+    public function getSetting($key, $default = null)
+    {
+        return data_get($this->settings, $key, $default);
+    }
+
+    public function setSetting($key, $value)
+    {
+        $currentSettings = $this->settings;
+        data_set($currentSettings, $key, $value);
+        $this->settings = $currentSettings;
+        $this->save();
+
+        return $this;
+    }
+
+    public function setMultipleSettings(array $settings)
+    {
+        $currentSettings = $this->settings;
+        foreach ($settings as $key => $value) {
+            data_set($currentSettings, $key, $value);
+        }
+
+        $this->settings = $currentSettings;
+        $this->save();
+
+        return $this;
     }
 }
