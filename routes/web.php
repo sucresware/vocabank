@@ -27,6 +27,11 @@ Route::get('/users/{user}', 'UserController@show')->name('users.show');
 Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
 Route::put('/users/{user}', 'UserController@update')->name('users.update');
 
+Route::get('/users/{user}/edit/email', 'UserController@editEmail')->name('users.edit.email');
+Route::put('/users/{user}/email', 'UserController@updateEmail')->name('users.update.email');
+Route::get('/users/{user}/edit/password', 'UserController@editPassword')->name('users.edit.password');
+Route::put('/users/{user}/password', 'UserController@updatePassword')->name('users.update.password');
+
 Route::get('/samples/recent', 'SampleController@recent')->name('samples.recent');
 Route::get('/samples/popular', 'SampleController@popular')->name('samples.popular');
 Route::get('/samples/search', 'SampleController@search')->name('samples.search');

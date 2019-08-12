@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Modification du profil - {{ $user->name }}
+    Modification du mot de passe - {{ $user->name }}
 @endsection
 
 @section('content')
@@ -14,36 +14,40 @@
     </div>
     <div class="w-1/3 mx-2">
         <div class="bg-white shadow p-3 mb-3">
-            <form action="{{ route('users.update', $user) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('users.update.password', $user) }}" method="post">
                 @method('put')
                 @csrf
 
+                @if ($user->password)
+                    <div class="mb-3">
+                        <label for="password" class="block text-xs mb-1">Mot de passe actuel<span class="text-red-500">*</span></label>
+                        <input type="password" name="password" id="password" class="border-gray-300 border rounded w-full px-2 py-1">
+                        @if ($errors->has('password'))
+                            <div class="text-red-500 mb-3 text-xs font-bold">
+                                {{ $errors->first('password') }}
+                            </div>
+                        @endif
+                    </div>
+                @else
+
+                @endif
+
                 <div class="mb-3">
-                    <label for="name" class="block text-xs mb-1">Nom<span class="text-red-500">*</span></label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" class="border-gray-300 border rounded w-full px-2 py-1" disabled="disabled">
-                    @if ($errors->has('name'))
+                    <label for="new_password" class="block text-xs mb-1">Nouveau mot de passe<span class="text-red-500">*</span></label>
+                    <input type="password" name="new_password" id="new_password" class="border-gray-300 border rounded w-full px-2 py-1">
+                    @if ($errors->has('new_password'))
                         <div class="text-red-500 mb-3 text-xs font-bold">
-                            {{ $errors->first('name') }}
+                            {{ $errors->first('new_password') }}
                         </div>
                     @endif
                 </div>
 
                 <div class="mb-3">
-                    <label for="name" class="block text-xs mb-1">Photo de profil</label>
-                    <input type="file" name="avatar" id="avatar" value="{{ old('avatar', $user->avatar) }}" class="border-gray-300 border rounded w-full px-2 py-1">
-                    @if ($errors->has('avatar'))
+                    <label for="new_password_confirmation" class="block text-xs mb-1">Nouveau mot de passe (confirmation)<span class="text-red-500">*</span></label>
+                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="border-gray-300 border rounded w-full px-2 py-1">
+                    @if ($errors->has('new_password_confirmation'))
                         <div class="text-red-500 mb-3 text-xs font-bold">
-                            {{ $errors->first('avatar') }}
-                        </div>
-                    @endif
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="block text-xs mb-1">Description</label>
-                    <textarea type="text" name="description" id="description" class="border-gray-300 border rounded w-full px-2 py-1 h-32">{{ old('description', $user->description) }}</textarea>
-                    @if ($errors->has('description'))
-                        <div class="text-red-500 mb-3 text-xs font-bold">
-                            {{ $errors->first('description') }}
+                            {{ $errors->first('new_password_confirmation') }}
                         </div>
                     @endif
                 </div>
