@@ -144,15 +144,11 @@
             >{{ formErrors.name[0] }}</div>
           </div>
           <div class="mb-3">
-            <div class="text-xs mb-1">
-              Tags
-              <span class="text-red-500">*</span>
-            </div>
+            <div class="text-xs mb-1">Tags</div>
             <input
               type="text"
               class="form-control w-full"
               @keyup.enter="appendTag()"
-              @keyup.space="appendTag()"
               v-model="currentTag"
               :disabled="formSubmitted"
             />

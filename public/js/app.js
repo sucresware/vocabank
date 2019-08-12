@@ -2448,10 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 var uploadMaxSize = 10 * 1048576; // 10 Mo
 
@@ -44706,10 +44702,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "mb-3" }, [
-                _c("div", { staticClass: "text-xs mb-1" }, [
-                  _vm._v("\n            Tags\n            "),
-                  _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
-                ]),
+                _c("div", { staticClass: "text-xs mb-1" }, [_vm._v("Tags")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -44724,35 +44717,15 @@ var render = function() {
                   attrs: { type: "text", disabled: _vm.formSubmitted },
                   domProps: { value: _vm.currentTag },
                   on: {
-                    keyup: [
-                      function($event) {
-                        if (
-                          !$event.type.indexOf("key") &&
-                          _vm._k(
-                            $event.keyCode,
-                            "enter",
-                            13,
-                            $event.key,
-                            "Enter"
-                          )
-                        ) {
-                          return null
-                        }
-                        return _vm.appendTag()
-                      },
-                      function($event) {
-                        if (
-                          !$event.type.indexOf("key") &&
-                          _vm._k($event.keyCode, "space", 32, $event.key, [
-                            " ",
-                            "Spacebar"
-                          ])
-                        ) {
-                          return null
-                        }
-                        return _vm.appendTag()
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
                       }
-                    ],
+                      return _vm.appendTag()
+                    },
                     input: function($event) {
                       if ($event.target.composing) {
                         return

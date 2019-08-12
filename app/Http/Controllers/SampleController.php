@@ -321,7 +321,7 @@ class SampleController extends Controller
         request()->validate([
             'id'        => ['required'],
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
-            'tags'      => ['required', 'array'],
+            'tags'      => ['nullable', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
         ]);
 
