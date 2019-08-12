@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bg-white border rounded shadow mb-3">
+    <div class="card mb-3">
       <div v-for="sample in samples" :key="sample.id">
         <sample-preview :sample="sample"></sample-preview>
       </div>

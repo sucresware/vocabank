@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <div class="flex mb-5 justify-between items-center">
         @if ($sample->prev)
             <div>
@@ -93,7 +92,5 @@
         </div>
         @endif
     </div>
-
-
 </div>
 @endsection

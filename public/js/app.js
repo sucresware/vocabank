@@ -2052,25 +2052,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
@@ -44018,7 +43999,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "hover:bg-gray-100" },
+    { staticClass: "hoverable" },
     [
       _c(
         "div",
@@ -44163,12 +44144,7 @@ var render = function() {
           _c("div", { staticClass: "z-20 ml-auto" }, [
             _c("i", { staticClass: "fas fa-undo" }),
             _vm._v("\n      " + _vm._s(_vm.sample.views) + "\n    ")
-          ]),
-          _vm._v(" "),
-          _c("div", {
-            staticClass: "absolute bottom-0 left-0 bg-teal-500",
-            staticStyle: { height: "3px" }
-          })
+          ])
         ],
         1
       ),
@@ -44177,64 +44153,57 @@ var render = function() {
         "slide-up-down",
         { attrs: { active: _vm.showControls, duration: 200 } },
         [
+          _c("div", {
+            staticClass: "w-full flex items-center relative py-8",
+            staticStyle: { height: "30px" },
+            attrs: { id: "wavesurfer-" + _vm.sample.id }
+          }),
+          _vm._v(" "),
           _c(
             "div",
-            {
-              staticClass: "border-gray-300",
-              staticStyle: { "border-bottom-width": "1px" }
-            },
+            { staticClass: "flex flex-wrap px-3 pb-2 text-xs items-end" },
             [
-              _c("div", {
-                staticClass: "w-full flex items-center relative py-8",
-                staticStyle: { height: "30px" },
-                attrs: { id: "wavesurfer-" + _vm.sample.id }
-              }),
+              _c(
+                "div",
+                { staticClass: "flex-auto" },
+                [
+                  [_vm._v("ajouté " + _vm._s(_vm.sample.presented_date))],
+                  _vm._v(" "),
+                  _vm.sample.user
+                    ? [
+                        _vm._v("\n          — par\n          "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "link",
+                            attrs: { href: "/users/" + _vm.sample.user.id }
+                          },
+                          [_vm._v(_vm._s(_vm.sample.user.name))]
+                        )
+                      ]
+                    : _vm._e()
+                ],
+                2
+              ),
               _vm._v(" "),
-              _c("div", { staticClass: "flex flex-wrap px-3 mb-3 items-end" }, [
+              _c("div", { staticClass: "ml-auto" }, [
                 _c(
-                  "div",
-                  { staticClass: "flex-auto" },
-                  [
-                    [_vm._v("ajouté " + _vm._s(_vm.sample.presented_date))],
-                    _vm._v(" "),
-                    _vm.sample.user
-                      ? [
-                          _vm._v("\n            — par\n            "),
-                          _c(
-                            "a",
-                            {
-                              staticClass: "text-gray-900 hover:text-gray-600",
-                              attrs: { href: "/user/" + _vm.sample.user.id }
-                            },
-                            [_vm._v(_vm._s(_vm.sample.user.name))]
-                          )
-                        ]
-                      : _vm._e()
-                  ],
-                  2
+                  "a",
+                  {
+                    staticClass: "btn btn-xs btn-secondary",
+                    attrs: { href: "/samples/" + _vm.sample.id }
+                  },
+                  [_vm._v("Détails")]
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "ml-auto" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass:
-                        "inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs",
-                      attrs: { href: "/samples/" + _vm.sample.id }
-                    },
-                    [_vm._v("Détails")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass:
-                        "inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs",
-                      attrs: { href: "/samples/" + _vm.sample.id }
-                    },
-                    [_c("i", { staticClass: "fas fa-copy" })]
-                  )
-                ])
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-xs btn-primary",
+                    attrs: { href: "/samples/" + _vm.sample.id }
+                  },
+                  [_c("i", { staticClass: "fas fa-copy" })]
+                )
               ])
             ]
           )
@@ -44269,7 +44238,7 @@ var render = function() {
   return _c("div", [
     _c(
       "div",
-      { staticClass: "bg-white border rounded shadow mb-3" },
+      { staticClass: "card mb-3" },
       _vm._l(_vm.samples, function(sample) {
         return _c(
           "div",

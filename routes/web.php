@@ -21,6 +21,7 @@ Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresC
 Route::get('/home', 'HomeController@index')->name('home');
 Route::view('/terms', 'static/terms')->name('terms');
 Route::view('/api', 'static/api')->name('api');
+Route::view('/themetest', 'static/test')->name('test');
 
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');

@@ -15,43 +15,192 @@ html {
     }
 }
 
+
+/** Global **/
+
+body {
+    @apply text-sm;
+}
+
+nav {
+    @apply w-full py-3 mb-6;
+}
+
+.form-control {
+    @apply rounded px-2 py-1
+}
+
 /** Buttons **/
 
 .btn {
-    @apply inline-block mr-1 px-3 py-1 font-bold text-center rounded-full;
+    @apply inline-block px-3 py-1 font-bold text-center rounded-full;
 }
 
 .btn-lg {
     @apply px-4 py-2;
 }
 
-.btn-gray {
-    @apply bg-gray-300;
+.btn-xs {
+    @apply text-xs px-3 py-1;
 }
 
-.btn-gray:hover {
-    @apply bg-gray-400;
+.card {
+    @apply rounded shadow;
 }
 
-.btn-white:hover {
-    @apply bg-gray-200;
+.card .hoverable {
+    @apply rounded;
 }
 
-.btn-teal {
-    @apply bg-teal-300;
+/** Theme Vocabank v1 **/
+
+body.theme-legacy  {
+    @apply bg-gray-100 text-gray-700;
 }
 
-.btn-teal:hover {
-    @apply bg-teal-400;
+.theme-legacy .text-muted {
+    @apply text-gray-500;
 }
 
-.btn-dark {
-    @apply text-white bg-gray-700;
+.theme-legacy a {
+    @apply text-gray-600;
 }
 
-.btn-dark:hover {
-    @apply text-white bg-gray-600;
+.theme-legacy a:hover {
+    @apply text-gray-500;
 }
+
+.theme-legacy nav {
+    @apply bg-gray-800 shadow-lg;
+}
+
+.theme-legacy .form-control {
+    @apply border border-gray-300;
+}
+
+.theme-legacy .form-control.form-control-inverse {
+    @apply border-0 bg-gray-700 text-white;
+}
+
+.theme-legacy .nav-link {
+    @apply text-gray-600;
+}
+
+.theme-legacy .nav-link:hover {
+    @apply text-gray-400;
+}
+
+.theme-legacy .nav-link.active {
+    @apply text-white;
+}
+
+.theme-legacy .btn {
+    @apply text-gray-700;
+}
+
+.theme-legacy .btn-primary {
+    @apply bg-teal-500 text-white;
+}
+
+.theme-legacy .btn-primary:hover {
+    @apply bg-teal-600 text-white;
+}
+
+.theme-legacy .card {
+    @apply bg-white;
+}
+
+.theme-legacy .hoverable:hover {
+    @apply bg-gray-100;
+}
+
+/** Theme Vocabank v2 **/
+
+body.theme-vocabank {
+    @apply text-white;
+    background-color: #272A33;
+}
+
+.theme-vocabank .text-muted {
+    @apply text-gray-500;
+}
+
+.theme-vocabank a {
+    @apply text-gray-300;
+}
+
+.theme-vocabank a:hover {
+    @apply text-gray-400;
+}
+
+.theme-vocabank .text-muted a {
+    @apply text-gray-400;
+}
+
+.theme-vocabank .text-muted a:hover {
+    @apply text-gray-500;
+}
+
+.theme-vocabank > nav {
+    background: linear-gradient(270deg, #CE3572 0%, #4B2E85 100%);
+    @apply relative;
+}
+
+.theme-vocabank > nav::after {
+    @apply absolute left-0 right-0 w-full;
+    bottom: -200px;
+    height: 200px;
+    content: "";
+    width: 100%;
+    background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 68.81%), linear-gradient(270deg, #CE3572 0%, #4B2E85 100%);
+    z-index: -1;
+}
+
+.theme-vocabank .form-control {
+    @apply border-0 bg-gray-700 text-white;
+}
+
+.theme-vocabank .form-control.form-control-inverse {
+    @apply border-0 text-white;
+    background: rgba(255, 255, 255, .15);
+}
+
+.theme-vocabank .nav-link {
+    @apply text-white;
+    opacity: .6;
+}
+
+.theme-vocabank .nav-link:hover {
+    opacity: .8;
+}
+
+.theme-vocabank .nav-link.active {
+    @apply text-white;
+    opacity: 1;
+}
+
+.theme-vocabank .btn {
+    @apply text-white;
+}
+
+.theme-vocabank .btn-primary {
+    background: rgba(255, 255, 255, .15);
+}
+
+.theme-vocabank .btn-primary:hover {
+    background: rgba(255, 255, 255, .30);
+}
+
+.theme-vocabank .card {
+    @apply shadow-lg;
+    background-color: #474a51;
+}
+
+.theme-vocabank .hoverable:hover {
+    background-color: #56585f;
+}
+
+/** Wavesurfer **/
 
 wave {
     width: 100%;

@@ -1,5 +1,5 @@
 <template>
-  <div class="hover:bg-gray-100">
+  <div class="hoverable">
     <div
       class="hover:cursor-pointer px-2 py-2 w-full flex items-center relative"
       v-on:click="toggle()"
@@ -53,45 +53,26 @@
         <i class="fas fa-undo"></i>
         {{ sample.views }}
       </div>
-
-      <div class="absolute bottom-0 left-0 bg-teal-500" style="height: 3px;"></div>
     </div>
-    <!-- <div
-      style="height: 30px; border-bottom-width: 1px;"
-      class="w-full flex items-center relative border-gray-300 py-8"
-      v-show="showControls"
-      :id="'wavesurfer-' + sample.id"
-    ></div>-->
     <slide-up-down :active="showControls" :duration="200">
-      <div style="border-bottom-width: 1px;" class="border-gray-300">
-        <div
-          style="height: 30px;"
-          class="w-full flex items-center relative py-8"
-          :id="'wavesurfer-' + sample.id"
-        ></div>
-        <div class="flex flex-wrap px-3 mb-3 items-end">
-          <div class="flex-auto">
-            <template>ajouté {{ sample.presented_date }}</template>
-            <template v-if="sample.user">
-              — par
-              <a
-                :href="'/user/' + sample.user.id"
-                class="text-gray-900 hover:text-gray-600"
-              >{{ sample.user.name }}</a>
-            </template>
-          </div>
-          <div class="ml-auto">
-            <a
-              :href="'/samples/' + sample.id"
-              class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs"
-            >Détails</a>
-            <a
-              :href="'/samples/' + sample.id"
-              class="inline-block mr-1 px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 text-xs"
-            >
-              <i class="fas fa-copy"></i>
-            </a>
-          </div>
+      <div
+        style="height: 30px;"
+        class="w-full flex items-center relative py-8"
+        :id="'wavesurfer-' + sample.id"
+      ></div>
+      <div class="flex flex-wrap px-3 pb-2 text-xs items-end">
+        <div class="flex-auto">
+          <template>ajouté {{ sample.presented_date }}</template>
+          <template v-if="sample.user">
+            — par
+            <a :href="'/users/' + sample.user.id" class="link">{{ sample.user.name }}</a>
+          </template>
+        </div>
+        <div class="ml-auto">
+          <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
+          <a :href="'/samples/' + sample.id" class="btn btn-xs btn-primary">
+            <i class="fas fa-copy"></i>
+          </a>
         </div>
       </div>
     </slide-up-down>
