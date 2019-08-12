@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full justify-center">
     <div class="w-1/2">
-      <div class="bg-white shadow mb-5">
+      <div class="card mb-5">
         <slide-up-down :active="step == 1" :duration="300">
           <div
             class="bg-gray-800 text-gray-200 text-white h-64 w-full flex items-center justify-center text-center"
@@ -13,7 +13,7 @@
           <div class="p-10 text-center">
             <a
               href="#"
-              class="inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5"
+              class="btn btn-primary mb-5"
               onclick="document.getElementById('audioInput').click()"
             >
               <i class="fa fa-upload mr-1"></i> Choisir un fichier
@@ -21,17 +21,16 @@
             <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
             <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
 
-            <div class="text-center mb-6 mt-2 px-32">
-              <div class="bg-gray-300" style="height: 1px;"></div>
-              <div class="-mt-3">
-                <span class="bg-white px-2">ou</span>
-              </div>
+            <div class="w-1/2 mx-auto flex items-center justify-center mb-6">
+              <hr class="w-full" />
+              <div class="px-2">ou</div>
+              <hr class="w-full" />
             </div>
 
             <input
               type="text"
               placeholder="Coller un lien YouTube"
-              class="bg-gray-200 rounded-full px-4 py-1 text-center"
+              class="form-control"
               :disabled="formSubmitted"
               v-model="youtubeURL"
             />
@@ -40,7 +39,7 @@
                       'bg-gray-300 hover:bg-gray-400': !formSubmitted,
                       'cursor-not-allowed bg-gray-400': formSubmitted,
                       }"
-              class="inline px-3 py-1 font-bold rounded-full"
+              class="btn btn-secondary"
               v-on:click="processYouTubeURL"
             >
               <span v-show="formSubmitted">
@@ -90,9 +89,7 @@
               <span class="text-red-500">*</span>
             </div>
 
-            <sample-player :sample="sample" :autoload="false" :autoplay="false" ref="samplePlayer"></sample-player>
-
-            <div class="flex items-center border-gray-300 border rounded w-full px-3 py-2 relative">
+            <div class="flex items-center form-control w-full relative p-4">
               <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
                 <img
                   :src="'/storage/' + sample.waveform"
@@ -109,7 +106,7 @@
                   {{ files.audio.name }}
                   <span class="text-gray-500">({{ uploadProgress }}%)</span>
                 </div>
-                <div class="border-gray-300 border rounded w-full h-2 relative">
+                <div class="rounded w-full h-2 relative">
                   <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
                 </div>
               </div>
@@ -137,7 +134,7 @@
             </div>
             <input
               type="text"
-              class="border-gray-300 border rounded w-full px-2 py-1"
+              class="form-control w-full"
               v-model="sample.name"
               :disabled="formSubmitted"
             />
@@ -153,7 +150,7 @@
             </div>
             <input
               type="text"
-              class="border-gray-300 border rounded w-full px-2 py-1"
+              class="form-control w-full"
               @keyup.enter="appendTag()"
               @keyup.space="appendTag()"
               v-model="currentTag"
@@ -166,7 +163,7 @@
 
             <div class="my-3">
               <div
-                class="text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block"
+                class="btn btn-xs btn-secondary hover:line-through cursor-pointer mr-1 inline-block"
                 v-for="(tag, i) in sample.tags"
                 :key="i"
                 v-on:click="removeTag(i)"
@@ -178,7 +175,7 @@
               <div class="text-xs mb-1">Description</div>
               <textarea
                 type="text"
-                class="border-gray-300 border rounded w-full px-2 py-1 h-32"
+                class="form-control w-full h-32"
                 v-model="sample.description"
                 :disabled="formSubmitted"
               ></textarea>
@@ -192,10 +189,10 @@
             <a
               href="#"
               :class="{
-                      'bg-gray-300 hover:bg-gray-400': !formSubmitted && processingComplete,
-                      'cursor-not-allowed bg-gray-400': formSubmitted || !processingComplete,
+                      'btn-primary': !formSubmitted && processingComplete,
+                      'cursor-not-allowed btn-secondary': formSubmitted || !processingComplete,
                       }"
-              class="inline-block px-3 py-1 font-bold rounded-full"
+              class="btn"
               v-on:click="submit"
             >
               <span v-show="formSubmitted || !processingComplete">

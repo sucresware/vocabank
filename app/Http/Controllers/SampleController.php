@@ -7,6 +7,7 @@ use App\Jobs\GenerateWaveformJob;
 use App\Models\Sample;
 use App\Models\Tag;
 use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
 use FFMpeg\Format\Audio\Mp3;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class SampleController extends Controller
     {
         if ($request->q) {
             $q = explode(' ', $request->q);
-            $samples = Sample::public();
+            $samples = Sample::with('user')->public();
 
             foreach ($q as $q_) {
                 $samples = $samples->whereHas('tags', function ($query) use ($q_) {
@@ -293,23 +294,21 @@ class SampleController extends Controller
 
         $sample->audio = 'temp/' . $audio_name;
 
-        try {
-            $waveform_name = $sample->id . '_waveform_' . time() . '.png';
+        $waveform_name = $sample->id . '_waveform_' . time() . '.png';
 
-            $ffmpeg = FFMpeg::create();
-            $audio = $ffmpeg->open(Storage::path($sample->audio));
-            $audio->save((new Mp3()), storage_path('app/temp', $audio_name));
+        $ffmpeg = FFMpeg::create();
+        $audio = $ffmpeg->open(Storage::path($sample->audio));
+        $audio->save((new Mp3()), storage_path('app/temp' . $audio_name));
 
-            $ffprobe = FFMpeg\FFProbe::create();
-            $sample->duration = $ffprobe
-    ->format(storage_path('app/temp', $audio_name)) // extracts file informations
-    ->get('duration');             // returns the duration property
+        $ffprobe = FFProbe::create();
+        $sample->duration = $ffprobe
+            ->format(storage_path('app/temp/' . $audio_name)) // extracts file informations
+            ->get('duration');             // returns the duration property
 
-            $waveform = $audio->waveform(1920, 128, ['#a0aec0']);
-            $waveform->save(Storage::path('public/samples/' . $waveform_name));
-            $sample->waveform = 'samples/' . $waveform_name;
-        } catch (\Exception $e) {
-        }
+        $waveform = $audio->waveform(1920, 128, ['#a0aec0']);
+        $waveform->save(Storage::path('public/samples/' . $waveform_name));
+        $sample->waveform = 'samples/' . $waveform_name;
+
         $sample->save();
 
         return $sample;
@@ -317,14 +316,14 @@ class SampleController extends Controller
 
     public function store(Request $request)
     {
+        $sample = Sample::findOrFail(request()->id);
+
         request()->validate([
             'id'        => ['required'],
-            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name'],
+            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
             'tags'      => ['required', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
         ]);
-
-        $sample = Sample::findOrFail(request()->id);
 
         if ($sample->status != Sample::STATUS_DRAFT);
 

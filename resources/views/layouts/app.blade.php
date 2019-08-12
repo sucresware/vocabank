@@ -21,8 +21,8 @@
                         <div class="pl-3"><a href="{{ route('login') }}" class="nav-link {{ active_class(if_route('login')) }}">Connexion</a></div>
                     @else
                         <a href="{{ route('samples.create') }}" class="mx-3 btn btn-primary"><i class="fa fa-plus"></i> Ajouter</a>
-                        <a href="{{ route('users.show', auth()->user()) }}" class="mx-3 nav-link {{ active_class(if_route('users.show', auth()->user())) }}">{{ auth()->user()->name }}</a>
-                        <a href="#" class="mx-3 nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Déconnexion</a>
+                        <a href="{{ route('users.show', auth()->user()) }}" class="mx-3 nav-link {{ active_class(if_route('users.show', auth()->user())) }}"><i class="fas fa-user"></i></a>
+                        <a href="#" class="mx-3 nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                     @endguest
@@ -42,6 +42,7 @@
 
         <strong>VocaBank</strong>, parce qu'on entendait rien sur <a href="https://risibank.fr">RisiBank</a>.<br>
 
+        <a href="javascript:void(0)" id="lightSwitch"><i class="fas fa-lightbulb"></i></a> —
         <a href="{{ route('api') }}">API</a> —
         <a href="{{ route('terms') }}">Conditions générales d'utilisation</a> —
         <a href="https://github.com/4sucres/vocabank" target="_blank">GitHub</a><br>
@@ -50,5 +51,4 @@
         <a href="https://4sucres.org" target="_blank">4sucres.org</a> —
         <a href="https://olinux.org" target="_blank">Olinux Records®</a><br>
     </footer>
-
 @endsection

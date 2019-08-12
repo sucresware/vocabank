@@ -39,8 +39,6 @@ class ConvertToMP3Job implements ShouldQueue
             ->open(Storage::path($this->sample->audio))
             ->save((new Mp3()), Storage::path('samples/' . $audio_name));
 
-        dump(Storage::path('samples/' . $audio_name));
-
         $ffprobe = FFProbe::create();
         $duration = $ffprobe->format(Storage::path('samples/' . $audio_name))->get('duration');
 

@@ -3,7 +3,7 @@
     <div class="mx-3">
       <div class="relative h-10 w-10" v-on:click="toggle()">
         <div
-          class="rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-gray-600 flex items-center justify-center"
+          class="rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
         >
           <i
             class="text-xs fas fa-play"
@@ -12,7 +12,7 @@
           ></i>
         </div>
         <div
-          class="rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-gray-600 flex items-center justify-center"
+          class="rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
         >
           <i
             class="text-xs fas fa-play"

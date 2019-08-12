@@ -2452,9 +2452,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 var uploadMaxSize = 10 * 1048576; // 10 Mo
 
@@ -43899,7 +43896,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-gray-600 flex items-center justify-center"
+                "rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
             },
             [
               _c("i", {
@@ -43921,7 +43918,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-gray-600 flex items-center justify-center"
+                "rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
             },
             [
               _c("i", {
@@ -44346,7 +44343,7 @@ var render = function() {
     _c("div", { staticClass: "w-1/2" }, [
       _c(
         "div",
-        { staticClass: "bg-white shadow mb-5" },
+        { staticClass: "card mb-5" },
         [
           _c(
             "slide-up-down",
@@ -44379,8 +44376,7 @@ var render = function() {
                 _c(
                   "a",
                   {
-                    staticClass:
-                      "inline-block px-3 py-1 font-bold rounded-full bg-gray-300 hover:bg-gray-400 mb-5",
+                    staticClass: "btn btn-primary mb-5",
                     attrs: {
                       href: "#",
                       onclick: "document.getElementById('audioInput').click()"
@@ -44414,16 +44410,20 @@ var render = function() {
                   [_vm._v(_vm._s(_vm.uploadError))]
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "text-center mb-6 mt-2 px-32" }, [
-                  _c("div", {
-                    staticClass: "bg-gray-300",
-                    staticStyle: { height: "1px" }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "-mt-3" }, [
-                    _c("span", { staticClass: "bg-white px-2" }, [_vm._v("ou")])
-                  ])
-                ]),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w-1/2 mx-auto flex items-center justify-center mb-6"
+                  },
+                  [
+                    _c("hr", { staticClass: "w-full" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "px-2" }, [_vm._v("ou")]),
+                    _vm._v(" "),
+                    _c("hr", { staticClass: "w-full" })
+                  ]
+                ),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -44434,7 +44434,7 @@ var render = function() {
                       expression: "youtubeURL"
                     }
                   ],
-                  staticClass: "bg-gray-200 rounded-full px-4 py-1 text-center",
+                  staticClass: "form-control",
                   attrs: {
                     type: "text",
                     placeholder: "Coller un lien YouTube",
@@ -44454,7 +44454,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "inline px-3 py-1 font-bold rounded-full",
+                    staticClass: "btn btn-secondary",
                     class: {
                       "bg-gray-300 hover:bg-gray-400": !_vm.formSubmitted,
                       "cursor-not-allowed bg-gray-400": _vm.formSubmitted
@@ -44554,144 +44554,119 @@ var render = function() {
                   : _vm._e()
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "mb-3" },
-                [
-                  _c("div", { staticClass: "text-xs mb-1" }, [
-                    _vm._v("\n            Sample\n            "),
-                    _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
-                  ]),
-                  _vm._v(" "),
-                  _c("sample-player", {
-                    ref: "samplePlayer",
-                    attrs: {
-                      sample: _vm.sample,
-                      autoload: false,
-                      autoplay: false
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center border-gray-300 border rounded w-full px-3 py-2 relative"
-                    },
-                    [
-                      _vm.sample.waveform
-                        ? _c(
+              _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "text-xs mb-1" }, [
+                  _vm._v("\n            Sample\n            "),
+                  _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "flex items-center form-control w-full relative p-4"
+                  },
+                  [
+                    _vm.sample.waveform
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "absolute px-5 top-0 bottom-0 left-0 right-0"
+                          },
+                          [
+                            _c("img", {
+                              staticClass: "w-full h-full",
+                              staticStyle: { opacity: "0.2" },
+                              attrs: { src: "/storage/" + _vm.sample.waveform }
+                            })
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mr-3" }, [
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.processingComplete,
+                            expression: "!processingComplete"
+                          }
+                        ],
+                        staticClass: "fa fa-fw fa-spinner fa-spin"
+                      }),
+                      _vm._v(" "),
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.processingComplete,
+                            expression: "processingComplete"
+                          }
+                        ],
+                        staticClass: "fa fa-fw fa-check-circle text-teal-400"
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _vm.importType == "mp3"
+                      ? _c("div", { staticClass: "flex-1" }, [
+                          _c("div", { staticClass: "text-xs mb-1" }, [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(_vm.files.audio.name) +
+                                "\n                "
+                            ),
+                            _c("span", { staticClass: "text-gray-500" }, [
+                              _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
                             "div",
-                            {
-                              staticClass:
-                                "absolute px-5 top-0 bottom-0 left-0 right-0"
-                            },
+                            { staticClass: "rounded w-full h-2 relative" },
                             [
-                              _c("img", {
-                                staticClass: "w-full h-full",
-                                staticStyle: { opacity: "0.2" },
-                                attrs: {
-                                  src: "/storage/" + _vm.sample.waveform
-                                }
+                              _c("div", {
+                                staticClass: "h-full bg-teal-400",
+                                style: { width: _vm.uploadProgress + "%" }
                               })
                             ]
                           )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mr-3" }, [
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: !_vm.processingComplete,
-                              expression: "!processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-spinner fa-spin"
-                        }),
-                        _vm._v(" "),
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.processingComplete,
-                              expression: "processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-check-circle text-teal-400"
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _vm.importType == "mp3"
-                        ? _c("div", { staticClass: "flex-1" }, [
-                            _c("div", { staticClass: "text-xs mb-1" }, [
-                              _vm._v(
-                                "\n                " +
-                                  _vm._s(_vm.files.audio.name) +
-                                  "\n                "
-                              ),
-                              _c("span", { staticClass: "text-gray-500" }, [
-                                _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
-                              ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.importType == "youtube" &&
+                    _vm.sample.youtube_video != ""
+                      ? _c("div", { staticClass: "flex-1 flex items-center" }, [
+                          _c("div", [
+                            _c("img", {
+                              staticClass: "h-10 rounded mr-3",
+                              attrs: {
+                                src: _vm.sample.youtube_video.thumbnail_url
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex-1 text-xs" }, [
+                            _c("i", { staticClass: "fab fa-youtube mr-1" }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "font-bold" }, [
+                              _vm._v(_vm._s(_vm.sample.youtube_video.title))
                             ]),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "border-gray-300 border rounded w-full h-2 relative"
-                              },
-                              [
-                                _c("div", {
-                                  staticClass: "h-full bg-teal-400",
-                                  style: { width: _vm.uploadProgress + "%" }
-                                })
-                              ]
+                            _c("br"),
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(_vm.sample.youtube_video.author_name) +
+                                "\n              "
                             )
                           ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.importType == "youtube" &&
-                      _vm.sample.youtube_video != ""
-                        ? _c(
-                            "div",
-                            { staticClass: "flex-1 flex items-center" },
-                            [
-                              _c("div", [
-                                _c("img", {
-                                  staticClass: "h-10 rounded mr-3",
-                                  attrs: {
-                                    src: _vm.sample.youtube_video.thumbnail_url
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "flex-1 text-xs" }, [
-                                _c("i", { staticClass: "fab fa-youtube mr-1" }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "font-bold" }, [
-                                  _vm._v(_vm._s(_vm.sample.youtube_video.title))
-                                ]),
-                                _vm._v(" "),
-                                _c("br"),
-                                _vm._v(
-                                  "\n                " +
-                                    _vm._s(
-                                      _vm.sample.youtube_video.author_name
-                                    ) +
-                                    "\n              "
-                                )
-                              ])
-                            ]
-                          )
-                        : _vm._e()
-                    ]
-                  )
-                ],
-                1
-              ),
+                        ])
+                      : _vm._e()
+                  ]
+                )
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "mb-3" }, [
                 _c("div", { staticClass: "text-xs mb-1" }, [
@@ -44708,8 +44683,7 @@ var render = function() {
                       expression: "sample.name"
                     }
                   ],
-                  staticClass:
-                    "border-gray-300 border rounded w-full px-2 py-1",
+                  staticClass: "form-control w-full",
                   attrs: { type: "text", disabled: _vm.formSubmitted },
                   domProps: { value: _vm.sample.name },
                   on: {
@@ -44746,8 +44720,7 @@ var render = function() {
                       expression: "currentTag"
                     }
                   ],
-                  staticClass:
-                    "border-gray-300 border rounded w-full px-2 py-1",
+                  staticClass: "form-control w-full",
                   attrs: { type: "text", disabled: _vm.formSubmitted },
                   domProps: { value: _vm.currentTag },
                   on: {
@@ -44806,7 +44779,7 @@ var render = function() {
                       {
                         key: i,
                         staticClass:
-                          "text-xs py-1 mb-1 px-2 bg-gray-200 rounded-full hover:bg-gray-300 hover:line-through cursor-pointer mr-1 inline-block",
+                          "btn btn-xs btn-secondary hover:line-through cursor-pointer mr-1 inline-block",
                         on: {
                           click: function($event) {
                             return _vm.removeTag(i)
@@ -44835,8 +44808,7 @@ var render = function() {
                         expression: "sample.description"
                       }
                     ],
-                    staticClass:
-                      "border-gray-300 border rounded w-full px-2 py-1 h-32",
+                    staticClass: "form-control w-full h-32",
                     attrs: { type: "text", disabled: _vm.formSubmitted },
                     domProps: { value: _vm.sample.description },
                     on: {
@@ -44863,12 +44835,11 @@ var render = function() {
                 _c(
                   "a",
                   {
-                    staticClass:
-                      "inline-block px-3 py-1 font-bold rounded-full",
+                    staticClass: "btn",
                     class: {
-                      "bg-gray-300 hover:bg-gray-400":
+                      "btn-primary":
                         !_vm.formSubmitted && _vm.processingComplete,
-                      "cursor-not-allowed bg-gray-400":
+                      "cursor-not-allowed btn-secondary":
                         _vm.formSubmitted || !_vm.processingComplete
                     },
                     attrs: { href: "#" },
@@ -57709,6 +57680,18 @@ var app = new Vue({
 window.onbeforeunload = function (event) {
   var logo = document.getElementById("logo-replay");
   logo.classList.add('spinner');
+};
+
+document.getElementById('lightSwitch').onclick = function (event) {
+  var bodyClasses = document.querySelector('body').classList;
+
+  if (bodyClasses.contains('theme-legacy')) {
+    bodyClasses.remove('theme-legacy');
+    bodyClasses.add('theme-vocabank');
+  } else {
+    bodyClasses.remove('theme-vocabank');
+    bodyClasses.add('theme-legacy');
+  }
 };
 
 /***/ }),

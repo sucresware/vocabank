@@ -26,3 +26,15 @@ window.onbeforeunload = function (event) {
     let logo = document.getElementById("logo-replay");
     logo.classList.add('spinner')
 }
+
+document.getElementById('lightSwitch').onclick = function(event) {
+    let bodyClasses = document.querySelector('body').classList;
+
+    if (bodyClasses.contains('theme-legacy')) {
+        bodyClasses.remove('theme-legacy');
+        bodyClasses.add('theme-vocabank');
+    } else {
+        bodyClasses.remove('theme-vocabank');
+        bodyClasses.add('theme-legacy');
+    }
+}
