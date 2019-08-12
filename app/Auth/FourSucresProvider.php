@@ -39,10 +39,10 @@ class FourSucresProvider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            'id'    => $user['id'],
-            'name'  => $user['name'],
-            'email' => isset($user['email']) ? $user['email'] : null,
-            // 'avatar_link' => $user['avatar_link'],
+            'id'     => $user['id'],
+            'name'   => $user['name'],
+            'avatar' => $user['avatar_link'],
+            'email'  => isset($user['email']) ? $user['email'] : null,
         ]);
     }
 }

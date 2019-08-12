@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\SucresHelper;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
@@ -24,7 +25,7 @@ class Sample extends Model implements ViewableContract
     protected $guarded = [];
 
     protected $appends = [
-        'views',
+        'views', 'presented_date',
     ];
 
     public function user()
@@ -55,5 +56,12 @@ class Sample extends Model implements ViewableContract
     public function getViewsAttribute()
     {
         return $this->views()->count();
+    }
+
+    public function getPresentedDateAttribute()
+    {
+        $markup = SucresHelper::niceDate($this->created_at, SucresHelper::NICEDATE_WITH_HOURS);
+
+        return $markup;
     }
 }

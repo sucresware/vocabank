@@ -48,7 +48,7 @@ class LoginController extends Controller
         try {
             $socialite_user = Socialite::with('foursucres')->user();
 
-            $user = User::where('4sucres_id', $socialite_user->getId())->first();
+            $user = User::where('fourSucres_account->id', $socialite_user->getId())->first();
 
             if (!$user && $socialite_user->getEmail()) {
                 $user = User::where('email', $socialite_user->getEmail())->first();
@@ -56,9 +56,9 @@ class LoginController extends Controller
 
             if (!$user) {
                 $user = User::create([
-                    'name'       => $socialite_user->getName(),
-                    'email'      => $socialite_user->getEmail(),
-                    '4sucres_id' => $socialite_user->getId(),
+                    'name'               => $socialite_user->getName(),
+                    'email'              => $socialite_user->getEmail(),
+                    'fourSucres_account' => (array) $socialite_user,
                 ]);
             }
 

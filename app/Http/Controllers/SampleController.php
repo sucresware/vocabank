@@ -28,7 +28,7 @@ class SampleController extends Controller
 
     public function recent()
     {
-        $samples = Sample::public()->orderBy('created_at', 'DESC')->paginate(15);
+        $samples = Sample::with('user')->public()->orderBy('created_at', 'DESC')->paginate(15);
 
         if (request()->ajax()) {
             return $samples;
@@ -39,7 +39,7 @@ class SampleController extends Controller
 
     public function popular()
     {
-        $samples = Sample::public()->orderByViews()->paginate(15);
+        $samples = Sample::with('user')->public()->orderByViews()->paginate(15);
 
         if (request()->ajax()) {
             return $samples;

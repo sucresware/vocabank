@@ -11,16 +11,15 @@ class User extends Authenticatable
     use Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', '4sucres_id',
+        'name', 'email', 'password', 'fourSucres_account',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'email', 'fourSucres_account',
+    ];
+
+    protected $casts = [
+        'fourSucres_account' => 'array',
     ];
 
     public function samples()

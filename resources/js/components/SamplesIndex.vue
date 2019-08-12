@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-white border rounded shadow mb-3">
-      <div v-for="(sample, i) in samples" :key="sample.id">
+      <div v-for="sample in samples" :key="sample.id">
         <sample-preview :sample="sample"></sample-preview>
       </div>
     </div>
@@ -12,6 +12,7 @@
         <div slot="no-results"></div>
       </infinite-loading>
     </div>
+
     <div v-if="!infinite" class="flex justify-between mb-3">
       <div
         class="mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"
@@ -41,10 +42,8 @@ export default {
       page: "",
       path: "",
       samples: [],
-      // infinite props :
       pageTop: "",
-      // not-infinite props :
-      lastPage: 0
+      lastPage: 1
     };
   },
   methods: {
@@ -56,7 +55,6 @@ export default {
         .then(
           response => {
             if (response.data.data.length) {
-              // this.page += 1;
               this.samples.push(...response.data.data);
               $state.loaded();
             } else {
@@ -87,37 +85,12 @@ export default {
           }
         });
     }
-    // infiniteHandlerTop($state) {
-    //   if (this.pageTop <= 0) return $state.complete();
-
-    //   axios
-    //     .get("/api/v0/discussions/" + this.discussionId, {
-    //       params: { page: this.pageTop }
-    //     })
-    //     .then(({ data }) => {
-    //       if (data.data.length) {
-    //         this.pageTop -= 1;
-    //         this.posts = data.data.concat(this.posts);
-    //         $state.loaded();
-    //       } else {
-    //         $state.complete();
-    //       }
-    //     });
-    // }
   },
   mounted: function() {
-    console.log(this.paginator);
     this.samples = this.paginator.data;
     this.page = this.paginator.current_page;
+    this.last_page = this.paginator.last_page;
     this.path = this.paginator.path;
-
-    // if (this.initPage) {
-    //   this.page = this.initPage;
-    //   // this.pageTop = this.initPage;
-    // } else {
-    //   this.page = 1;
-    //   // this.pageTop = 1;
-    // }
   }
 };
 </script>

@@ -20,9 +20,12 @@ Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresC
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::view('/terms', 'static/terms')->name('terms');
+Route::view('/api', 'static/api')->name('api');
 
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
+Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
+Route::put('/users/{user}', 'UserController@update')->name('users.update');
 
 Route::get('/samples/recent', 'SampleController@recent')->name('samples.recent');
 Route::get('/samples/popular', 'SampleController@popular')->name('samples.popular');

@@ -2065,6 +2065,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
@@ -2079,7 +2085,9 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
       isPlaying: false
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    console.log(this.sample);
+  },
   methods: {
     toggle: function toggle() {
       var vm = this;
@@ -2177,6 +2185,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["filter", "paginator", "infinite"],
@@ -2185,10 +2194,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       page: "",
       path: "",
       samples: [],
-      // infinite props :
       pageTop: "",
-      // not-infinite props :
-      lastPage: 0
+      lastPage: 1
     };
   },
   methods: {
@@ -2203,7 +2210,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (response.data.data.length) {
           var _this$samples;
 
-          // this.page += 1;
           (_this$samples = _this.samples).push.apply(_this$samples, _toConsumableArray(response.data.data));
 
           $state.loaded();
@@ -2228,35 +2234,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           history.pushState({}, null, response.data.path + "?page=" + vm.page);
         }
       });
-    } // infiniteHandlerTop($state) {
-    //   if (this.pageTop <= 0) return $state.complete();
-    //   axios
-    //     .get("/api/v0/discussions/" + this.discussionId, {
-    //       params: { page: this.pageTop }
-    //     })
-    //     .then(({ data }) => {
-    //       if (data.data.length) {
-    //         this.pageTop -= 1;
-    //         this.posts = data.data.concat(this.posts);
-    //         $state.loaded();
-    //       } else {
-    //         $state.complete();
-    //       }
-    //     });
-    // }
-
+    }
   },
   mounted: function mounted() {
-    console.log(this.paginator);
     this.samples = this.paginator.data;
     this.page = this.paginator.current_page;
-    this.path = this.paginator.path; // if (this.initPage) {
-    //   this.page = this.initPage;
-    //   // this.pageTop = this.initPage;
-    // } else {
-    //   this.page = 1;
-    //   // this.pageTop = 1;
-    // }
+    this.last_page = this.paginator.last_page;
+    this.path = this.paginator.path;
   }
 });
 
@@ -44207,17 +44191,28 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("div", { staticClass: "flex flex-wrap px-3 mb-3 items-end" }, [
-                _c("div", { staticClass: "flex-auto" }, [
-                  _vm._v("\n          il y a 3 jours par\n          "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "text-gray-900 hover:text-gray-600",
-                      attrs: { href: "#" }
-                    },
-                    [_vm._v("YvonEnbaver")]
-                  )
-                ]),
+                _c(
+                  "div",
+                  { staticClass: "flex-auto" },
+                  [
+                    [_vm._v("ajouté " + _vm._s(_vm.sample.presented_date))],
+                    _vm._v(" "),
+                    _vm.sample.user
+                      ? [
+                          _vm._v("\n            — par\n            "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "text-gray-900 hover:text-gray-600",
+                              attrs: { href: "/user/" + _vm.sample.user.id }
+                            },
+                            [_vm._v(_vm._s(_vm.sample.user.name))]
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                ),
                 _vm._v(" "),
                 _c("div", { staticClass: "ml-auto" }, [
                   _c(
@@ -44275,7 +44270,7 @@ var render = function() {
     _c(
       "div",
       { staticClass: "bg-white border rounded shadow mb-3" },
-      _vm._l(_vm.samples, function(sample, i) {
+      _vm._l(_vm.samples, function(sample) {
         return _c(
           "div",
           { key: sample.id },

@@ -25,11 +25,22 @@ class UserController extends Controller
         return view('user.show', compact('user', 'samples'));
     }
 
-    // public function edit($id)
-    // { }
+    public function edit(User $user)
+    {
+        return view('user.edit', compact('user'));
+    }
 
-    // public function update(Request $request, $id)
-    // { }
+    public function update(User $user)
+    {
+        request()->validate([
+            'description' => ['nullable', 'max:1024'],
+        ]);
+
+        $user->description = request()->description;
+        $user->save();
+
+        return redirect(route('users.show', $user));
+    }
 
     // public function destroy($id)
     // { }

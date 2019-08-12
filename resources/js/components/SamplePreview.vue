@@ -71,8 +71,14 @@
         ></div>
         <div class="flex flex-wrap px-3 mb-3 items-end">
           <div class="flex-auto">
-            il y a 3 jours par
-            <a href="#" class="text-gray-900 hover:text-gray-600">YvonEnbaver</a>
+            <template>ajouté {{ sample.presented_date }}</template>
+            <template v-if="sample.user">
+              — par
+              <a
+                :href="'/user/' + sample.user.id"
+                class="text-gray-900 hover:text-gray-600"
+              >{{ sample.user.name }}</a>
+            </template>
           </div>
           <div class="ml-auto">
             <a
@@ -107,7 +113,9 @@ export default {
       isPlaying: false
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.sample);
+  },
   methods: {
     toggle() {
       let vm = this;
