@@ -90,7 +90,7 @@ export default {
     this.samples = this.paginator.data;
     this.page = this.paginator.current_page;
     this.last_page = this.paginator.last_page;
-    this.path = this.paginator.path;
+    this.path = "//" + location.host + location.pathname; //this.paginator.path;
   }
 };
 </script>
