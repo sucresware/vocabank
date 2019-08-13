@@ -46,14 +46,16 @@ export default {
     return {
       waveSurfer: null,
       isLoading: true,
-      isPlaying: false
+      isPlaying: false,
+      hasAutoLoad: false,
+      hasAutoPlay: false
     };
   },
   mounted() {
-    if (typeof this.autoload == "undefined") this.autoload = true;
-    if (typeof this.autoplay == "undefined") this.autoplay = true;
+    if (typeof this.autoload == "undefined") this.hasAutoLoad = true;
+    if (typeof this.autoplay == "undefined") this.hasAutoPlay = true;
 
-    if (this.autoload) this.load();
+    if (this.hasAutoLoad) this.load();
   },
   methods: {
     load() {
@@ -75,7 +77,7 @@ export default {
 
       this.waveSurfer.on("ready", function() {
         vm.isLoading = false;
-        if (vm.autoplay) {
+        if (vm.hasAutoPlay) {
           vm.isPlaying = true;
           vm.waveSurfer.play();
         }

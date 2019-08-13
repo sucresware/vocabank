@@ -42,17 +42,19 @@ window.onbeforeunload = function (event) {
     logo.classList.add('spinner')
 }
 
-document.getElementById('lightSwitch').onclick = function(event) {
-    let bodyClasses = document.querySelector('body').classList;
+if (document.getElementById('lightSwitch')) {
+    document.getElementById('lightSwitch').onclick = function(event) {
+        let bodyClasses = document.querySelector('body').classList;
 
-    lightTogglerPlayer.play();
-    axios.get("/light-toggler");
+        lightTogglerPlayer.play();
+        axios.get("/light-toggler");
 
-    if (bodyClasses.contains('theme-legacy')) {
-        bodyClasses.remove('theme-legacy');
-        bodyClasses.add('theme-vocabank');
-    } else {
-        bodyClasses.remove('theme-vocabank');
-        bodyClasses.add('theme-legacy');
+        if (bodyClasses.contains('theme-legacy')) {
+            bodyClasses.remove('theme-legacy');
+            bodyClasses.add('theme-vocabank');
+        } else {
+            bodyClasses.remove('theme-vocabank');
+            bodyClasses.add('theme-legacy');
+        }
     }
 }

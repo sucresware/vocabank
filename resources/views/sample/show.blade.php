@@ -41,6 +41,7 @@
                                 </div>
                             </div>
                             @endif
+                            @if ($sample->tags->count())
                             <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-muted">
                                     Tags
@@ -51,6 +52,7 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
 
                             <hr class="my-3">
 

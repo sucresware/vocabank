@@ -13,8 +13,8 @@ class CreateSamplesTable extends Migration
     public function up()
     {
         Schema::create('samples', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
+            $table->uuid('id');
+            $table->uuid('user_id');
 
             $table->string('name');
             $table->unsignedInteger('status')->default(Sample::STATUS_DRAFT);

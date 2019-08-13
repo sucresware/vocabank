@@ -180,6 +180,8 @@
                 v-if="formErrors && formErrors.description !== undefined"
               >{{ formErrors.description[0] }}</div>
             </div>
+
+            <span class="font-bold">Attention : Une fois ajouté, votre sample n'est pas modifiable.</span>
           </div>
           <div class="text-right">
             <a

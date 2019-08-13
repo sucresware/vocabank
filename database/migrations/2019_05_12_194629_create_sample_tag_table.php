@@ -12,7 +12,7 @@ class CreateSampleTagTable extends Migration
     public function up()
     {
         Schema::create('sample_tag', function (Blueprint $table) {
-            $table->bigInteger('sample_id')->unsigned();
+            $table->uuid('sample_id');
             $table->bigInteger('tag_id')->unsigned();
         });
     }

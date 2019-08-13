@@ -6,7 +6,7 @@ use App\Helpers\SucresHelper;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
-use Illuminate\Database\Eloquent\Model;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Sample extends Model implements ViewableContract
 {

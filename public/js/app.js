@@ -1909,13 +1909,15 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
     return {
       waveSurfer: null,
       isLoading: true,
-      isPlaying: false
+      isPlaying: false,
+      hasAutoLoad: false,
+      hasAutoPlay: false
     };
   },
   mounted: function mounted() {
-    if (typeof this.autoload == "undefined") this.autoload = true;
-    if (typeof this.autoplay == "undefined") this.autoplay = true;
-    if (this.autoload) this.load();
+    if (typeof this.autoload == "undefined") this.hasAutoLoad = true;
+    if (typeof this.autoplay == "undefined") this.hasAutoPlay = true;
+    if (this.hasAutoLoad) this.load();
   },
   methods: {
     load: function load() {
@@ -1936,7 +1938,7 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
       this.waveSurfer.on("ready", function () {
         vm.isLoading = false;
 
-        if (vm.autoplay) {
+        if (vm.hasAutoPlay) {
           vm.isPlaying = true;
           vm.waveSurfer.play();
         }
@@ -2052,13 +2054,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["sample", "views"],
+  props: ["sample", "views", "iframe"],
   data: function data() {
     return {
+      inIframe: false,
       showWaveform: true,
       showControls: false,
       waveSurfer: null,
@@ -2067,7 +2079,7 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
     };
   },
   mounted: function mounted() {
-    console.log(this.sample);
+    if (this.iframe) this.inIframe = true;
   },
   methods: {
     toggle: function toggle() {
@@ -2241,6 +2253,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
 //
 //
 //
@@ -47349,25 +47363,46 @@ var render = function() {
                 2
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "ml-auto" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-xs btn-secondary",
-                    attrs: { href: "/samples/" + _vm.sample.id }
-                  },
-                  [_vm._v("Détails")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-xs btn-primary",
-                    attrs: { href: "/samples/" + _vm.sample.id }
-                  },
-                  [_c("i", { staticClass: "fas fa-copy" })]
-                )
-              ])
+              _c(
+                "div",
+                { staticClass: "ml-auto" },
+                [
+                  _vm.inIframe
+                    ? [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-xs btn-secondary",
+                            attrs: {
+                              href: "/samples/" + _vm.sample.id,
+                              target: "_blank"
+                            }
+                          },
+                          [_vm._v("Détails")]
+                        )
+                      ]
+                    : [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-xs btn-secondary",
+                            attrs: { href: "/samples/" + _vm.sample.id }
+                          },
+                          [_vm._v("Détails")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-xs btn-primary",
+                            attrs: { href: "/samples/" + _vm.sample.id }
+                          },
+                          [_c("i", { staticClass: "fas fa-copy" })]
+                        )
+                      ]
+                ],
+                2
+              )
             ]
           )
         ]
@@ -47971,6 +48006,12 @@ var render = function() {
                         [_vm._v(_vm._s(_vm.formErrors.description[0]))]
                       )
                     : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "font-bold" }, [
+                  _vm._v(
+                    "Attention : Une fois ajouté, votre sample n'est pas modifiable."
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -60838,19 +60879,21 @@ window.onbeforeunload = function (event) {
   logo.classList.add('spinner');
 };
 
-document.getElementById('lightSwitch').onclick = function (event) {
-  var bodyClasses = document.querySelector('body').classList;
-  lightTogglerPlayer.play();
-  axios.get("/light-toggler");
+if (document.getElementById('lightSwitch')) {
+  document.getElementById('lightSwitch').onclick = function (event) {
+    var bodyClasses = document.querySelector('body').classList;
+    lightTogglerPlayer.play();
+    axios.get("/light-toggler");
 
-  if (bodyClasses.contains('theme-legacy')) {
-    bodyClasses.remove('theme-legacy');
-    bodyClasses.add('theme-vocabank');
-  } else {
-    bodyClasses.remove('theme-vocabank');
-    bodyClasses.add('theme-legacy');
-  }
-};
+    if (bodyClasses.contains('theme-legacy')) {
+      bodyClasses.remove('theme-legacy');
+      bodyClasses.add('theme-vocabank');
+    } else {
+      bodyClasses.remove('theme-vocabank');
+      bodyClasses.add('theme-legacy');
+    }
+  };
+}
 
 /***/ }),
 

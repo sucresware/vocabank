@@ -1,5 +1,5 @@
 <div class="bg-white border rounded shadow p-3 mb-3">
-        {{--  <div class="row align-items-center">
+        <div class="row align-items-center">
             <div class="d-none d-sm-flex col-auto">
                 <div class="sample-thumbnail mx-auto">
                     <a href="{{ route('samples.show', $sample) }}"><img src="{{ $sample->thumbnail_link }}" class="rounded"></a>
@@ -18,13 +18,9 @@
                     </div>
                 </div>
                 <div class="mt-2">
-                    {!! $sample->render([
-                        'controls' => false,
-                        'height' => '60',
-                        'uniqid' => $uniqid,
-                    ]) !!}
+                    <sample-preview :sample="sample"></sample-preview>
                 </div>
             </div>
         </div>
-    </div>  --}}
+    </div>
 </div>

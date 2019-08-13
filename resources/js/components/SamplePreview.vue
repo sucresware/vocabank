@@ -69,10 +69,19 @@
           </template>
         </div>
         <div class="ml-auto">
-          <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
-          <a :href="'/samples/' + sample.id" class="btn btn-xs btn-primary">
-            <i class="fas fa-copy"></i>
-          </a>
+          <template v-if="inIframe">
+            <a
+              :href="'/samples/' + sample.id"
+              class="btn btn-xs btn-secondary"
+              target="_blank"
+            >Détails</a>
+          </template>
+          <template v-else>
+            <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
+            <a :href="'/samples/' + sample.id" class="btn btn-xs btn-primary">
+              <i class="fas fa-copy"></i>
+            </a>
+          </template>
         </div>
       </div>
     </slide-up-down>
@@ -84,9 +93,10 @@ let $ = require("jquery");
 import WaveSurfer from "wavesurfer.js";
 
 export default {
-  props: ["sample", "views"],
+  props: ["sample", "views", "iframe"],
   data() {
     return {
+      inIframe: false,
       showWaveform: true,
       showControls: false,
       waveSurfer: null,
@@ -95,7 +105,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.sample);
+    if (this.iframe) this.inIframe = true;
   },
   methods: {
     toggle() {
