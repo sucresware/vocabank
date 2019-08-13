@@ -9,6 +9,8 @@
 @endsection
 
 @section('body')
+    <div class="font-bold text-xs p-3 py-1 text-center text-red-500 shadow-lg">VocaBank v2 - Open Alpha - La base de données peut être remise à zéro à tout moment.</div>
+
     <nav id="header">
         <div class="container mx-auto flex flex-wrap items-center">
             <div class="mx-2">
