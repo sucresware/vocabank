@@ -45,12 +45,12 @@ class Sample extends Model implements ViewableContract
 
     public function getNextAttribute()
     {
-        return static::public()->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
+        return static::public()->where('created_at', '>', $this->created_at)->orderBy('created_at', 'asc')->first();
     }
 
     public function getPrevAttribute()
     {
-        return static::public()->where('id', '<', $this->id)->orderBy('id', 'desc')->first();
+        return static::public()->where('created_at', '<', $this->created_at)->orderBy('created_at', 'desc')->first();
     }
 
     public function getViewsAttribute()
