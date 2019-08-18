@@ -59,147 +59,49 @@
 
         <slide-up-down :active="step == 2" :duration="300" class="p-5">
           <div class="mx-auto relative h-32 w-32 mb-5">
-            <img
-              :src="sample.thumbnail == '' ? sample.youtube_video.thumbnail_url : sample.thumbnail"
-              class="w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg"
-            />
-
-            <div
-              class="opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center"
-              style="background: rgba(0, 0, 0, 0.5);"
-              onclick="document.getElementById('thumbnailInput').click()"
-              id="thumbnail"
-            >
-              <i class="text-xs fas fa-upload"></i>
-            </div>
-            <input
-              type="file"
-              id="thumbnailInput"
-              v-on:change="onThumbnailInputChange"
-              class="hidden"
-            />
-            <div
-              class="text-red-500 mt-3 text-xs font-bold"
-              v-if="formErrors && formErrors.thumbnail !== undefined"
-            >{{ formErrors.thumbnail[0] }}</div>
-          </div>
-          <div class="mb-3">
-            <div class="text-xs mb-1">
-              Sample
-              <span class="text-red-500">*</span>
-            </div>
-
-            <div class="flex items-center form-control w-full relative p-4">
-              <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
-                <img
-                  :src="'/storage/' + sample.waveform"
-                  class="w-full h-full"
-                  style="opacity: 0.2;"
-                />
-              </div>
-              <div class="mr-3">
-                <i class="fa fa-fw fa-spinner fa-spin" v-show="!processingComplete"></i>
-                <i class="fa fa-fw fa-check-circle text-teal-400" v-show="processingComplete"></i>
-              </div>
-              <div class="flex-1" v-if="importType == 'mp3'">
-                <div class="text-xs mb-1">
-                  {{ files.audio.name }}
-                  <span class="text-gray-500">({{ uploadProgress }}%)</span>
-                </div>
-                <div class="rounded w-full h-2 relative">
-                  <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
-                </div>
-              </div>
-              <div
-                class="flex-1 flex items-center"
-                v-if="importType == 'youtube' && sample.youtube_video != ''"
-              >
-                <div>
-                  <img :src="sample.youtube_video.thumbnail_url" class="h-10 rounded mr-3" />
-                </div>
-                <div class="flex-1 text-xs">
-                  <i class="fab fa-youtube mr-1"></i>
-                  <span class="font-bold">{{ sample.youtube_video.title }}</span>
-                  <br />
-                  {{ sample.youtube_video.author_name }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <div class="text-xs mb-1">
-              Nom
-              <span class="text-red-500">*</span>
-            </div>
-            <input
-              type="text"
-              class="form-control w-full"
-              v-model="sample.name"
-              :disabled="formSubmitted"
-            />
-            <div
-              class="text-red-500 mt-3 text-xs font-bold"
-              v-if="formErrors && formErrors.name !== undefined"
-            >{{ formErrors.name[0] }}</div>
-          </div>
-          <div class="mb-3">
-            <div class="text-xs mb-1">Tags</div>
-            <input
-              type="text"
-              class="form-control w-full"
-              @keyup.enter="appendTag()"
-              v-model="currentTag"
-              :disabled="formSubmitted"
-            />
-            <div
-              class="text-red-500 mt-3 text-xs font-bold"
-              v-if="formErrors && formErrors.tags !== undefined"
-            >{{ formErrors.tags[0] }}</div>
-
-            <div class="my-3">
-              <div
-                class="btn btn-xs btn-secondary hover:line-through cursor-pointer mr-1 inline-block"
-                v-for="(tag, i) in sample.tags"
-                :key="i"
-                v-on:click="removeTag(i)"
-              >{{ tag }}</div>
-            </div>
-          </div>
-          <div>
             <div class="mb-3">
-              <div class="text-xs mb-1">Description</div>
-              <textarea
-                type="text"
-                class="form-control w-full h-32"
-                v-model="sample.description"
-                :disabled="formSubmitted"
-              ></textarea>
-              <div
-                class="text-red-500 mt-3 text-xs font-bold"
-                v-if="formErrors && formErrors.description !== undefined"
-              >{{ formErrors.description[0] }}</div>
-            </div>
+              <div class="text-xs mb-1">
+                Sample
+                <span class="text-red-500">*</span>
+              </div>
 
-            <span class="font-bold">Attention : Une fois ajouté, votre sample n'est pas modifiable.</span>
-          </div>
-          <div class="text-right">
-            <a
-              href="#"
-              :class="{
-                      'btn-primary': !formSubmitted && processingComplete,
-                      'cursor-not-allowed btn-secondary': formSubmitted || !processingComplete,
-                      }"
-              class="btn"
-              v-on:click="submit"
-            >
-              <span v-show="formSubmitted || !processingComplete">
-                <i class="fa fa-spinner fa-spin fa-fw"></i>
-              </span>
-              <span v-show="!formSubmitted && processingComplete">
-                <i class="fa fa-upload mr-1"></i> Ajouter
-              </span>
-            </a>
+              <div class="flex items-center form-control w-full relative p-4">
+                <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
+                  <img
+                    :src="'/storage/' + sample.waveform"
+                    class="w-full h-full"
+                    style="opacity: 0.2;"
+                  />
+                </div>
+                <div class="mr-3">
+                  <i class="fa fa-fw fa-spinner fa-spin" v-show="!processingComplete"></i>
+                  <i class="fa fa-fw fa-check-circle text-teal-400" v-show="processingComplete"></i>
+                </div>
+                <div class="flex-1" v-if="importType == 'mp3'">
+                  <div class="text-xs mb-1">
+                    {{ files.audio.name }}
+                    <span class="text-gray-500">({{ uploadProgress }}%)</span>
+                  </div>
+                  <div class="rounded w-full h-2 relative">
+                    <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
+                  </div>
+                </div>
+                <div
+                  class="flex-1 flex items-center"
+                  v-if="importType == 'youtube' && sample.youtube_video != ''"
+                >
+                  <div>
+                    <img :src="sample.youtube_video.thumbnail_url" class="h-10 rounded mr-3" />
+                  </div>
+                  <div class="flex-1 text-xs">
+                    <i class="fab fa-youtube mr-1"></i>
+                    <span class="font-bold">{{ sample.youtube_video.title }}</span>
+                    <br />
+                    {{ sample.youtube_video.author_name }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </slide-up-down>
       </div>
@@ -350,18 +252,12 @@ export default {
         })
         .then(
           response => {
-            this.processingComplete = true;
-            this.sample.id = response.data.id;
-            this.sample.waveform = response.data.waveform;
-            this.sample.audio = response.data.audio;
-
-            this.$refs.samplePlayer.load();
+            window.location = "/samples/" + response.data.id;
           },
           error => {
             document.getElementById("dropzone").classList.add("border-red-500");
-            if (error.response) {
+            if (error.response)
               this.uploadError = error.response.data.errors.audio[0];
-            }
             this.step = 1;
           }
         );
@@ -377,110 +273,13 @@ export default {
 
       axios.post("/samples/preflight/youtube", formData).then(
         response => {
-          this.sample.id = response.data.id;
-          this.sample.name = response.data.name;
-          this.sample.youtube_video = response.data.youtube_video;
-          this.sample.thumbnail = "";
-          this.step = 2;
-          this.formSubmitted = false;
-          this.formErrors = {};
-
-          axios
-            .get("/samples/" + response.data.id + "/process-youtube")
-            .then(response => {
-              this.processingComplete = true;
-              this.sample.audio = response.data.audio;
-              this.$refs.samplePlayer.load();
-            });
+          window.location = "/samples/" + response.data.id;
         },
         error => {
           this.formSubmitted = false;
           this.formErrors = error.response.data.errors;
         }
       );
-    },
-    onThumbnailInputChange(e) {
-      this.processThumbnailFile(e.target.files[0]);
-    },
-    processThumbnailFile(file) {
-      let el = document.getElementById("thumbnail");
-
-      if (file.size > 2 * 1048576) {
-        el.classList.add("border-red-500");
-        return;
-      }
-
-      let extension = file.name
-        .substring(file.name.lastIndexOf(".") + 1)
-        .toLowerCase();
-
-      if (
-        extension != "gif" &&
-        extension != "png" &&
-        extension != "bmp" &&
-        extension != "jpeg" &&
-        extension != "jpg"
-      ) {
-        el.classList.add("border-red-500");
-        return;
-      }
-
-      this.files.thumbnail = file;
-
-      let reader = new FileReader();
-      reader.onload = e => {
-        this.sample.thumbnail = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    appendTag() {
-      let safeTag = this.currentTag.trim().replace(/  */gi, "-");
-      if (
-        safeTag &&
-        safeTag != "" &&
-        this.sample.tags.indexOf(safeTag) == -1 &&
-        safeTag.length < 30 &&
-        this.sample.tags.length < 10
-      ) {
-        this.sample.tags.push(safeTag);
-      }
-
-      this.currentTag = "";
-    },
-    removeTag(i) {
-      this.sample.tags.splice(i, 1);
-    },
-    submit() {
-      let formData = new FormData();
-
-      if (!this.sample.id) return;
-      if (this.formSubmitted || !this.processingComplete) return;
-
-      formData.append("id", this.sample.id);
-      formData.append("name", this.sample.name);
-
-      this.sample.tags.forEach((tag, i) => {
-        formData.append("tags[" + i + "]", tag);
-      });
-
-      formData.append("description", this.sample.description);
-      formData.append("thumbnail", this.files.thumbnail);
-
-      this.formSubmitted = true;
-
-      axios
-        .post("/samples", formData, {
-          headers: { "Content-Type": "multipart/form-data" }
-        })
-        .then(
-          response => {
-            window.location = "/samples/" + response.data.id;
-          },
-          error => {
-            this.formSubmitted = false;
-            this.formErrors = error.response.data.errors;
-          }
-        );
     }
   }
 };

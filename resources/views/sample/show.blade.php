@@ -18,10 +18,20 @@
                         </div>
                     </div>
                     <div class="flex-1">
-                        <sample-player :sample="{{ $sample }}"></sample-player>
-                        <div class="p-5 pt-0">
+                        @if ($sample->status == \App\Models\Sample::STATUS_PUBLIC)
+                            <sample-player :sample="{{ $sample }}"></sample-player>
+                            <div class="p-5 pt-0"><hr class="my-3 mt-0"></div>
+                        @endif
 
-                            <hr class="my-3 mt-0">
+                        <div class="p-5 pt-0">
+                            <div class="flex flex-wrap mb-2">
+                                <div class="w-48 text-muted">
+                                    Status
+                                </div>
+                                <div class="flex-1">
+                                    @include('sample._status')
+                                </div>
+                            </div>
 
                             <div class="flex flex-wrap mb-2">
                                 <div class="w-48 text-muted">

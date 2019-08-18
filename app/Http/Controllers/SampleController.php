@@ -83,9 +83,9 @@ class SampleController extends Controller
 
     public function show(Sample $sample)
     {
-        if ($sample->status != Sample::STATUS_PUBLIC) {
-            abort(403);
-        }
+        abort_if(
+            ($sample->status != Sample::STATUS_PUBLIC) &&
+            ($sample->user != auth()->user()), 403);
 
         return view('sample.show', compact('sample'));
     }
