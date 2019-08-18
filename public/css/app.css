@@ -1,4 +1,4 @@
-@import url(https://rsms.me/inter/inter.css);/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+@import url(https://rsms.me/inter/inter.css);@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap);/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document
    ========================================================================== */
@@ -627,10 +627,11 @@ video {
   }
 }
 
-/** Font **/
+/** Global **/
 
-html {
+body {
   font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
 }
 
 @supports (font-variation-settings: normal) {
@@ -639,10 +640,9 @@ html {
   }
 }
 
-/** Global **/
-
-body {
-  font-size: 0.875rem;
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 nav {
@@ -793,17 +793,21 @@ body.theme-legacy  {
 
 body.theme-vocabank {
   color: #fff;
-  background-color: #272A33;
+  background: #17191f;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .theme-vocabank hr {
-  background-color: #fff;
-  opacity: .3;
+  background-color: #242636;
   height: 1px;
 }
 
 .theme-vocabank .text-muted {
-  color: #e2e8f0;
+  color: #a0aec0;
+}
+
+.theme-vocabank .btn {
+  border-radius: 0.25rem;
 }
 
 .theme-vocabank a, .theme-vocabank .a {
@@ -811,7 +815,7 @@ body.theme-vocabank {
 }
 
 .theme-vocabank a:hover, .theme-vocabank .a:hover {
-  color: #edf2f7;
+  color: #38b2ac;
 }
 
 .theme-vocabank .text-muted a {
@@ -819,25 +823,12 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .text-muted a:hover {
-  color: #a0aec0;
+  color: #38b2ac;
 }
 
 .theme-vocabank > nav {
-  background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
   position: relative;
-}
-
-.theme-vocabank > nav::after {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  bottom: -450px;
-  height: 450px;
-  content: "";
-  width: 100%;
-  background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-  z-index: -1;
+  background: linear-gradient(to right,#17191f,#23252c);
 }
 
 .theme-vocabank .form-control {
@@ -861,6 +852,7 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .nav-link:hover {
+  color: #fff;
   opacity: .8;
 }
 
@@ -871,18 +863,29 @@ body.theme-vocabank {
 
 .theme-vocabank .btn {
   color: #fff;
+  transition: .1s;
+}
+
+.theme-vocabank .btn:hover {
+  color: #fff;
+  transition: .1s;
 }
 
 .theme-vocabank .btn-primary {
-  background: rgba(255, 255, 255, .30);
+  background: #05c6b1;
+  background-image: linear-gradient(to right, #1ed79d, #05c6b1);
 }
 
 .theme-vocabank .btn-secondary {
   background: rgba(255, 255, 255, .10);
 }
 
-.theme-vocabank .btn-primary:hover, .theme-vocabank .btn-secondary:hover {
-  background: rgba(255, 255, 255, .50);
+.theme-vocabank .btn-primary:hover {
+  box-shadow: 0 2px 18px 2px rgba(30,215,157,.3);
+}
+
+.theme-vocabank .btn-secondary:hover {
+  background: rgba(255, 255, 255, .15);
 }
 
 .theme-vocabank .btn-tertiary:hover {
@@ -891,7 +894,7 @@ body.theme-vocabank {
 
 .theme-vocabank .card {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  background: rgba(255, 255, 255, .10);
+  background: #1d1f25;
 }
 
 .theme-vocabank .hoverable {
@@ -899,6 +902,120 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .hoverable:hover {
+  transition: .1s;
+  background: rgba(255, 255, 255, .05);
+}
+
+/** Theme Outrun **/
+
+body.theme-outrun {
+  color: #fff;
+  background-color: #272A33;
+}
+
+.theme-outrun hr {
+  background-color: #fff;
+  opacity: .3;
+  height: 1px;
+}
+
+.theme-outrun .text-muted {
+  color: #e2e8f0;
+}
+
+.theme-outrun a, .theme-outrun .a {
+  color: #f7fafc;
+}
+
+.theme-outrun a:hover, .theme-outrun .a:hover {
+  color: #edf2f7;
+}
+
+.theme-outrun .text-muted a {
+  color: #cbd5e0;
+}
+
+.theme-outrun .text-muted a:hover {
+  color: #a0aec0;
+}
+
+.theme-outrun > nav {
+  background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
+  position: relative;
+}
+
+.theme-outrun > nav::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  bottom: -450px;
+  height: 450px;
+  content: "";
+  width: 100%;
+  background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
+  z-index: -1;
+}
+
+.theme-outrun .form-control {
+  border-width: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, .15);
+}
+
+.theme-outrun .form-control:disabled {
+  border-width: 0;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, .3);
+}
+
+.theme-outrun .form-control.form-control-inverse {
+}
+
+.theme-outrun .nav-link {
+  color: #fff;
+  opacity: .6;
+}
+
+.theme-outrun .nav-link:hover {
+  opacity: .8;
+}
+
+.theme-outrun .nav-link.active {
+  color: #fff;
+  opacity: 1;
+}
+
+.theme-outrun .btn {
+  color: #fff;
+}
+
+.theme-outrun .btn-primary {
+  background: rgba(255, 255, 255, .30);
+}
+
+.theme-outrun .btn-secondary {
+  background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .btn-primary:hover, .theme-outrun .btn-secondary:hover {
+  background: rgba(255, 255, 255, .50);
+}
+
+.theme-outrun .btn-tertiary:hover {
+  background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .card {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .hoverable {
+  transition: .1s;
+}
+
+.theme-outrun .hoverable:hover {
   transition: .1s;
   background: rgba(255, 255, 255, .15);
 }

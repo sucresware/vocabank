@@ -48270,90 +48270,94 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "card mb-3" },
+  return _c(
+    "div",
+    [
       _vm._l(_vm.samples, function(sample) {
-        return _c(
-          "div",
-          { key: sample.id },
-          [_c("sample-preview", { attrs: { sample: sample } })],
-          1
-        )
-      }),
-      0
-    ),
-    _vm._v(" "),
-    _vm.infinite
-      ? _c(
-          "div",
-          [
-            _c(
-              "infinite-loading",
-              {
-                attrs: { spinner: "waveDots" },
-                on: { infinite: _vm.infiniteHandler }
-              },
-              [
-                _c("div", { attrs: { slot: "no-more" }, slot: "no-more" }),
-                _vm._v(" "),
-                _c("div", { attrs: { slot: "no-results" }, slot: "no-results" })
-              ]
-            )
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    !_vm.infinite
-      ? _c("div", { staticClass: "flex justify-between mb-3" }, [
+        return _c("div", { key: sample.id }, [
           _c(
             "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.page !== 1,
-                  expression: "page !== 1"
-                }
-              ],
-              staticClass:
-                "mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs",
-              on: {
-                click: function($event) {
-                  return _vm.loadPage(_vm.page - 1)
-                }
-              }
-            },
-            [_c("i", { staticClass: "fas fa-angle-left" })]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.page !== _vm.lastPage,
-                  expression: "page !== lastPage"
-                }
-              ],
-              staticClass:
-                "ml-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs",
-              on: {
-                click: function($event) {
-                  return _vm.loadPage(_vm.page + 1)
-                }
-              }
-            },
-            [_c("i", { staticClass: "fas fa-angle-right" })]
+            { staticClass: "card mb-2" },
+            [_c("sample-preview", { attrs: { sample: sample } })],
+            1
           )
         ])
-      : _vm._e()
-  ])
+      }),
+      _vm._v(" "),
+      _vm.infinite
+        ? _c(
+            "div",
+            [
+              _c(
+                "infinite-loading",
+                {
+                  attrs: { spinner: "waveDots" },
+                  on: { infinite: _vm.infiniteHandler }
+                },
+                [
+                  _c("div", { attrs: { slot: "no-more" }, slot: "no-more" }),
+                  _vm._v(" "),
+                  _c("div", {
+                    attrs: { slot: "no-results" },
+                    slot: "no-results"
+                  })
+                ]
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.infinite
+        ? _c("div", { staticClass: "flex justify-between mb-3" }, [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.page !== 1,
+                    expression: "page !== 1"
+                  }
+                ],
+                staticClass:
+                  "mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs",
+                on: {
+                  click: function($event) {
+                    return _vm.loadPage(_vm.page - 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-angle-left" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.page !== _vm.lastPage,
+                    expression: "page !== lastPage"
+                  }
+                ],
+                staticClass:
+                  "ml-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs",
+                on: {
+                  click: function($event) {
+                    return _vm.loadPage(_vm.page + 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-angle-right" })]
+            )
+          ])
+        : _vm._e()
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -61497,8 +61501,11 @@ if (document.getElementById('lightSwitch')) {
     if (bodyClasses.contains('theme-legacy')) {
       bodyClasses.remove('theme-legacy');
       bodyClasses.add('theme-vocabank');
-    } else {
+    } else if (bodyClasses.contains('theme-vocabank')) {
       bodyClasses.remove('theme-vocabank');
+      bodyClasses.add('theme-outrun');
+    } else {
+      bodyClasses.remove('theme-outrun');
       bodyClasses.add('theme-legacy');
     }
   };

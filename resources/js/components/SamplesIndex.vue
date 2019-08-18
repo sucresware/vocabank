@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="card mb-3">
-      <div v-for="sample in samples" :key="sample.id">
+    <div v-for="sample in samples" :key="sample.id">
+      <div class="card mb-2">
         <sample-preview :sample="sample"></sample-preview>
       </div>
     </div>

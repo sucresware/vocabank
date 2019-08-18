@@ -52,8 +52,11 @@ if (document.getElementById('lightSwitch')) {
         if (bodyClasses.contains('theme-legacy')) {
             bodyClasses.remove('theme-legacy');
             bodyClasses.add('theme-vocabank');
-        } else {
+        } else if (bodyClasses.contains('theme-vocabank')) {
             bodyClasses.remove('theme-vocabank');
+            bodyClasses.add('theme-outrun');
+        } else {
+            bodyClasses.remove('theme-outrun');
             bodyClasses.add('theme-legacy');
         }
     }

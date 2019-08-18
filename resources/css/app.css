@@ -1,12 +1,13 @@
 @tailwind base;
 @tailwind components;
 
-/** Font **/
+/** Global **/
 
 @import url('https://rsms.me/inter/inter.css');
 
-html {
+body {
     font-family: 'Inter', sans-serif;
+    @apply text-sm;
 }
 
 @supports (font-variation-settings: normal) {
@@ -15,11 +16,8 @@ html {
     }
 }
 
-
-/** Global **/
-
-body {
-    @apply text-sm;
+hr {
+    @apply my-4;
 }
 
 nav {
@@ -137,19 +135,25 @@ body.theme-legacy  {
 
 /** Theme Vocabank v2 **/
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
 body.theme-vocabank {
     @apply text-white;
-    background-color: #272A33;
+    background: #17191f;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .theme-vocabank hr {
-    @apply bg-white;
-    opacity: .3;
+    background-color: #242636;
     height: 1px;
 }
 
 .theme-vocabank .text-muted {
-    @apply text-gray-300;
+    @apply text-gray-500;
+}
+
+.theme-vocabank .btn {
+    @apply rounded;
 }
 
 .theme-vocabank a, .theme-vocabank .a {
@@ -157,7 +161,7 @@ body.theme-vocabank {
 }
 
 .theme-vocabank a:hover, .theme-vocabank .a:hover {
-    @apply text-gray-200;
+    @apply text-teal-500;
 }
 
 .theme-vocabank .text-muted a {
@@ -165,22 +169,12 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .text-muted a:hover {
-    @apply text-gray-500;
+    @apply text-teal-500;
 }
 
 .theme-vocabank > nav {
-    background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
     @apply relative;
-}
-
-.theme-vocabank > nav::after {
-    @apply absolute left-0 right-0 w-full;
-    bottom: -450px;
-    height: 450px;
-    content: "";
-    width: 100%;
-    background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-    z-index: -1;
+    background: linear-gradient(to right,#17191f,#23252c);
 }
 
 .theme-vocabank .form-control {
@@ -201,6 +195,7 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .nav-link:hover {
+    @apply text-white;
     opacity: .8;
 }
 
@@ -211,18 +206,29 @@ body.theme-vocabank {
 
 .theme-vocabank .btn {
     @apply text-white;
+    transition: .1s;
+}
+
+.theme-vocabank .btn:hover {
+    @apply text-white;
+    transition: .1s;
 }
 
 .theme-vocabank .btn-primary {
-    background: rgba(255, 255, 255, .30);
+    background: #05c6b1;
+    background-image: linear-gradient(to right, #1ed79d, #05c6b1);
 }
 
 .theme-vocabank .btn-secondary {
     background: rgba(255, 255, 255, .10);
 }
 
-.theme-vocabank .btn-primary:hover, .theme-vocabank .btn-secondary:hover {
-    background: rgba(255, 255, 255, .50);
+.theme-vocabank .btn-primary:hover {
+    box-shadow: 0 2px 18px 2px rgba(30,215,157,.3);
+}
+
+.theme-vocabank .btn-secondary:hover {
+    background: rgba(255, 255, 255, .15);
 }
 
 .theme-vocabank .btn-tertiary:hover {
@@ -231,7 +237,7 @@ body.theme-vocabank {
 
 .theme-vocabank .card {
     @apply shadow-lg;
-    background: rgba(255, 255, 255, .10);
+    background: #1d1f25;
 }
 
 .theme-vocabank .hoverable {
@@ -239,6 +245,114 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .hoverable:hover {
+    transition: .1s;
+    background: rgba(255, 255, 255, .05);
+}
+
+/** Theme Outrun **/
+
+body.theme-outrun {
+    @apply text-white;
+    background-color: #272A33;
+}
+
+.theme-outrun hr {
+    @apply bg-white;
+    opacity: .3;
+    height: 1px;
+}
+
+.theme-outrun .text-muted {
+    @apply text-gray-300;
+}
+
+.theme-outrun a, .theme-outrun .a {
+    @apply text-gray-100;
+}
+
+.theme-outrun a:hover, .theme-outrun .a:hover {
+    @apply text-gray-200;
+}
+
+.theme-outrun .text-muted a {
+    @apply text-gray-400;
+}
+
+.theme-outrun .text-muted a:hover {
+    @apply text-gray-500;
+}
+
+.theme-outrun > nav {
+    background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
+    @apply relative;
+}
+
+.theme-outrun > nav::after {
+    @apply absolute left-0 right-0 w-full;
+    bottom: -450px;
+    height: 450px;
+    content: "";
+    width: 100%;
+    background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
+    z-index: -1;
+}
+
+.theme-outrun .form-control {
+    @apply border-0 text-white;
+    background: rgba(255, 255, 255, .15);
+}
+
+.theme-outrun .form-control:disabled {
+    @apply border-0 text-gray-300;
+    background: rgba(255, 255, 255, .3);
+}
+
+.theme-outrun .form-control.form-control-inverse {}
+
+.theme-outrun .nav-link {
+    @apply text-white;
+    opacity: .6;
+}
+
+.theme-outrun .nav-link:hover {
+    opacity: .8;
+}
+
+.theme-outrun .nav-link.active {
+    @apply text-white;
+    opacity: 1;
+}
+
+.theme-outrun .btn {
+    @apply text-white;
+}
+
+.theme-outrun .btn-primary {
+    background: rgba(255, 255, 255, .30);
+}
+
+.theme-outrun .btn-secondary {
+    background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .btn-primary:hover, .theme-outrun .btn-secondary:hover {
+    background: rgba(255, 255, 255, .50);
+}
+
+.theme-outrun .btn-tertiary:hover {
+    background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .card {
+    @apply shadow-lg;
+    background: rgba(255, 255, 255, .10);
+}
+
+.theme-outrun .hoverable {
+    transition: .1s;
+}
+
+.theme-outrun .hoverable:hover {
     transition: .1s;
     background: rgba(255, 255, 255, .15);
 }
