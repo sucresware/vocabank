@@ -47984,7 +47984,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", {
       ref: "wavesurfer",
-      staticClass: "w-full flex items-center relative py-8",
+      staticClass: "w-full flex items-center relative py-8 mr-3",
       staticStyle: { height: "30px" }
     })
   ])

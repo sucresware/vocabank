@@ -54,7 +54,7 @@
 
                 <div class="text-right">
                     <button class="btn btn-secondary">
-                        <i class="fa fa-edit mr-1"></i> Valider
+                        <i class="fas fa-pencil-alt mr-1"></i> Valider
                     </button>
                 </div>
             </form>

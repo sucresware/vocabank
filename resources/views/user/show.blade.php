@@ -33,7 +33,7 @@
         @endif
 
         @if (auth()->user() == $user)
-            <div class="text-center"><a href="{{ route('users.edit', $user) }}" class="btn btn-tertiary btn-xs"><i class="fas fa-edit mr-1"></i> Modifier mes informations</a></div>
+            <div class="text-center"><a href="{{ route('users.edit', $user) }}" class="btn btn-tertiary btn-xs"><i class="fas fa-pencil-alt mr-1"></i> Modifier mes informations</a></div>
         @endif
     </div>
     <div class="pl-5 flex-1">

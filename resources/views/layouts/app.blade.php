@@ -39,14 +39,18 @@
 
     @yield('main')
 
-    <div class="container w-full mx-auto flex" id="app">
+    <div class="container w-full mx-auto flex mb-10" id="app">
         <div class="px-3 flex-1">
             @yield('content')
         </div>
         <div class="px-3 w-1/4">
             <div class="card text-red-500 px-5 py-3 mb-6">
-                <span class="font-bold">VocaBank v2 - Open Alpha</span><br>
-                La base de données peut être remise à zéro à tout moment.
+                <span class="font-bold uppercase">VocaBank v2 - Open Alpha</span><br>
+                <div class="text-xs">
+                    &bull; La base de données peut être remise à zéro à tout moment<br>
+                    &bull; Certaines fonctionnalités ne fonctionnent pas encore<br>
+                    &bull; Open for hackers (cc ptdr)
+                </div>
             </div>
             <hr>
 

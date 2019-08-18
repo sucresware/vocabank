@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div style="height: 30px;" class="w-full flex items-center relative py-8" ref="wavesurfer"></div>
+    <div style="height: 30px;" class="w-full flex items-center relative py-8 mr-3" ref="wavesurfer"></div>
   </div>
 </template>
 
