@@ -2318,6 +2318,234 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SampleEdit.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SampleEdit.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["sample", "tags"],
+  data: function data() {
+    return {
+      currentSample: null,
+      formErrors: {},
+      formSubmitted: false,
+      currentTag: "",
+      files: {
+        thumbnail: null
+      }
+    };
+  },
+  mounted: function mounted() {
+    this.currentSample = this.sample;
+    this.currentSample.thumbnail = "/storage/" + this.currentSample.thumbnail;
+    this.currentSample.tags = this.tags;
+    setTimeout(this.mountDragAndDrop, 500);
+  },
+  methods: {
+    mountDragAndDrop: function mountDragAndDrop() {
+      var thumbnail = document.getElementById("thumbnail");
+      thumbnail.addEventListener("dragenter", this.dragEnter);
+      thumbnail.addEventListener("dragover", this.dragEnter);
+      thumbnail.addEventListener("dragleave", this.dragLeave);
+      thumbnail.addEventListener("drop", this.drop);
+    },
+    dragEnter: function dragEnter(e) {
+      e.preventDefault();
+      thumbnail.classList.add("border-teal-400");
+    },
+    dragLeave: function dragLeave(e) {
+      e.preventDefault();
+      thumbnail.classList.remove("border-teal-400");
+    },
+    drop: function drop(e) {
+      e.preventDefault();
+      thumbnail.classList.remove("border-teal-400");
+      thumbnail.classList.remove("border-red-500");
+      this.processThumbnailFile(e.dataTransfer.files[0]);
+    },
+    onThumbnailInputChange: function onThumbnailInputChange(e) {
+      this.processThumbnailFile(e.target.files[0]);
+    },
+    processThumbnailFile: function processThumbnailFile(file) {
+      var _this = this;
+
+      var el = document.getElementById("thumbnail");
+
+      if (file.size > 2 * 1048576) {
+        el.classList.add("border-red-500");
+        return;
+      }
+
+      var extension = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
+
+      if (extension != "gif" && extension != "png" && extension != "bmp" && extension != "jpeg" && extension != "jpg") {
+        el.classList.add("border-red-500");
+        return;
+      }
+
+      this.files.thumbnail = file;
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        _this.currentSample.thumbnail = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    appendTag: function appendTag() {
+      var safeTag = this.currentTag.trim().replace(/  */gi, "-");
+
+      if (safeTag && safeTag != "" && this.currentSample.tags.indexOf(safeTag) == -1 && safeTag.length < 30 && this.currentSample.tags.length < 10) {
+        this.currentSample.tags.push(safeTag);
+      }
+
+      this.currentTag = "";
+    },
+    removeTag: function removeTag(i) {
+      this.currentSample.tags.splice(i, 1);
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      var formData = new FormData();
+      if (this.formSubmitted) return;
+      formData.append("_method", "put");
+      formData.append("name", this.currentSample.name);
+      this.currentSample.tags.forEach(function (tag, i) {
+        formData.append("tags[" + i + "]", tag);
+      });
+      if (this.currentSample.description !== null) formData.append("description", this.currentSample.description);
+      if (this.files.thumbnail) formData.append("thumbnail", this.files.thumbnail);
+      this.formSubmitted = true;
+      axios.post("/samples/" + this.currentSample.id, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(function (response) {
+        _this2.formSubmitted = false;
+        window.location = "/samples/" + _this2.currentSample.id;
+      }, function (error) {
+        _this2.formSubmitted = false;
+        _this2.formErrors = error.response.data.errors;
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SamplePlayer.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SamplePlayer.vue?vue&type=script&lang=js& ***!
@@ -2715,11 +2943,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SamplePlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SamplePlayer */ "./resources/js/components/SamplePlayer.vue");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -2774,164 +3001,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var uploadMaxSize = 10 * 1048576; // 10 Mo
-
-var mimesTypes = ["audio/mpeg", "audio/mp3"];
+var mimesTypes = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg"];
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    SamplePlayer: _SamplePlayer__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
   data: function data() {
     return {
-      importType: "mp3",
       step: 1,
-      youtubeURL: "",
-      sample: {
-        id: "",
-        thumbnail: "/img/default.png",
-        waveform: "",
-        name: "",
-        tags: [],
-        description: "",
-        settings: {},
-        youtube_video: ""
-      },
       files: {
-        audio: "",
-        thumbnail: ""
+        audio: ""
       },
       fileInput: "",
       uploadProgress: 0,
       processingComplete: false,
-      uploadError: "",
-      formErrors: {},
-      formSubmitted: false,
-      youtubeImportedVideo: "",
-      currentTag: ""
+      uploadError: ""
     };
   },
   mounted: function mounted() {
-    var _this = this;
-
     var dropzone = document.getElementById("dropzone"),
         thumbnail = document.getElementById("thumbnail");
-    dropzone.addEventListener("dragenter", function (e) {
+    dropzone.addEventListener("dragenter", this.dragEnter);
+    dropzone.addEventListener("dragover", this.dragEnter);
+    dropzone.addEventListener("dragleave", this.dragLeave);
+    dropzone.addEventListener("drop", this.drop);
+  },
+  methods: {
+    dragEnter: function dragEnter(e) {
       e.preventDefault();
       dropzone.classList.add("border-teal-400");
-    });
-    dropzone.addEventListener("dragover", function (e) {
-      e.preventDefault();
-      dropzone.classList.add("border-teal-400");
-    });
-    dropzone.addEventListener("dragleave", function (e) {
+    },
+    dragLeave: function dragLeave(e) {
       e.preventDefault();
       dropzone.classList.remove("border-teal-400");
-    });
-    dropzone.addEventListener("drop", function (e) {
+    },
+    drop: function drop(e) {
       e.preventDefault();
       dropzone.classList.remove("border-teal-400");
       dropzone.classList.remove("border-red-500");
-      _this.uploadError = null;
-
-      _this.processAudioFile(e.dataTransfer.files[0]);
-    });
-    thumbnail.addEventListener("dragenter", function (e) {
-      e.preventDefault();
-      thumbnail.classList.add("border-teal-400");
-      thumbnail.classList.add("opacity-100");
-      thumbnail.classList.add("bg-gray-100");
-    });
-    thumbnail.addEventListener("dragover", function (e) {
-      e.preventDefault();
-      thumbnail.classList.add("border-teal-400");
-      thumbnail.classList.add("opacity-100");
-      thumbnail.classList.add("bg-gray-100");
-    });
-    thumbnail.addEventListener("dragleave", function (e) {
-      e.preventDefault();
-      thumbnail.classList.remove("border-teal-400");
-      thumbnail.classList.remove("bg-gray-100");
-      thumbnail.classList.remove("opacity-100");
-    });
-    thumbnail.addEventListener("drop", function (e) {
-      e.preventDefault();
-      thumbnail.classList.remove("border-teal-400");
-      thumbnail.classList.remove("bg-gray-100");
-      thumbnail.classList.remove("opacity-100");
-      thumbnail.classList.remove("border-red-500");
-      _this.uploadError = null;
-
-      _this.processThumbnailFile(e.dataTransfer.files[0]);
-    });
-  },
-  methods: {
+      this.uploadError = null;
+      this.processAudioFile(e.dataTransfer.files[0]);
+    },
     onAudioInputChange: function onAudioInputChange(e) {
+      e.preventDefault();
       this.processAudioFile(e.target.files[0]);
     },
     processAudioFile: function processAudioFile(file) {
       var el = document.getElementById("dropzone");
 
-      if (file.size > uploadMaxSize) {
+      if (file.size > 10 * 1048576) {
+        // 10 Mo
         el.classList.add("border-red-500");
         this.uploadError = "La taille du fichier doit être inférieure à 10 Mo.";
         return;
@@ -2944,43 +3062,28 @@ var mimesTypes = ["audio/mpeg", "audio/mp3"];
       }
 
       this.files.audio = file;
-      this.sample.name = file.name.substring(0, file.name.lastIndexOf("."));
       this.step = 2;
       this.uploadAudioFile();
     },
     uploadAudioFile: function uploadAudioFile() {
-      var _this2 = this;
+      var _this = this;
 
       var formData = new FormData();
       formData.append("audio", this.files.audio);
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples/preflight", formData, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/samples/preflight", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
         onUploadProgress: function onUploadProgress(progressEvent) {
-          _this2.uploadProgress = Math.round(progressEvent.loaded / progressEvent.total * 100);
+          _this.uploadProgress = Math.round(progressEvent.loaded / progressEvent.total * 100);
         }
       }).then(function (response) {
-        window.location = "/samples/" + response.data.id;
+        _this.processingComplete = true;
+        window.location = "/samples/" + response.data.id + "/edit";
       }, function (error) {
         document.getElementById("dropzone").classList.add("border-red-500");
-        if (error.response) _this2.uploadError = error.response.data.errors.audio[0];
-        _this2.step = 1;
-      });
-    },
-    processYouTubeURL: function processYouTubeURL() {
-      var _this3 = this;
-
-      if (this.formSubmitted) return;
-      var formData = new FormData();
-      formData.append("youtubeURL", this.youtubeURL);
-      this.importType = "youtube";
-      this.formSubmitted = true;
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/samples/preflight/youtube", formData).then(function (response) {
-        window.location = "/samples/" + response.data.id;
-      }, function (error) {
-        _this3.formSubmitted = false;
-        _this3.formErrors = error.response.data.errors;
+        _this.step = 1;
+        if (error.response) _this.uploadError = error.response.data.errors.audio[0];
       });
     }
   }
@@ -47881,6 +47984,287 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.currentSample
+    ? _c("div", { staticClass: "card p-4" }, [
+        _c("div", { staticClass: "mx-auto relative h-32 w-32 mb-5" }, [
+          _c("img", {
+            staticClass:
+              "w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg",
+            attrs: { src: _vm.currentSample.thumbnail }
+          }),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "hidden",
+            attrs: { type: "file", id: "thumbnailInput" },
+            on: { change: _vm.onThumbnailInputChange }
+          })
+        ]),
+        _vm._v(" "),
+        _vm.formErrors && _vm.formErrors.thumbnail !== undefined
+          ? _c("div", { staticClass: "text-red-500 my-3 text-xs font-bold" }, [
+              _vm._v(_vm._s(_vm.formErrors.thumbnail[0]))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-3" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.currentSample.name,
+                expression: "currentSample.name"
+              }
+            ],
+            staticClass: "form-control w-full",
+            attrs: { type: "text", disabled: _vm.formSubmitted },
+            domProps: { value: _vm.currentSample.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.currentSample, "name", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.formErrors && _vm.formErrors.name !== undefined
+            ? _c(
+                "div",
+                { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                [_vm._v(_vm._s(_vm.formErrors.name[0]))]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-3" }, [
+          _c("div", { staticClass: "text-xs mb-1" }, [_vm._v("Tags")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.currentTag,
+                expression: "currentTag"
+              }
+            ],
+            staticClass: "form-control w-full",
+            attrs: { type: "text", disabled: _vm.formSubmitted },
+            domProps: { value: _vm.currentTag },
+            on: {
+              keyup: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.appendTag()
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.currentTag = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.formErrors && _vm.formErrors.tags !== undefined
+            ? _c(
+                "div",
+                { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                [_vm._v(_vm._s(_vm.formErrors.tags[0]))]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.currentSample.tags.length == 0
+            ? _c("div", { staticClass: "text-muted mt-3 text-xs" }, [
+                _vm._v("\n      Exemples :\n      "),
+                _c("i", { staticClass: "fas fa-hashtag" }),
+                _vm._v(" olinux\n      "),
+                _c("i", { staticClass: "fas fa-hashtag" }),
+                _vm._v(" meme\n      "),
+                _c("i", { staticClass: "fas fa-hashtag" }),
+                _vm._v(" 4sucres\n    ")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "my-3" },
+            _vm._l(_vm.currentSample.tags, function(tag, i) {
+              return _c(
+                "div",
+                {
+                  key: i,
+                  staticClass:
+                    "btn btn-xs btn-secondary hover:line-through cursor-pointer mr-1 inline-block",
+                  on: {
+                    click: function($event) {
+                      return _vm.removeTag(i)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-hashtag" }),
+                  _vm._v("\n        " + _vm._s(tag) + "\n      ")
+                ]
+              )
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _c("div", { staticClass: "mb-3" }, [
+            _c("div", { staticClass: "text-xs mb-1" }, [_vm._v("Description")]),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.currentSample.description,
+                  expression: "currentSample.description"
+                }
+              ],
+              staticClass: "form-control w-full h-32",
+              attrs: {
+                placeholder:
+                  "Tu peux renseigner la source du sample et son histoire",
+                type: "text",
+                disabled: _vm.formSubmitted
+              },
+              domProps: { value: _vm.currentSample.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.currentSample,
+                    "description",
+                    $event.target.value
+                  )
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.formErrors && _vm.formErrors.description !== undefined
+              ? _c(
+                  "div",
+                  { staticClass: "text-red-500 mt-3 text-xs font-bold" },
+                  [_vm._v(_vm._s(_vm.formErrors.description[0]))]
+                )
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "text-right" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              class: {
+                "btn-primary": !_vm.formSubmitted,
+                "cursor-not-allowed btn-secondary": _vm.formSubmitted
+              },
+              attrs: { href: "#" },
+              on: { click: _vm.submit }
+            },
+            [
+              _c(
+                "span",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.formSubmitted,
+                      expression: "formSubmitted"
+                    }
+                  ]
+                },
+                [_c("i", { staticClass: "fa fa-spinner fa-spin fa-fw" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "span",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.formSubmitted,
+                      expression: "!formSubmitted"
+                    }
+                  ]
+                },
+                [_vm._v("Valider")]
+              )
+            ]
+          )
+        ])
+      ])
+    : _vm._e()
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "opacity-0 hover:opacity-100 rounded-full border-2 border-gray-300 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center",
+        staticStyle: { background: "rgba(0, 0, 0, 0.5)" },
+        attrs: {
+          onclick: "document.getElementById('thumbnailInput').click()",
+          id: "thumbnail"
+        }
+      },
+      [_c("i", { staticClass: "text-xs fas fa-upload" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-xs mb-1" }, [
+      _vm._v("\n      Nom\n      "),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SamplePlayer.vue?vue&type=template&id=41217b96&":
 /*!***************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SamplePlayer.vue?vue&type=template&id=41217b96& ***!
@@ -48381,311 +48765,163 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "flex w-full justify-center" }, [
-    _c("div", { staticClass: "w-1/2" }, [
-      _c(
-        "div",
-        { staticClass: "card mb-5" },
-        [
-          _c(
-            "slide-up-down",
-            { attrs: { active: _vm.step == 1, duration: 300 } },
-            [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "bg-gray-800 text-gray-200 text-white h-64 w-full flex items-center justify-center text-center"
-                },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "border-gray-400 border-dashed border-2 rounded px-10 py-5",
-                      attrs: { id: "dropzone" }
-                    },
-                    [
-                      _c("span", { staticClass: "text-center font-bold" }, [
-                        _vm._v("#balance-ton-mp3")
-                      ])
-                    ]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "p-10 text-center" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-primary mb-5",
-                    attrs: {
-                      href: "#",
-                      onclick: "document.getElementById('audioInput').click()"
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "fa fa-upload mr-1" }),
-                    _vm._v(" Choisir un fichier\n          ")
-                  ]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "hidden",
-                  attrs: { type: "file", id: "audioInput" },
-                  on: { change: _vm.onAudioInputChange }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.uploadError,
-                        expression: "uploadError"
-                      }
-                    ],
-                    staticClass: "text-red-500 mb-3 font-bold"
-                  },
-                  [_vm._v(_vm._s(_vm.uploadError))]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "w-1/2 mx-auto flex items-center justify-center mb-6"
-                  },
-                  [
-                    _c("hr", { staticClass: "w-full" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "px-2" }, [_vm._v("ou")]),
-                    _vm._v(" "),
-                    _c("hr", { staticClass: "w-full" })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.youtubeURL,
-                      expression: "youtubeURL"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Coller un lien YouTube",
-                    disabled: _vm.formSubmitted
-                  },
-                  domProps: { value: _vm.youtubeURL },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.youtubeURL = $event.target.value
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    class: {
-                      "bg-gray-300 hover:bg-gray-400": !_vm.formSubmitted,
-                      "cursor-not-allowed bg-gray-400": _vm.formSubmitted
-                    },
-                    on: { click: _vm.processYouTubeURL }
-                  },
-                  [
-                    _c(
-                      "span",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.formSubmitted,
-                            expression: "formSubmitted"
-                          }
-                        ]
-                      },
-                      [_c("i", { staticClass: "fa fa-spinner fa-spin fa-fw" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: !_vm.formSubmitted,
-                            expression: "!formSubmitted"
-                          }
-                        ]
-                      },
-                      [_c("i", { staticClass: "fab fa-youtube fa-fw" })]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _vm.formErrors && _vm.formErrors.youtubeURL !== undefined
-                  ? _c(
-                      "div",
-                      { staticClass: "text-red-500 mt-3 text-xs font-bold" },
-                      [_vm._v(_vm._s(_vm.formErrors.youtubeURL[0]))]
-                    )
-                  : _vm._e()
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "slide-up-down",
-            {
-              staticClass: "p-5",
-              attrs: { active: _vm.step == 2, duration: 300 }
-            },
-            [
-              _c("div", { staticClass: "mx-auto relative h-32 w-32 mb-5" }, [
-                _c("div", { staticClass: "mb-3" }, [
-                  _c("div", { staticClass: "text-xs mb-1" }, [
-                    _vm._v("\n              Sample\n              "),
-                    _c("span", { staticClass: "text-red-500" }, [_vm._v("*")])
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "card p-4 mb-4" },
+      [
+        _c(
+          "slide-up-down",
+          { attrs: { active: _vm.step == 1, duration: 300 } },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "border-gray-400 border-dashed border-2 rounded px-10 py-32 flex justify-center text-center",
+                attrs: { id: "dropzone" }
+              },
+              [
+                _c("div", [
+                  _c("div", { staticClass: "font-bold" }, [
+                    _vm._v("#balance-ton-mp3")
                   ]),
+                  _vm._v(" "),
+                  _c("div", [_vm._v("Dépose ton fichier dans cette zone")]),
                   _vm._v(" "),
                   _c(
                     "div",
                     {
                       staticClass:
-                        "flex items-center form-control w-full relative p-4"
+                        "mx-auto flex items-center justify-center my-6"
                     },
                     [
-                      _vm.sample.waveform
-                        ? _c(
-                            "div",
-                            {
-                              staticClass:
-                                "absolute px-5 top-0 bottom-0 left-0 right-0"
-                            },
-                            [
-                              _c("img", {
-                                staticClass: "w-full h-full",
-                                staticStyle: { opacity: "0.2" },
-                                attrs: {
-                                  src: "/storage/" + _vm.sample.waveform
-                                }
-                              })
-                            ]
-                          )
-                        : _vm._e(),
+                      _c("hr", { staticClass: "w-full" }),
                       _vm._v(" "),
-                      _c("div", { staticClass: "mr-3" }, [
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: !_vm.processingComplete,
-                              expression: "!processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-spinner fa-spin"
-                        }),
-                        _vm._v(" "),
-                        _c("i", {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.processingComplete,
-                              expression: "processingComplete"
-                            }
-                          ],
-                          staticClass: "fa fa-fw fa-check-circle text-teal-400"
-                        })
-                      ]),
+                      _c("div", { staticClass: "px-2" }, [_vm._v("ou")]),
                       _vm._v(" "),
-                      _vm.importType == "mp3"
-                        ? _c("div", { staticClass: "flex-1" }, [
-                            _c("div", { staticClass: "text-xs mb-1" }, [
-                              _vm._v(
-                                "\n                  " +
-                                  _vm._s(_vm.files.audio.name) +
-                                  "\n                  "
-                              ),
-                              _c("span", { staticClass: "text-gray-500" }, [
-                                _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "rounded w-full h-2 relative" },
-                              [
-                                _c("div", {
-                                  staticClass: "h-full bg-teal-400",
-                                  style: { width: _vm.uploadProgress + "%" }
-                                })
-                              ]
-                            )
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.importType == "youtube" &&
-                      _vm.sample.youtube_video != ""
-                        ? _c(
-                            "div",
-                            { staticClass: "flex-1 flex items-center" },
-                            [
-                              _c("div", [
-                                _c("img", {
-                                  staticClass: "h-10 rounded mr-3",
-                                  attrs: {
-                                    src: _vm.sample.youtube_video.thumbnail_url
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "flex-1 text-xs" }, [
-                                _c("i", { staticClass: "fab fa-youtube mr-1" }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "font-bold" }, [
-                                  _vm._v(_vm._s(_vm.sample.youtube_video.title))
-                                ]),
-                                _vm._v(" "),
-                                _c("br"),
-                                _vm._v(
-                                  "\n                  " +
-                                    _vm._s(
-                                      _vm.sample.youtube_video.author_name
-                                    ) +
-                                    "\n                "
-                                )
-                              ])
-                            ]
-                          )
-                        : _vm._e()
+                      _c("hr", { staticClass: "w-full" })
                     ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          onclick:
+                            "document.getElementById('audioInput').click()"
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-upload mr-1" }),
+                        _vm._v(" Choisis un fichier\n            ")
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "hidden",
+                    attrs: { type: "file", id: "audioInput" },
+                    on: { change: _vm.onAudioInputChange }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.uploadError,
+                          expression: "uploadError"
+                        }
+                      ],
+                      staticClass: "text-red-500 mt-6 font-bold"
+                    },
+                    [_vm._v(_vm._s(_vm.uploadError))]
                   )
                 ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "slide-up-down",
+          { attrs: { active: _vm.step == 2, duration: 300 } },
+          [
+            _c("div", { staticClass: "flex items-center w-full" }, [
+              _c("div", { staticClass: "mr-3" }, [
+                _c("i", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.processingComplete,
+                      expression: "!processingComplete"
+                    }
+                  ],
+                  staticClass: "fa fa-fw fa-spinner fa-spin"
+                }),
+                _vm._v(" "),
+                _c("i", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.processingComplete,
+                      expression: "processingComplete"
+                    }
+                  ],
+                  staticClass: "fa fa-fw fa-check-circle text-teal-400"
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex-1" }, [
+                _c("div", { staticClass: "text-xs mb-1" }, [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.files.audio.name) +
+                      "\n            "
+                  ),
+                  _c("span", { staticClass: "text-gray-500" }, [
+                    _vm._v("(" + _vm._s(_vm.uploadProgress) + "%)")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "rounded w-full h-2 relative" }, [
+                  _c("div", {
+                    staticClass: "h-full bg-teal-400",
+                    style: { width: _vm.uploadProgress + "%" }
+                  })
+                ])
               ])
-            ]
-          )
-        ],
-        1
-      )
-    ])
+            ])
+          ]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-muted text-xs" }, [
+      _vm._v("\n    En envoyant un sample, vous acceptez les\n    "),
+      _c("a", { attrs: { href: "/terms", target: "_blank" } }, [
+        _vm._v("termes et conditions")
+      ]),
+      _vm._v(" sans réserve.\n  ")
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -61408,6 +61644,7 @@ module.exports = function(module) {
 
 var map = {
 	"./components/LegacyUploadWizard.vue": "./resources/js/components/LegacyUploadWizard.vue",
+	"./components/SampleEdit.vue": "./resources/js/components/SampleEdit.vue",
 	"./components/SamplePlayer.vue": "./resources/js/components/SamplePlayer.vue",
 	"./components/SamplePreview.vue": "./resources/js/components/SamplePreview.vue",
 	"./components/SamplesIndex.vue": "./resources/js/components/SamplesIndex.vue",
@@ -61635,6 +61872,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LegacyUploadWizard_vue_vue_type_template_id_990fb740___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LegacyUploadWizard_vue_vue_type_template_id_990fb740___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SampleEdit.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/SampleEdit.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SampleEdit.vue?vue&type=template&id=8424d502& */ "./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502&");
+/* harmony import */ var _SampleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SampleEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/SampleEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SampleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SampleEdit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SampleEdit.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/SampleEdit.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SampleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SampleEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SampleEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SampleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SampleEdit.vue?vue&type=template&id=8424d502& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SampleEdit.vue?vue&type=template&id=8424d502&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SampleEdit_vue_vue_type_template_id_8424d502___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

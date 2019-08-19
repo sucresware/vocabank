@@ -11,6 +11,6 @@
     <a href="{{ route('samples.create.url') }}" class="mx-1 btn btn-lg {{ active_class(if_route('samples.create.url'), 'btn-primary', 'btn-secondary') }}">Importer depuis une URL</a>
 </div>
 
-<upload-wizard></upload-wizard>
+<url-import-wizard></url-import-wizard>
 
 @endsection

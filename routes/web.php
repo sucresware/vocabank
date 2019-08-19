@@ -48,8 +48,9 @@ Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.pre
 Route::get('/samples/{sample}/edit', 'SampleController@edit')->name('samples.edit');
 
 Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
-Route::post('/samples/preflight/youtube', 'SampleController@preflightYouTube')->name('samples.preflight.youtube');
-Route::get('/samples/{sample}/process-youtube', 'SampleController@processYouTube')->name('samples.process.youtube');
+Route::post('/samples/preflight/url', 'SampleController@preflightURL')->name('samples.preflight.url');
+Route::get('/samples/create/url', 'SampleController@createURL')->name('samples.create.url');
+Route::get('/samples/{sample}/process-url', 'SampleController@processURL')->name('samples.process.url');
 
 Route::resource('samples', 'SampleController');
 

@@ -81,6 +81,11 @@ class SampleController extends Controller
         return view('sample.create');
     }
 
+    public function createURL()
+    {
+        return view('sample.create_url');
+    }
+
     public function show(Sample $sample)
     {
         abort_if(
@@ -114,7 +119,7 @@ class SampleController extends Controller
 
     public function iframe(Sample $sample)
     {
-        $sample->user; // Lazy load
+        $sample->user; // Preload
 
         return view('sample.iframe', compact('sample'));
     }
@@ -136,7 +141,7 @@ class SampleController extends Controller
     public function preflight()
     {
         request()->validate([
-            'audio' => ['required', 'file', 'max:10240', 'mimetypes:audio/mpeg,audio/mp3'],
+            'audio' => ['required', 'file', 'max:10240', 'mimetypes:audio/mpeg,audio/mp3,audio/wav,audio/ogg'],
         ]);
 
         $sample = auth()->user()->samples()->create(
@@ -155,7 +160,7 @@ class SampleController extends Controller
         return Sample::findOrFail($sample->id);
     }
 
-    public function preflightYouTube()
+    public function preflightURL()
     {
         request()->validate([
             'youtubeURL' => ['required'],
@@ -215,9 +220,9 @@ class SampleController extends Controller
         }
     }
 
-    public function processYouTube(Sample $sample)
+    public function processURL(Sample $sample)
     {
-        $audio_name = $sample->id . '_youtube_' . time() . '.mp3';
+        $audio_name = $sample->id . '_url_' . time() . '.mp3';
 
         $dl = new YoutubeDl([
             'extract-audio' => true,
@@ -234,7 +239,7 @@ class SampleController extends Controller
         } catch (PrivateVideoException $e) {
             return response(['Video is private']);
         } catch (CopyrightException $e) {
-            return response(['The YouTube account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
+            return response(['The URL account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
         } catch (\Exception $e) {
             return response([$e->getMessage()]);
         }
@@ -261,40 +266,40 @@ class SampleController extends Controller
         return $sample;
     }
 
-    public function store(Request $request)
+    public function edit(Sample $sample)
     {
-        $sample = Sample::findOrFail(request()->id);
+        abort_if($sample->user != auth()->user(), 403);
 
+        $tags = $sample->tags->pluck('name'); // Preload
+
+        return view('sample.edit', compact('sample', 'tags'));
+    }
+
+    public function update(Sample $sample)
+    {
         request()->validate([
-            'id'        => ['required'],
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
             'tags'      => ['nullable', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
         ]);
 
-        if ($sample->status != Sample::STATUS_DRAFT);
-
-        $sample->name = $request->name;
-        $sample->description = $request->description;
+        $sample->name = request()->name;
+        $sample->description = request()->description;
 
         $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
-        if ($request->hasFile('thumbnail')) {
-            Image::make($request->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
+        if (request()->hasFile('thumbnail')) {
+            Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
             $sample->thumbnail = 'samples/' . $thumbnail_name;
         } elseif (isset($sample->youtube_video['thumbnail_url'])) {
             Image::make(file_get_contents($sample->youtube_video['thumbnail_url']))->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
             $sample->thumbnail = 'samples/' . $thumbnail_name;
         }
 
-        // TODO: Move audio from temp storage to remote
-        // $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
-        // $sample->audio = request()->audio->storeAs('samples', $audio_name);
-
-        foreach ($request->tags ?? [] as $tag) {
+        $sample->tags()->detach();
+        foreach (request()->tags ?? [] as $tag) {
             Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
         }
 
-        $sample->status = Sample::STATUS_PUBLIC;
         $sample->save();
 
         return $sample;

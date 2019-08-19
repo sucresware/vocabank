@@ -16,7 +16,7 @@
             </div>
             <div class="mx-2">
                 <form action="{{ route('samples.search') }}" method="get">
-                    <input type="text" placeholder="Recherche" class="form-control form-control-inverse" name="q" value="{{ old('q', $q ?? '') }}">
+                    <input type="text" placeholder="Recherche" class="form-control form-control-inverse w-48" name="q" value="{{ old('q', $q ?? '') }}">
                     <button type="submit"><i class="nav-link {{ active_class(if_route('samples.search')) }} -ml-8 fa fa-search"></i></button>
                 </form>
             </div>

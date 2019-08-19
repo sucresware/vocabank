@@ -1,224 +1,109 @@
 <template>
-  <div class="flex w-full justify-center">
-    <div class="w-1/2">
-      <div class="card mb-5">
-        <slide-up-down :active="step == 1" :duration="300">
-          <div
-            class="bg-gray-800 text-gray-200 text-white h-64 w-full flex items-center justify-center text-center"
-          >
-            <div class="border-gray-400 border-dashed border-2 rounded px-10 py-5" id="dropzone">
-              <span class="text-center font-bold">#balance-ton-mp3</span>
-            </div>
-          </div>
-          <div class="p-10 text-center">
-            <a
-              href="#"
-              class="btn btn-primary mb-5"
-              onclick="document.getElementById('audioInput').click()"
-            >
-              <i class="fa fa-upload mr-1"></i> Choisir un fichier
-            </a>
-            <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
-            <div class="text-red-500 mb-3 font-bold" v-show="uploadError">{{ uploadError }}</div>
-
-            <div class="w-1/2 mx-auto flex items-center justify-center mb-6">
+  <div>
+    <div class="card p-4 mb-4">
+      <slide-up-down :active="step == 1" :duration="300">
+        <div
+          class="border-gray-400 border-dashed border-2 rounded px-10 py-32 flex justify-center text-center"
+          id="dropzone"
+        >
+          <div>
+            <div class="font-bold">#balance-ton-mp3</div>
+            <div>Dépose ton fichier dans cette zone</div>
+            <div class="mx-auto flex items-center justify-center my-6">
               <hr class="w-full" />
               <div class="px-2">ou</div>
               <hr class="w-full" />
             </div>
-
-            <input
-              type="text"
-              placeholder="Coller un lien YouTube"
-              class="form-control"
-              :disabled="formSubmitted"
-              v-model="youtubeURL"
-            />
-            <button
-              :class="{
-                      'bg-gray-300 hover:bg-gray-400': !formSubmitted,
-                      'cursor-not-allowed bg-gray-400': formSubmitted,
-                      }"
-              class="btn btn-secondary"
-              v-on:click="processYouTubeURL"
-            >
-              <span v-show="formSubmitted">
-                <i class="fa fa-spinner fa-spin fa-fw"></i>
-              </span>
-              <span v-show="!formSubmitted">
-                <i class="fab fa-youtube fa-fw"></i>
-              </span>
-            </button>
-
-            <div
-              class="text-red-500 mt-3 text-xs font-bold"
-              v-if="formErrors && formErrors.youtubeURL !== undefined"
-            >{{ formErrors.youtubeURL[0] }}</div>
+            <div class="text-center">
+              <button
+                class="btn btn-primary"
+                onclick="document.getElementById('audioInput').click()"
+              >
+                <i class="fa fa-upload mr-1"></i> Choisis un fichier
+              </button>
+            </div>
+            <input type="file" id="audioInput" v-on:change="onAudioInputChange" class="hidden" />
+            <div class="text-red-500 mt-6 font-bold" v-show="uploadError">{{ uploadError }}</div>
           </div>
-        </slide-up-down>
-
-        <slide-up-down :active="step == 2" :duration="300" class="p-5">
-          <div class="mx-auto relative h-32 w-32 mb-5">
-            <div class="mb-3">
-              <div class="text-xs mb-1">
-                Sample
-                <span class="text-red-500">*</span>
-              </div>
-
-              <div class="flex items-center form-control w-full relative p-4">
-                <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-if="sample.waveform">
-                  <img
-                    :src="'/storage/' + sample.waveform"
-                    class="w-full h-full"
-                    style="opacity: 0.2;"
-                  />
-                </div>
-                <div class="mr-3">
-                  <i class="fa fa-fw fa-spinner fa-spin" v-show="!processingComplete"></i>
-                  <i class="fa fa-fw fa-check-circle text-teal-400" v-show="processingComplete"></i>
-                </div>
-                <div class="flex-1" v-if="importType == 'mp3'">
-                  <div class="text-xs mb-1">
-                    {{ files.audio.name }}
-                    <span class="text-gray-500">({{ uploadProgress }}%)</span>
-                  </div>
-                  <div class="rounded w-full h-2 relative">
-                    <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 flex items-center"
-                  v-if="importType == 'youtube' && sample.youtube_video != ''"
-                >
-                  <div>
-                    <img :src="sample.youtube_video.thumbnail_url" class="h-10 rounded mr-3" />
-                  </div>
-                  <div class="flex-1 text-xs">
-                    <i class="fab fa-youtube mr-1"></i>
-                    <span class="font-bold">{{ sample.youtube_video.title }}</span>
-                    <br />
-                    {{ sample.youtube_video.author_name }}
-                  </div>
-                </div>
-              </div>
+        </div>
+      </slide-up-down>
+      <slide-up-down :active="step == 2" :duration="300">
+        <div class="flex items-center w-full">
+          <div class="mr-3">
+            <i class="fa fa-fw fa-spinner fa-spin" v-show="!processingComplete"></i>
+            <i class="fa fa-fw fa-check-circle text-teal-400" v-show="processingComplete"></i>
+          </div>
+          <div class="flex-1">
+            <div class="text-xs mb-1">
+              {{ files.audio.name }}
+              <span class="text-gray-500">({{ uploadProgress }}%)</span>
+            </div>
+            <div class="rounded w-full h-2 relative">
+              <div class="h-full bg-teal-400" :style="{width: uploadProgress + '%'}"></div>
             </div>
           </div>
-        </slide-up-down>
-      </div>
+        </div>
+      </slide-up-down>
+    </div>
+    <div class="text-muted text-xs">
+      En envoyant un sample, vous acceptez les
+      <a href="/terms" target="_blank">termes et conditions</a> sans réserve.
     </div>
   </div>
 </template>
 
 <script>
-import SamplePlayer from "./SamplePlayer";
-let uploadMaxSize = 10 * 1048576; // 10 Mo
-let mimesTypes = ["audio/mpeg", "audio/mp3"];
+let mimesTypes = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg"];
 import axios from "axios";
 import _ from "lodash";
 
 export default {
-  components: {
-    SamplePlayer
-  },
   data() {
     return {
-      importType: "mp3",
       step: 1,
-      youtubeURL: "",
-      sample: {
-        id: "",
-        thumbnail: "/img/default.png",
-        waveform: "",
-        name: "",
-        tags: [],
-        description: "",
-        settings: {},
-        youtube_video: ""
-      },
       files: {
-        audio: "",
-        thumbnail: ""
+        audio: ""
       },
       fileInput: "",
       uploadProgress: 0,
       processingComplete: false,
-      uploadError: "",
-      formErrors: {},
-      formSubmitted: false,
-      youtubeImportedVideo: "",
-      currentTag: ""
+      uploadError: ""
     };
   },
   mounted() {
     let dropzone = document.getElementById("dropzone"),
       thumbnail = document.getElementById("thumbnail");
 
-    dropzone.addEventListener("dragenter", e => {
+    dropzone.addEventListener("dragenter", this.dragEnter);
+    dropzone.addEventListener("dragover", this.dragEnter);
+    dropzone.addEventListener("dragleave", this.dragLeave);
+    dropzone.addEventListener("drop", this.drop);
+  },
+  methods: {
+    dragEnter(e) {
       e.preventDefault();
-
       dropzone.classList.add("border-teal-400");
-    });
-    dropzone.addEventListener("dragover", e => {
+    },
+    dragLeave(e) {
       e.preventDefault();
-
-      dropzone.classList.add("border-teal-400");
-    });
-    dropzone.addEventListener("dragleave", e => {
-      e.preventDefault();
-
       dropzone.classList.remove("border-teal-400");
-    });
-    dropzone.addEventListener("drop", e => {
+    },
+    drop(e) {
       e.preventDefault();
-
       dropzone.classList.remove("border-teal-400");
-
       dropzone.classList.remove("border-red-500");
       this.uploadError = null;
       this.processAudioFile(e.dataTransfer.files[0]);
-    });
-
-    thumbnail.addEventListener("dragenter", e => {
-      e.preventDefault();
-
-      thumbnail.classList.add("border-teal-400");
-      thumbnail.classList.add("opacity-100");
-      thumbnail.classList.add("bg-gray-100");
-    });
-    thumbnail.addEventListener("dragover", e => {
-      e.preventDefault();
-
-      thumbnail.classList.add("border-teal-400");
-      thumbnail.classList.add("opacity-100");
-      thumbnail.classList.add("bg-gray-100");
-    });
-    thumbnail.addEventListener("dragleave", e => {
-      e.preventDefault();
-
-      thumbnail.classList.remove("border-teal-400");
-      thumbnail.classList.remove("bg-gray-100");
-      thumbnail.classList.remove("opacity-100");
-    });
-    thumbnail.addEventListener("drop", e => {
-      e.preventDefault();
-
-      thumbnail.classList.remove("border-teal-400");
-      thumbnail.classList.remove("bg-gray-100");
-      thumbnail.classList.remove("opacity-100");
-
-      thumbnail.classList.remove("border-red-500");
-      this.uploadError = null;
-      this.processThumbnailFile(e.dataTransfer.files[0]);
-    });
-  },
-  methods: {
+    },
     onAudioInputChange(e) {
+      e.preventDefault();
       this.processAudioFile(e.target.files[0]);
     },
     processAudioFile(file) {
       let el = document.getElementById("dropzone");
 
-      if (file.size > uploadMaxSize) {
+      if (file.size > 10 * 1048576) {
+        // 10 Mo
         el.classList.add("border-red-500");
         this.uploadError = "La taille du fichier doit être inférieure à 10 Mo.";
         return;
@@ -232,7 +117,6 @@ export default {
       }
 
       this.files.audio = file;
-      this.sample.name = file.name.substring(0, file.name.lastIndexOf("."));
       this.step = 2;
 
       this.uploadAudioFile();
@@ -252,34 +136,16 @@ export default {
         })
         .then(
           response => {
-            window.location = "/samples/" + response.data.id;
+            this.processingComplete = true;
+            window.location = "/samples/" + response.data.id + "/edit";
           },
           error => {
             document.getElementById("dropzone").classList.add("border-red-500");
+            this.step = 1;
             if (error.response)
               this.uploadError = error.response.data.errors.audio[0];
-            this.step = 1;
           }
         );
-    },
-    processYouTubeURL() {
-      if (this.formSubmitted) return;
-
-      let formData = new FormData();
-      formData.append("youtubeURL", this.youtubeURL);
-
-      this.importType = "youtube";
-      this.formSubmitted = true;
-
-      axios.post("/samples/preflight/youtube", formData).then(
-        response => {
-          window.location = "/samples/" + response.data.id;
-        },
-        error => {
-          this.formSubmitted = false;
-          this.formErrors = error.response.data.errors;
-        }
-      );
     }
   }
 };

@@ -828,19 +828,19 @@ body.theme-vocabank {
 
 .theme-vocabank > nav {
   position: relative;
-  background: linear-gradient(to right,#17191f,#23252c);
+  background: linear-gradient(to right,#17191f, #23252c);
 }
 
 .theme-vocabank .form-control {
   border-width: 0;
   color: #fff;
-  background: rgba(255, 255, 255, .15);
+  background: rgba(255, 255, 255, .05);
 }
 
 .theme-vocabank .form-control:disabled {
   border-width: 0;
   color: #e2e8f0;
-  background: rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .15);
 }
 
 .theme-vocabank .form-control.form-control-inverse {
@@ -848,6 +848,7 @@ body.theme-vocabank {
 
 .theme-vocabank .nav-link {
   color: #fff;
+  font-weight: 700;
   opacity: .6;
 }
 
@@ -863,12 +864,21 @@ body.theme-vocabank {
 
 .theme-vocabank .btn {
   color: #fff;
-  transition: .1s;
+  transition: all .1s ease-in-out;
+  transition-property: box-shadow, text-shadow, background, -webkit-filter;
+  transition-property: box-shadow, text-shadow, filter, background;
+  transition-property: box-shadow, text-shadow, filter, background, -webkit-filter;
 }
 
 .theme-vocabank .btn:hover {
   color: #fff;
-  transition: .1s;
+  transition: all .1s ease-in-out;
+  transition-property: box-shadow, text-shadow, background, -webkit-filter;
+  transition-property: box-shadow, text-shadow, filter, background;
+  transition-property: box-shadow, text-shadow, filter, background, -webkit-filter;
+  -webkit-filter: brightness(1.1) saturate(1.05);
+          filter: brightness(1.1) saturate(1.05);
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
 }
 
 .theme-vocabank .btn-primary {
