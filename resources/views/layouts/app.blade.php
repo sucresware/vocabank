@@ -54,8 +54,13 @@
             </div>
             <hr>
 
-            <div class="card p-3 mb-2">
+            <div class="text-xs text-muted mb-2">
+                Tags les plus utilisés :
             </div>
+
+            @foreach($popular_tags as $tag)
+                <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="btn btn-xs btn-secondary mb-1"><i class="fas fa-hashtag"></i>{{ $tag->name }} <span class="text-muted">({{ $tag->count }})</span></a>
+            @endforeach
 
             <hr>
 
@@ -63,6 +68,7 @@
                 <div class="mb-2">
                     VocaBank &copy; 2019<br>
                     Parce qu'on entendait rien sur <a href="https://risibank.fr">RisiBank</a>.<br>
+                    Temps d'exécution : {{ round((microtime(true) - LARAVEL_START), 3)*1000 }} ms<br>
                 </div>
 
                 <hr>

@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="flex-1 ">
                                     @foreach($sample->tags as $tag)
-                                        <a href="{{ route('samples.search') }}?q={{ $tag->name }}" class="btn btn-xs btn-secondary mb-1"><i class="fas fa-hashtag"></i>{{ $tag->name }}</a>
+                                        <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="btn btn-xs btn-secondary mb-1"><i class="fas fa-hashtag"></i>{{ $tag->name }}</a>
                                     @endforeach
                                 </div>
                             </div>

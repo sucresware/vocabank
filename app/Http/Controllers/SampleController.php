@@ -52,13 +52,17 @@ class SampleController extends Controller
     public function search(Request $request)
     {
         if ($request->q) {
-            $q = explode(' ', $request->q);
-            $samples = Sample::with('user')->public();
+            $samples = Sample::with('user')
+                ->public();
 
-            foreach ($q as $q_) {
-                $samples = $samples->whereHas('tags', function ($query) use ($q_) {
-                    return $query->where('name', 'like', $q_ . '%');
-                });
+            $samples = $samples->whereHas('tags', function ($query) use ($request) {
+                return $query->where('name', 'like', '%' . $request->q . '%');
+            });
+
+            if (!$request->tag) {
+                $samples = $samples
+                    ->orWhere('name', 'like', '%' . $request->q . '%')
+                    ->orWhere('description', 'like', '%' . $request->q . '%');
             }
 
             $samples = $samples->paginate(15);
