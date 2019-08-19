@@ -71,8 +71,7 @@ export default {
     };
   },
   mounted() {
-    let dropzone = document.getElementById("dropzone"),
-      thumbnail = document.getElementById("thumbnail");
+    let dropzone = document.getElementById("dropzone");
 
     dropzone.addEventListener("dragenter", this.dragEnter);
     dropzone.addEventListener("dragover", this.dragEnter);

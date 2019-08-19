@@ -3018,8 +3018,7 @@ var mimesTypes = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg"];
     };
   },
   mounted: function mounted() {
-    var dropzone = document.getElementById("dropzone"),
-        thumbnail = document.getElementById("thumbnail");
+    var dropzone = document.getElementById("dropzone");
     dropzone.addEventListener("dragenter", this.dragEnter);
     dropzone.addEventListener("dragover", this.dragEnter);
     dropzone.addEventListener("dragleave", this.dragLeave);
