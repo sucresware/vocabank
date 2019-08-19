@@ -27,8 +27,9 @@
                         <div class="pl-3"><a href="{{ route('login') }}" class="nav-link {{ active_class(if_route('login')) }}">Connexion</a></div>
                     @else
                         <a href="{{ route('samples.create') }}" class="mx-3 btn btn-primary"><i class="fa fa-plus"></i> Ajouter</a>
+                        <button id="lightSwitch" class="mx-3 nav-link"><i class="fa fa-lightbulb"></i></button>
                         <a href="{{ route('users.show', auth()->user()) }}" class="mx-3 nav-link {{ active_class(if_route('users.show', auth()->user())) }}"><i class="fas fa-user"></i></a>
-                        <a href="#" class="mx-3 nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
+                        <a href="{{ route('logout') }}" class="mx-3 nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                     @endguest
@@ -47,7 +48,7 @@
             <div class="card text-red-500 px-5 py-3 mb-6">
                 <span class="font-bold uppercase">VocaBank v2 - Open Alpha</span><br>
                 <div class="text-xs">
-                    &bull; La base de données peut être remise à zéro à tout moment<br>
+                    &bull; La base de données ne devrait plus être remise à zéro (sauf éventuellement, à l'ouverture idk)<br>
                     &bull; Certaines fonctionnalités ne fonctionnent pas encore<br>
                     &bull; Open for hackers (cc ptdr)
                 </div>
@@ -75,7 +76,6 @@
 
                 <div class="mb-2">
                     Liens :<br>
-                    <a href="javascript:void(0)" id="lightSwitch">Changement de thème</a><br>
                     <a href="{{ route('terms') }}">Conditions générales d'utilisation</a><br>
                     <a href="{{ route('api') }}">API</a><br>
                     <a href="https://github.com/4sucres/vocabank" target="_blank">GitHub</a><br>

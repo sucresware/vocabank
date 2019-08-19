@@ -6,13 +6,13 @@
     >
       <fade-transition :duration="150">
         <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-show="showWaveform">
-          <img :src="'/storage/' + sample.waveform" class="w-full h-full" style="opacity: 0.30" />
+          <img :src="sample.waveform_url" class="w-full h-full" style="opacity: 0.30" />
         </div>
       </fade-transition>
 
       <div class="relative h-8 w-8">
         <img
-          :src="sample.thumbnail ? '/storage/' + sample.thumbnail : '/img/default.png'"
+          :src="sample.thumbnail_url"
           class="rounded-full border-2 border-gray-400 absolute object-cover top-0 bottom-0 left-0 right-0"
         />
         <div

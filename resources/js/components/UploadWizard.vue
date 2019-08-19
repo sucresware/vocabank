@@ -45,10 +45,6 @@
         </div>
       </slide-up-down>
     </div>
-    <div class="text-muted text-xs">
-      En envoyant un sample, vous acceptez les
-      <a href="/terms" target="_blank">termes et conditions</a> sans réserve.
-    </div>
   </div>
 </template>
 

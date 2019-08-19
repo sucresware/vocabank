@@ -3,28 +3,29 @@
 namespace App\Jobs;
 
 use App\Models\Sample;
-use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
-use FFMpeg\Format\Audio\Mp3;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use YoutubeDl\YoutubeDl;
 
-class ConvertToMP3Job implements ShouldQueue
+class YoutubeDlJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $url;
     protected $sample;
     protected $sample_id;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($sample_id)
+    public function __construct($sample_id, $url)
     {
+        $this->url = $url;
         $this->sample_id = $sample_id;
     }
 
@@ -42,18 +43,19 @@ class ConvertToMP3Job implements ShouldQueue
             Storage::disk('public')->makeDirectory('samples/', 0775, true);
         }
 
-        $audio_name = $this->sample->id . '_audio_' . time() . '.mp3';
-        $unprocessed_file = Storage::disk('local')->path($this->sample->audio);
+        $audio_name = $this->sample->id . '_youtubedl_' . time() . '.mp3';
+
+        $dl = new YoutubeDl([
+            'extract-audio' => true,
+            'audio-format'  => 'mp3',
+            'audio-quality' => 0, // best
+            'output'        => $audio_name,
+        ]);
+        $dl->setDownloadPath(Storage::disk('public')->path('samples/'));
+        $dl->download($this->url);
 
         $ffprobe = FFProbe::create();
-        $duration = $ffprobe->format($unprocessed_file)->get('duration');
-
-        $ffmpeg = FFMpeg::create();
-        $ffmpeg
-            ->open($unprocessed_file)
-            ->save((new Mp3()), Storage::disk('public')->path('samples/' . $audio_name));
-
-        Storage::disk('local')->delete($this->sample->audio);
+        $duration = $ffprobe->format(Storage::disk('public')->path('samples/' . $audio_name))->get('duration');
 
         $this->sample->audio = 'samples/' . $audio_name;
         $this->sample->duration = $duration;

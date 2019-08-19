@@ -7,6 +7,7 @@ use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Sample extends Model implements ViewableContract
 {
@@ -15,18 +16,20 @@ class Sample extends Model implements ViewableContract
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
     const STATUS_PUBLIC = 2;
-    const STATUS_UNLISTED = 3;
-    const STATUS_REMOVED = 4;
 
     protected $casts = [
-        'youtube_video' => 'array',
+        'settings' => 'array',
+    ];
+
+    protected $hidden = [
+        'thumbnail', 'waveform', 'audio',
+    ];
+
+    protected $appends = [
+        'views', 'presented_date', 'thumbnail_url', 'waveform_url',
     ];
 
     protected $guarded = [];
-
-    protected $appends = [
-        'views', 'presented_date',
-    ];
 
     public function user()
     {
@@ -63,5 +66,15 @@ class Sample extends Model implements ViewableContract
         $markup = SucresHelper::niceDate($this->created_at, SucresHelper::NICEDATE_WITH_HOURS);
 
         return $markup;
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        return $this->thumbnail ? Storage::disk('public')->url($this->thumbnail) : '/img/default.png';
+    }
+
+    public function getWaveformUrlAttribute()
+    {
+        return $this->waveform ? Storage::disk('public')->url($this->waveform) : '/img/waveform.png';
     }
 }

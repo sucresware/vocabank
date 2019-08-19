@@ -4,21 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ConvertToMP3Job;
 use App\Jobs\GenerateWaveformJob;
+use App\Jobs\MakePublicJob;
+use App\Jobs\YoutubeDlJob;
 use App\Models\Sample;
 use App\Models\Tag;
-use FFMpeg\FFMpeg;
-use FFMpeg\FFProbe;
-use FFMpeg\Format\Audio\Mp3;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Spatie\Regex\Regex;
-use YoutubeDl\Exception\CopyrightException;
-use YoutubeDl\Exception\NotFoundException;
-use YoutubeDl\Exception\PrivateVideoException;
-use YoutubeDl\YoutubeDl;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class SampleController extends Controller
 {
@@ -92,10 +86,6 @@ class SampleController extends Controller
 
     public function show(Sample $sample)
     {
-        abort_if(
-            ($sample->status != Sample::STATUS_PUBLIC) &&
-            ($sample->user != auth()->user()), 403);
-
         return view('sample.show', compact('sample'));
     }
 
@@ -134,12 +124,12 @@ class SampleController extends Controller
             ->delayInSession(1)
             ->record();
 
-        return response()->file(Storage::path($sample->audio));
+        return response()->file(Storage::disk('public')->path($sample->audio));
     }
 
     public function download(Sample $sample)
     {
-        return response()->download(Storage::path($sample->audio));
+        return response()->download(Storage::disk('public')->path($sample->audio));
     }
 
     public function preflight()
@@ -159,113 +149,74 @@ class SampleController extends Controller
 
         ConvertToMP3Job::withChain([
             new GenerateWaveformJob($sample->id),
+            new MakePublicJob($sample->id),
         ])->dispatch($sample->id);
 
-        return Sample::findOrFail($sample->id);
+        return $sample;
     }
 
     public function preflightURL()
     {
         request()->validate([
-            'youtubeURL' => ['required'],
+            'url' => ['required'],
         ]);
 
-        $pattern = '/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/m';
-        $match = Regex::match($pattern, request()->youtubeURL);
+        try {
+            $process = new Process([
+                'youtube-dl',
+                request()->url,
+                '--skip-download',
+                '--dump-json',
+                '--no-playlist',
+            ]);
+            $process->run();
 
-        if (!$match->hasMatch()) {
-            return response()->json([
-                'errors' => [
-                    'youtubeURL' => [
-                        'Le format du lien est invalide',
-                    ],
-                ],
-            ], 422);
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['errors' => ['url' => ['Déso, aucune information n\'a été trouvée']]], 422);
         }
 
-        try {
-            $client = new Client();
-            $res = $client->get('https://www.googleapis.com/youtube/v3/videos?id=' . $match->group(1) . '&key=' . config('services.youtube.key') . '&part=snippet,contentDetails');
+        $ytdl_dump = json_decode($process->getOutput());
 
-            $data = json_decode($res->getBody()->getContents());
-            $duration = now()->add($data->items[0]->contentDetails->duration)->diffInSeconds();
+        if ($ytdl_dump->extractor !== 'youtube' && $ytdl_dump->extractor !== 'soundcloud') {
+            if (!isset($ytdl_dump->duration)) {
+                return response()->json(['errors' => ['url' => ['Déso, des informations ont été trouvées mais le site n\'est pas explicitement autorisé (poke the dev!)']]], 422);
+            }
+        }
 
-            if ($duration > 300) {
-                return response()->json([
-                    'errors' => [
-                        'youtubeURL' => [
-                            'La durée de la vidéo doit être inférieure à 5 minutes',
-                        ],
-                    ],
-                ], 422);
+        if ($ytdl_dump->duration < 1 || $ytdl_dump->duration >= 5 * 60) { // 5 minutes
+            return response()->json(['errors' => ['url' => ['Le sample doit faire moins de 5 minutes, abuse pas']]], 422);
+        }
+
+        $sample = auth()->user()->samples()->create([
+            'name'        => $ytdl_dump->alt_title ?? $ytdl_dump->title,
+            'description' => 'Source : ' . $ytdl_dump->webpage_url . ' (' . $ytdl_dump->extractor . ')',
+        ]);
+
+        if (isset($ytdl_dump->tags) && count($ytdl_dump->tags)) {
+            foreach ($ytdl_dump->tags as $tag) {
+                Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+            }
+        }
+
+        if (isset($ytdl_dump->thumbnail)) {
+            if (!Storage::disk('public')->exists('images/')) {
+                Storage::disk('public')->makeDirectory('images/', 0775, true);
             }
 
-            $sample = auth()->user()->samples()->create([
-                'name'          => $data->items[0]->snippet->title,
-                'youtube_video' => [
-                    'id'            => $data->items[0]->id,
-                    'title'         => $data->items[0]->snippet->title,
-                    'author_name'   => $data->items[0]->snippet->channelTitle,
-                    'thumbnail_url' => $data->items[0]->snippet->thumbnails->maxres->url ?? $data->items[0]->snippet->thumbnails->default->url,
-                    'duration'      => $duration,
-                ],
-            ]);
+            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
 
-            return $sample;
-        } catch (\Exception $e) {
-            return response()->json([
-                'errors' => [
-                    'youtubeURL' => [
-                        // 'Impossible de récupérer les informations de la vidéo',
-                        $e->getMessage(),
-                    ],
-                ],
-            ], 422);
-        }
-    }
-
-    public function processURL(Sample $sample)
-    {
-        $audio_name = $sample->id . '_url_' . time() . '.mp3';
-
-        $dl = new YoutubeDl([
-            'extract-audio' => true,
-            'audio-format'  => 'mp3',
-            'audio-quality' => 0, // best
-            'output'        => $audio_name,
-        ]);
-        $dl->setDownloadPath(storage_path('app/temp'));
-
-        try {
-            $dl->download('https://www.youtube.com/watch?v=' . $sample->youtube_video['id']);
-        } catch (NotFoundException $e) {
-            return response(['Video not found']);
-        } catch (PrivateVideoException $e) {
-            return response(['Video is private']);
-        } catch (CopyrightException $e) {
-            return response(['The URL account associated with this video has been terminated due to multiple third-party notifications of copyright infringement']);
-        } catch (\Exception $e) {
-            return response([$e->getMessage()]);
+            Image::make(file_get_contents($ytdl_dump->thumbnail))->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
+            $sample->thumbnail = 'images/' . $thumbnail_name;
+            $sample->save();
         }
 
-        $sample->audio = 'temp/' . $audio_name;
-
-        $waveform_name = $sample->id . '_waveform_' . time() . '.png';
-
-        $ffmpeg = FFMpeg::create();
-        $audio = $ffmpeg->open(Storage::path($sample->audio));
-        $audio->save((new Mp3()), storage_path('app/temp' . $audio_name));
-
-        $ffprobe = FFProbe::create();
-        $sample->duration = $ffprobe
-            ->format(storage_path('app/temp/' . $audio_name)) // extracts file informations
-            ->get('duration');             // returns the duration property
-
-        $waveform = $audio->waveform(1920, 128, ['#a0aec0']);
-        $waveform->save(Storage::path('public/samples/' . $waveform_name));
-        $sample->waveform = 'samples/' . $waveform_name;
-
-        $sample->save();
+        YoutubeDlJob::withChain([
+            new GenerateWaveformJob($sample->id),
+            new MakePublicJob($sample->id),
+        ])->dispatch($sample->id, request()->url);
 
         return $sample;
     }
@@ -284,19 +235,21 @@ class SampleController extends Controller
         request()->validate([
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
             'tags'      => ['nullable', 'array'],
-            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,jpg', 'max:2048'],
+            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,gif,jpg', 'max:2048'],
         ]);
 
         $sample->name = request()->name;
         $sample->description = request()->description;
 
-        $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
         if (request()->hasFile('thumbnail')) {
-            Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
-            $sample->thumbnail = 'samples/' . $thumbnail_name;
-        } elseif (isset($sample->youtube_video['thumbnail_url'])) {
-            Image::make(file_get_contents($sample->youtube_video['thumbnail_url']))->fit(300, 300)->save(Storage::path('public/samples/' . $thumbnail_name));
-            $sample->thumbnail = 'samples/' . $thumbnail_name;
+            if (!Storage::disk('public')->exists('images/')) {
+                Storage::disk('public')->makeDirectory('images/', 0775, true);
+            }
+
+            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+
+            Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
+            $sample->thumbnail = 'images/' . $thumbnail_name;
         }
 
         $sample->tags()->detach();

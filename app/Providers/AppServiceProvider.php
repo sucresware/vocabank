@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Auth\FourSucresProvider;
+use App\Models\Sample;
 use App\Models\Tag;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
                 return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
+                    ->join('samples', 'samples.id', '=', 'sample_tag.sample_id')
+                    ->where('status', Sample::STATUS_PUBLIC)
                     ->groupBy('tags.id')
                     ->select(['tags.*', DB::raw('COUNT(*) as count')])
                     ->orderBy('count', 'desc')

@@ -18,9 +18,9 @@
         <div class="card mb-3">
             <div class="flex flex-wrap">
                 <div class="overflow-hidden flex relative">
-                    <img src="{{ $sample->thumbnail ? '/storage/' . $sample->thumbnail : '/img/default.png' }}" class="object-cover h-full" style="filter: blur(10px); transform: scale(1.1);">
+                    <img src="{{ $sample->thumbnail_url }}" class="object-cover h-full" style="filter: blur(10px); transform: scale(1.1);">
                     <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                        <img src="{{ $sample->thumbnail ? '/storage/' . $sample->thumbnail : '/img/default.png' }}" class="h-48 w-48 shadow-lg rounded-full">
+                        <img src="{{ $sample->thumbnail_url }}" class="h-48 w-48 shadow-lg rounded-full">
                     </div>
                 </div>
                 <div class="flex-1">
@@ -31,7 +31,7 @@
 
                     <div class="px-4">
                         @if ($sample->status != \App\Models\Sample::STATUS_PUBLIC)
-                            <div class="flex flex-wrap mb-2">
+                            <div class="flex flex-wrap mt-4 mb-2">
                                 <div class="w-48 text-muted">
                                     Statut
                                 </div>

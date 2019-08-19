@@ -2,7 +2,7 @@
   <div class="card p-4" v-if="currentSample">
     <div class="mx-auto relative h-32 w-32 mb-5">
       <img
-        :src="currentSample.thumbnail"
+        :src="currentSample.thumbnail_url"
         class="w-32 h-32 rounded-full border-2 border-gray-300 absolute object-cover top-0 bottom-0 left-0 right-0 shadow-lg"
       />
 

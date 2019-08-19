@@ -37,6 +37,7 @@ return [
             'table'       => 'jobs',
             'queue'       => 'default',
             'retry_after' => 90,
+            'timeout'     => 300,
         ],
 
         'beanstalkd' => [

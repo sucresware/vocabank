@@ -16,13 +16,14 @@ class GenerateWaveformJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $sample;
+    protected $sample_id;
 
     /**
      * Create a new job instance.
      */
     public function __construct($sample_id)
     {
-        $this->sample = Sample::findOrFail($sample_id);
+        $this->sample_id = $sample_id;
     }
 
     /**
@@ -30,15 +31,24 @@ class GenerateWaveformJob implements ShouldQueue
      */
     public function handle()
     {
+        $this->sample = Sample::findOrFail($this->sample_id);
+
+        $this->sample->status = Sample::STATUS_PROCESSING;
+        $this->sample->save();
+
+        if (!Storage::disk('public')->exists('images/')) {
+            Storage::disk('public')->makeDirectory('images/', 0775, true);
+        }
+
         $waveform_name = $this->sample->id . '_waveform_' . time() . '.png';
 
         $ffmpeg = FFMpeg::create();
         $waveform = $ffmpeg
-            ->open(Storage::path($this->sample->audio))
+            ->open(Storage::disk('public')->path($this->sample->audio))
             ->waveform(1920, 128, ['#a0aec0']);
-        $waveform->save(Storage::path('public/samples/' . $waveform_name));
+        $waveform->save(Storage::disk('public')->path('images/' . $waveform_name));
 
-        $this->sample->waveform = 'samples/' . $waveform_name;
+        $this->sample->waveform = 'images/' . $waveform_name;
         $this->sample->save();
     }
 }
