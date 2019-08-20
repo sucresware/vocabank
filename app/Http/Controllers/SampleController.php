@@ -223,7 +223,7 @@ class SampleController extends Controller
 
     public function edit(Sample $sample)
     {
-        abort_if($sample->user != auth()->user(), 403);
+        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
 
         $tags = $sample->tags->pluck('name'); // Preload
 
@@ -232,6 +232,8 @@ class SampleController extends Controller
 
     public function update(Sample $sample)
     {
+        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
+
         request()->validate([
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
             'tags'      => ['nullable', 'array'],
@@ -260,5 +262,14 @@ class SampleController extends Controller
         $sample->save();
 
         return $sample;
+    }
+
+    public function destroy(Sample $sample)
+    {
+        abort_if(!auth()->user()->hasRole('admin'), 403);
+
+        $sample->delete();
+
+        return redirect('/');
     }
 }

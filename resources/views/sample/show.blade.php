@@ -111,11 +111,18 @@
                             <a href="#" class="btn btn-primary mx-1 "><i class="fa fa-copy mr-1"></i> Copier le lien</a>
                             <a href="{{ route('samples.download', $sample) }}" class="btn btn-tertiary mx-1"><i class="fa fa-download mr-1"></i> Télécharger</a>
                         </div>
-                        @if ($sample->user == auth()->user())
-                            <div class="ml-auto">
-                                <a href="{{ route('samples.edit', $sample) }}" class="btn btn-tertiary"><i class="fas fa-pencil-alt mr-1"></i> Modifier</a>
-                            </div>
-                        @endif
+                        <div class="ml-auto">
+                            @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))
+                                <a href="{{ route('samples.edit', $sample) }}" class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></a>
+                            @endif
+                            @if (auth()->user()->hasRole('admin'))
+                                <button
+                                    class="btn btn-secondary"
+                                    onclick="event.preventDefault(); document.getElementById('delete-form').submit();"
+                                ><i class="fas fa-trash"></i></button>
+                                <form id="delete-form" action="{{ route('samples.destroy', $sample) }}" method="POST" style="display: none;">@csrf @method('delete')</form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

@@ -31,6 +31,23 @@ class Sample extends Model implements ViewableContract
 
     protected $guarded = [];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::deleting(function ($sample) {
+            $sample->tags()->detach();
+
+            collect(Storage::disk('local')->allFiles('temp'))
+                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
+                ->each(function ($file) { Storage::disk('local')->delete($file); });
+
+            collect(Storage::disk('public')->allFiles())
+                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
+                ->each(function ($file) { Storage::disk('public')->delete($file); });
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
