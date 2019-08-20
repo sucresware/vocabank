@@ -78,9 +78,9 @@
           </template>
           <template v-else>
             <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
-            <a :href="'/samples/' + sample.id" class="btn btn-xs btn-primary">
+            <button class="btn btn-xs btn-primary" v-clipboard:copy="sampleUrl">
               <i class="fas fa-copy"></i>
-            </a>
+            </button>
           </template>
         </div>
       </div>
@@ -143,6 +143,17 @@ export default {
         this.isPlaying = !this.isPlaying;
         this.waveSurfer.playPause();
       }
+    }
+  },
+  computed: {
+    sampleUrl() {
+      return (
+        location.protocol +
+        "//" +
+        location.hostname +
+        "/samples/" +
+        this.sample.id
+      );
     }
   }
 };

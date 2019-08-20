@@ -108,8 +108,8 @@
 
                     <div class="px-4 mb-4 flex ">
                         <div class="mr-auto">
-                            <a href="#" class="btn btn-primary mx-1 "><i class="fa fa-copy mr-1"></i> Copier le lien</a>
-                            <a href="{{ route('samples.download', $sample) }}" class="btn btn-tertiary mx-1"><i class="fa fa-download mr-1"></i> Télécharger</a>
+                            <button class="btn btn-primary mx-1" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> Copier le lien</button>
+                            <a href="{{ route('samples.download', $sample) }}" class="btn btn-secondary mx-1" title="Télécharger"><i class="fa fa-download"></i> Télécharger</a>
                         </div>
                         <div class="ml-auto">
                             @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))

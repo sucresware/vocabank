@@ -1,14 +1,13 @@
 require('./bootstrap');
-require('select2')
-
-let $ = require("jquery")
 let ClipboardJS = require('clipboard/dist/clipboard.min.js')
 let axios = require('axios');
+
 import {
     Howl,
     Howler
 } from 'howler';
 
+/** Vue */
 
 window.Vue = require('vue');
 
@@ -16,48 +15,49 @@ const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 import SlideUpDown from 'vue-slide-up-down'
-Vue.component('slide-up-down', SlideUpDown)
-
 import InfiniteLoading from 'vue-infinite-loading';
-Vue.use(InfiniteLoading)
-
 import Transitions from 'vue2-transitions'
+import VueClipboard from 'vue-clipboard2'
+
+Vue.component('slide-up-down', SlideUpDown)
+Vue.use(InfiniteLoading)
 Vue.use(Transitions)
+Vue.use(VueClipboard)
 
 const app = new Vue({
     el: '#app',
 });
 
-let lightTogglerPlayer = new Howl({
-    src: '/audio/tink.mp3',
-    volume: .6,
-    html5: true,
-    onloaderror: () => {
-        console.warn('Could not load light toggler sound.')
-    }
-});
+/** ClipboardJS */
+let dataClipboard = document.querySelector('[data-clipboard]');
 
-window.onbeforeunload = function (event) {
-    let logo = document.getElementById("logo-replay");
-    logo.classList.add('spinner')
-}
+if (dataClipboard) new ClipboardJS(dataClipboard);
 
-if (document.getElementById('lightSwitch')) {
-    document.getElementById('lightSwitch').onclick = function(event) {
+/** Onche Light Switcher */
+let lightSwitch = document.getElementById('lightSwitch');
+
+if (lightSwitch) {
+    let lightTogglerPlayer = new Howl({
+        src: '/audio/tink.mp3',
+        volume: .6,
+        html5: true,
+        onloaderror: () => {
+            console.warn('Could not load light toggler sound.')
+        }
+    });
+
+    lightSwitch.onclick = function(event) {
         let bodyClasses = document.querySelector('body').classList;
 
-        lightTogglerPlayer.play();
-        axios.get("/light-toggler");
-
         if (bodyClasses.contains('theme-legacy')) {
-            bodyClasses.remove('theme-legacy');
             bodyClasses.add('theme-vocabank');
-        } else if (bodyClasses.contains('theme-vocabank')) {
-            bodyClasses.remove('theme-vocabank');
-            bodyClasses.add('theme-outrun');
+            bodyClasses.remove('theme-legacy');
         } else {
-            bodyClasses.remove('theme-outrun');
             bodyClasses.add('theme-legacy');
+            bodyClasses.remove('theme-vocabank');
         }
+
+        axios.get("/light-toggler");
+        lightTogglerPlayer.play();
     }
 }
