@@ -46,17 +46,15 @@ class SampleController extends Controller
     public function search(Request $request)
     {
         if ($request->q) {
-            $samples = Sample::with('user')
-                ->public();
-
-            $samples = $samples->whereHas('tags', function ($query) use ($request) {
-                return $query->where('name', 'like', '%' . $request->q . '%');
-            });
+            $samples = Sample::with('user')->public();
 
             if (!$request->tag) {
                 $samples = $samples
+                    ->whereHas('tags', function ($query) use ($request) { return $query->where('name', 'like', '%' . $request->q . '%'); })
                     ->orWhere('name', 'like', '%' . $request->q . '%')
                     ->orWhere('description', 'like', '%' . $request->q . '%');
+            } else {
+                $samples = $samples->whereHas('tags', function ($query) use ($request) { return $query->where('name', $request->q); });
             }
 
             $samples = $samples->paginate(15);
@@ -82,54 +80,6 @@ class SampleController extends Controller
     public function createURL()
     {
         return view('sample.create_url');
-    }
-
-    public function show(Sample $sample)
-    {
-        return view('sample.show', compact('sample'));
-    }
-
-    public function next(Sample $sample)
-    {
-        $next_sample = $sample->next;
-
-        if ($next_sample) {
-            return redirect()->route('samples.show', $next_sample);
-        }
-
-        return redirect()->route('home');
-    }
-
-    public function prev(Sample $sample)
-    {
-        $prev_sample = $sample->prev;
-
-        if ($prev_sample) {
-            return redirect()->route('samples.show', $prev_sample);
-        }
-
-        return redirect()->route('home');
-    }
-
-    public function iframe(Sample $sample)
-    {
-        $sample->user; // Preload
-
-        return view('sample.iframe', compact('sample'));
-    }
-
-    public function listen(Sample $sample)
-    {
-        views($sample)
-            ->delayInSession(1)
-            ->record();
-
-        return response()->file(Storage::disk('public')->path($sample->audio));
-    }
-
-    public function download(Sample $sample)
-    {
-        return response()->download(Storage::disk('public')->path($sample->audio));
     }
 
     public function preflight()
@@ -219,6 +169,54 @@ class SampleController extends Controller
         ])->dispatch($sample->id, request()->url);
 
         return $sample;
+    }
+
+    public function show(Sample $sample)
+    {
+        return view('sample.show', compact('sample'));
+    }
+
+    public function next(Sample $sample)
+    {
+        $next_sample = $sample->next;
+
+        if ($next_sample) {
+            return redirect()->route('samples.show', $next_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
+    public function prev(Sample $sample)
+    {
+        $prev_sample = $sample->prev;
+
+        if ($prev_sample) {
+            return redirect()->route('samples.show', $prev_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
+    public function iframe(Sample $sample)
+    {
+        $sample->user; // Preload
+
+        return view('sample.iframe', compact('sample'));
+    }
+
+    public function listen(Sample $sample)
+    {
+        views($sample)
+            ->delayInSession(1)
+            ->record();
+
+        return response()->file(Storage::disk('public')->path($sample->audio));
+    }
+
+    public function download(Sample $sample)
+    {
+        return response()->download(Storage::disk('public')->path($sample->audio));
     }
 
     public function edit(Sample $sample)

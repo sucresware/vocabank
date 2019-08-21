@@ -28,6 +28,12 @@ const app = new Vue({
     el: '#app',
 });
 
+/** Navbar */
+let navToggle = document.getElementById('nav-toggle');
+if (navToggle) {
+    navToggle.onclick = () => document.getElementById("nav-content").classList.toggle("hidden");
+}
+
 /** ClipboardJS */
 let dataClipboard = document.querySelector('[data-clipboard]');
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 
@@ -12,17 +13,10 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            abort_if($request->user->id != auth()->user()->id, 403);
+            abort_if($request->user != auth()->user(), 403);
 
             return $next($request);
-        })->except(['index', 'show']);
-    }
-
-    public function index()
-    {
-        $users = User::orderBy('created_at', 'ASC')->paginate(20);
-
-        return view('user.index', compact('users'));
+        })->except(['show']);
     }
 
     public function show(User $user)
@@ -49,8 +43,12 @@ class UserController extends Controller
         ]);
 
         if (request()->hasFile('avatar')) {
+            if (!Storage::disk('public')->exists('avatars/')) {
+                Storage::disk('public')->makeDirectory('avatars/', 0775, true);
+            }
+
             $avatar_name = $user->id . '_avatar_' . time() . '.' . request()->avatar->getClientOriginalExtension();
-            Image::make(request()->avatar)->fit(300, 300)->save(storage_path('app/public/avatars/' . $avatar_name));
+            Image::make(request()->avatar)->fit(300, 300)->save(Storage::disk('public')->path('avatars/' . $avatar_name));
             $user->avatar = 'avatars/' . $avatar_name;
         }
 
@@ -99,7 +97,4 @@ class UserController extends Controller
 
         return redirect(route('users.edit.password', $user))->with('success', 'Modifications enregistrées !');
     }
-
-    // public function destroy($id)
-    // { }
 }

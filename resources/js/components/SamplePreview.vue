@@ -48,8 +48,8 @@
           ></i>
         </div>
       </div>
-      <div class="z-20 ml-3 truncate font-bold">{{ sample.name }}</div>
-      <div class="z-20 ml-auto">
+      <div class="z-20 mx-3 flex-1 truncate font-bold">{{ sample.name }}</div>
+      <div class="z-20 ml-auto" v-if="sample.views">
         <i class="fas fa-undo"></i>
         {{ sample.views }}
       </div>
@@ -60,15 +60,15 @@
         class="w-full flex items-center relative py-8"
         :id="'wavesurfer-' + sample.id"
       ></div>
-      <div class="flex flex-wrap px-3 pb-2 text-xs items-end">
-        <div class="flex-auto">
-          <template>ajouté {{ sample.presented_date }}</template>
+      <div class="flex flex-wrap px-4 pb-4 sm:pb-2 text-xs items-center text-center sm:text-left">
+        <div class="flex-1 sm:flex-auto mb-2 sm:mb-0">
+          ajouté {{ sample.presented_date }}
           <template v-if="sample.user">
             — par
             <a :href="'/users/' + sample.user.id" class="link">{{ sample.user.name }}</a>
           </template>
         </div>
-        <div class="ml-auto">
+        <div class="w-full sm:w-auto sm:ml-auto">
           <template v-if="inIframe">
             <a
               :href="'/samples/' + sample.id"
@@ -78,7 +78,11 @@
           </template>
           <template v-else>
             <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
-            <button class="btn btn-xs btn-primary" v-clipboard:copy="sampleUrl">
+            <button
+              class="btn btn-xs btn-primary"
+              v-clipboard:copy="sampleUrl"
+              title="Copier le lien"
+            >
               <i class="fas fa-copy"></i>
             </button>
           </template>

@@ -392,3 +392,7 @@ wave {
 }
 
 @tailwind utilities;
+
+.truncate {
+    min-width: 0;
+}

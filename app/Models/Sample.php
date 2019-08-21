@@ -87,11 +87,11 @@ class Sample extends Model implements ViewableContract
 
     public function getThumbnailUrlAttribute()
     {
-        return $this->thumbnail ? Storage::disk('public')->url($this->thumbnail) : '/img/default.png';
+        return $this->thumbnail ? Storage::disk('public')->url($this->thumbnail) : url('/img/default.png');
     }
 
     public function getWaveformUrlAttribute()
     {
-        return $this->waveform ? Storage::disk('public')->url($this->waveform) : '/img/waveform.png';
+        return $this->waveform ? Storage::disk('public')->url($this->waveform) : url('/img/waveform.png');
     }
 }

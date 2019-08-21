@@ -7984,6 +7984,10 @@ wave {
   z-index: auto;
 }
 
+.truncate {
+  min-width: 0;
+}
+
 @media (min-width: 640px) {
   .sm\:appearance-none {
     -webkit-appearance: none;

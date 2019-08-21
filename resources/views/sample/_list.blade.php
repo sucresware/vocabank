@@ -1,1 +1,0 @@
-<sample-preview :sample="{{ $sample }}" :views="{{ views($sample)->count() }}"></sample-preview>

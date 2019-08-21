@@ -4,51 +4,62 @@
 
 @section('body')
     <nav id="header">
-        <div class="container mx-auto flex flex-wrap items-center">
-            <div class="mx-2">
+        <div class="container mx-auto flex flex-wrap items-center justify-between">
+            <div class="mx-4">
                 <a href="{{ route('home') }}">{!! File::get(base_path('/public/svg/logo_white.svg')) !!}</a>
             </div>
-            <div class="mx-2">
+            <div class="hidden md:block mx-2">
                 <form action="{{ route('samples.search') }}" method="get">
-                    <input type="text" placeholder="Recherche" class="form-control form-control-inverse w-48" name="q" value="{{ old('q', $q ?? '') }}">
-                    <button type="submit"><i class="nav-link {{ active_class(if_route('samples.search')) }} -ml-8 fa fa-search"></i></button>
+                    <input type="text" placeholder="Recherche" class="form-control form-control-inverse w-64" name="q" value="{{ old('q', $q ?? '') }}">
+                    <button type="submit"><i class="nav-link {{ active_class(if_route('samples.search')) }} -ml-10 fa fa-fw fa-search"></i></button>
                 </form>
             </div>
-            <div class="mx-2 ml-auto">
-                <div class="flex flex-wrap items-center justify-end">
+            <div class="block md:hidden mx-4">
+                <button id="nav-toggle" class="nav-link"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="hidden w-full md:block md:w-auto mx-2 md:ml-auto pt-4 md:pt-0" id="nav-content">
+                <ul class="flex flex-wrap items-center justify-center md:justify-end">
+                    <li class="w-full mx-2 mb-4 md:hidden">
+                        <form action="{{ route('samples.search') }}" method="get" class="flex">
+                            <div class="flex-auto mr-4">
+                                <input type="text" placeholder="Recherche" class="form-control form-control-inverse w-full" name="q" value="{{ old('q', $q ?? '') }}">
+                            </div>
+                            <button type="submit"><i class="nav-link {{ active_class(if_route('samples.search')) }} fa fa-fw fa-search"></i></button>
+                        </form>
+                    </li>
                     @guest
-                        <div class="px-3"><a href="{{ route('register') }}" class="nav-link {{ active_class(if_route('register')) }}">Inscription</a></div>
-                        <div class="pl-3"><a href="{{ route('login') }}" class="nav-link {{ active_class(if_route('login')) }}">Connexion</a></div>
+                        <li class="mx-2 my-2 md:my-0">
+                            <a href="{{ route('register') }}" class="nav-link {{ active_class(if_route('register')) }}">Inscription</a>
+                        </li>
+                        <li class="mx-2 my-2 md:my-0">
+                            <a href="{{ route('login') }}" class="nav-link {{ active_class(if_route('login')) }}">Connexion</a>
+                        </li>
                     @else
-                        <a href="{{ route('samples.create') }}" class="mx-3 btn btn-primary"><i class="fa fa-plus"></i> Ajouter</a>
-                        <button id="lightSwitch" class="mx-3 nav-link"><i class="fa fa-lightbulb"></i></button>
-                        <a href="{{ route('users.show', auth()->user()) }}" class="mx-3 nav-link {{ active_class(if_route('users.show', auth()->user())) }}"><i class="fas fa-user"></i></a>
-                        <a href="{{ route('logout') }}" class="mx-3 nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
+                        <li class="mx-2">
+                            <a href="{{ route('samples.create') }}" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i> Ajouter</a>
+                        </li>
+                        <li class="mr-2 ml-auto md:ml-2">
+                            <button id="lightSwitch" class="nav-link"><i class="fa fa-fw fa-lightbulb"></i></button>
+                        </li>
+                        <li class="mx-2">
+                            <a href="{{ route('users.show', auth()->user()) }}" class="nav-link {{ active_class(if_route('users.show', auth()->user())) }}"><i class="fas fa-fw fa-user"></i></a>
+                        </li>
+                        <li class="mx-2">
+                            <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-fw fa-sign-out-alt"></i></a>
+                        </li>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                     @endguest
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
 
-    @yield('main')
-
-    <div class="container w-full mx-auto flex mb-10" id="app">
-        <div class="px-3 flex-1">
+    <div class="container w-full mx-auto flex flex-wrap mb-10" id="app">
+        <div class="flex-1 mb-6 px-4">
             @yield('content')
         </div>
-        <div class="px-3 w-1/4">
-            <div class="card text-red-500 px-5 py-3 mb-6">
-                <span class="font-bold uppercase">VocaBank v2 - Open Alpha</span><br>
-                <div class="text-xs">
-                    &bull; La base de données ne devrait plus être remise à zéro (sauf éventuellement, à l'ouverture idk)<br>
-                    &bull; Certaines fonctionnalités ne fonctionnent pas encore<br>
-                    &bull; Open for hackers (cc ptdr)
-                </div>
-            </div>
-            <hr>
-
+        <div class="px-4 w-full md:w-1/4">
             <div class="text-xs text-muted mb-2">
                 Tags les plus utilisés :
             </div>
@@ -61,26 +72,21 @@
 
             <footer class="text-xs text-muted">
                 <div class="mb-2">
-                    VocaBank &copy; 2019<br>
-                    Parce qu'on entendait rien sur <a href="https://risibank.fr">RisiBank</a>.<br>
-                    Temps d'exécution : {{ round((microtime(true) - LARAVEL_START), 3)*1000 }} ms<br>
-                </div>
-
-                <hr>
-
-                <div class="mb-2">
                     Liens :<br>
                     <a href="{{ route('terms') }}">Conditions générales d'utilisation</a><br>
                     <a href="{{ route('api') }}">API</a><br>
-                    <a href="https://github.com/4sucres/vocabank" target="_blank">GitHub</a><br>
+                    <a href="mailto:vocabank@4sucres.org">Contact</a><br>
+                    <a href="mailto:vocabank@4sucres.org">Signaler un contenu</a>
                 </div>
 
                 <hr>
 
                 <div class="mb-2">
-                    Partenaires :<br>
-                    <a href="https://4sucres.org" target="_blank">4sucres.org</a><br>
-                    <a href="https://olinux.org" target="_blank">Olinux Records®</a><br>
+                    VocaBank &copy; 2019<br>
+                    Parce qu'on entendait rien sur <a href="https://risibank.fr">RisiBank</a>.<br>
+                    Temps d'exécution : {{ round((microtime(true) - LARAVEL_START), 3)*1000 }} ms<br>
+                    Projet Open Source de <a href="https://4sucres.org" target="_blank">4sucres.org</a><br>
+                    Voir le <a href="https://github.com/4sucres/vocabank" target="_blank">GitHub</a>
                 </div>
             </footer>
         </div>

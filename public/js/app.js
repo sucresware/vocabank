@@ -2371,6 +2371,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
@@ -34855,14 +34859,16 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "z-20 ml-3 truncate font-bold" }, [
+          _c("div", { staticClass: "z-20 mx-3 flex-1 truncate font-bold" }, [
             _vm._v(_vm._s(_vm.sample.name))
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "z-20 ml-auto" }, [
-            _c("i", { staticClass: "fas fa-undo" }),
-            _vm._v("\n      " + _vm._s(_vm.sample.views) + "\n    ")
-          ])
+          _vm.sample.views
+            ? _c("div", { staticClass: "z-20 ml-auto" }, [
+                _c("i", { staticClass: "fas fa-undo" }),
+                _vm._v("\n      " + _vm._s(_vm.sample.views) + "\n    ")
+              ])
+            : _vm._e()
         ],
         1
       ),
@@ -34879,14 +34885,20 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "flex flex-wrap px-3 pb-2 text-xs items-end" },
+            {
+              staticClass:
+                "flex flex-wrap px-4 pb-4 sm:pb-2 text-xs items-center text-center sm:text-left"
+            },
             [
               _c(
                 "div",
-                { staticClass: "flex-auto" },
+                { staticClass: "flex-1 sm:flex-auto mb-2 sm:mb-0" },
                 [
-                  [_vm._v("ajouté " + _vm._s(_vm.sample.presented_date))],
-                  _vm._v(" "),
+                  _vm._v(
+                    "\n        ajouté " +
+                      _vm._s(_vm.sample.presented_date) +
+                      "\n        "
+                  ),
                   _vm.sample.user
                     ? [
                         _vm._v("\n          — par\n          "),
@@ -34906,7 +34918,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "ml-auto" },
+                { staticClass: "w-full sm:w-auto sm:ml-auto" },
                 [
                   _vm.inIframe
                     ? [
@@ -34944,7 +34956,8 @@ var render = function() {
                                 arg: "copy"
                               }
                             ],
-                            staticClass: "btn btn-xs btn-primary"
+                            staticClass: "btn btn-xs btn-primary",
+                            attrs: { title: "Copier le lien" }
                           },
                           [_c("i", { staticClass: "fas fa-copy" })]
                         )
@@ -48030,7 +48043,17 @@ Vue.use(vue_clipboard2__WEBPACK_IMPORTED_MODULE_4___default.a);
 var app = new Vue({
   el: '#app'
 });
+/** Navbar */
+
+var navToggle = document.getElementById('nav-toggle');
+
+if (navToggle) {
+  navToggle.onclick = function () {
+    return document.getElementById("nav-content").classList.toggle("hidden");
+  };
+}
 /** ClipboardJS */
+
 
 var dataClipboard = document.querySelector('[data-clipboard]');
 if (dataClipboard) new ClipboardJS(dataClipboard);
