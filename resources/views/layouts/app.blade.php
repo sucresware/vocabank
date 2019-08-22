@@ -80,8 +80,8 @@
                     @foreach ($static_pages as $static_page)
                         <a href="{{ route('pages', $static_page->slug) }}">{{ $static_page->name }}</a><br>
                     @endforeach
-                    <a href="mailto:vocabank@4sucres.org">Contact</a><br>
-                    <a href="mailto:vocabank@4sucres.org">Signaler un contenu</a>
+                    <a href="mailto:contact@vocabank.org">Contact</a><br>
+                    <a href="mailto:contact@vocabank.org">Signaler un contenu</a>
                 </div>
 
                 <hr>
