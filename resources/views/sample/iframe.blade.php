@@ -1,9 +1,11 @@
-@extends('layouts.app_minimal')
+@extends('layouts.base')
 
-@section('title')
-    {{ $sample->name }}
-@endsection
+@section('title', $sample->name)
 
-@section('content')
-    @include('sample._preview', ['iframe' => true])
+@section('body-classes', 'theme-legacy')
+
+@section('body')
+    <div id="app" class="flex items-center h-screen">
+        <sample-preview :sample="{{ $sample }}" :iframe="true"></sample-preview>
+    </div>
 @endsection

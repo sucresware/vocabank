@@ -1,39 +1,71 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Inscription</div>
+@section('title')
+    Inscription
+@endsection
 
-                <div class="card-body">
-                    {!! BootForm::horizontal([
-                        'url' => route('register'),
-                        'method' => 'post',
-                        'left_column_class' => 'col-md-3',
-                        'left_column_offset_class' => 'col-md-offset-3',
-                        'right_column_class' => 'col-md-8'
-                    ]) !!}
-                        @csrf
+@section('body-classes', 'theme-vocabank w-full h-screen')
 
-                        {!! BootForm::text('name', 'Pseudo*', old('name'), ['help_text' => "Attention, contrairement à 4sucres.org, tu peux pas le changer après."]) !!}
-                        {!! BootForm::text('email', 'Adresse email*', old('email'), ['help_text' => "Ton email ne sera jamais partagé ou affiché publiquement."]) !!}
-                        {!! BootForm::password('password', 'Mot de passe*', ['help_text' => "6 caractères minimum, c'est important pour la sécurité."]) !!}
+@section('body')
+<div class="flex w-full h-screen items-center justify-center">
+    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w:1/6 text-center mx-4">
+        <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48 animated fadeInDown">
 
-                       <div class="card-footer bg-light">
-                        <div class="text-center mb-3">
-                            <small>En t'inscrivant et en utilisant nos services, tu déclares avoir lu et accepter sans réserve les <a href="{{ route('terms') }}">Conditions générales d'utilisation</a>.</small>
+        <div class="mb-6">
+            <a href="/login/4sucres" class="btn btn-primary">
+                <img src="/img/4sucres.png" class="inline h-6 mr-1" alt="4sucres">
+                Inscription avec 4sucres
+            </a>
+        </div>
+
+        <div class="flex justify-center items-center text-center mb-6">
+            <hr class="flex-1">
+            <div class="mx-4">ou</div>
+            <hr class="flex-1">
+        </div>
+
+        <form action="{{ route('register') }}" method="post">
+            @csrf
+
+            <div class="card mb-4 p-4">
+                <div class="mb-3">
+                    <input type="text" placeholder="Pseudo" class="form-control w-full" name="name" value="{{ old('name') }}">
+
+                    @if ($errors->has('name'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            {{ $errors->first('name') }}
                         </div>
+                    @endif
+                </div>
 
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Inscription</button>
+                <div class="mb-3">
+                    <input type="text" placeholder="Adresse e-mail" class="form-control w-full" name="email" value="{{ old('email') }}">
+
+                    @if ($errors->has('email'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            {{ $errors->first('email') }}
                         </div>
-                    </div>
+                    @endif
+                </div>
 
-                    {!! BootForm::close() !!}
+                <div>
+                    <input type="password" placeholder="Mot de passe" class="form-control w-full" name="password">
+
+                    @if ($errors->has('password'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            <strong>{{ $errors->first('password') }}
+                        </div>
+                    @endif
                 </div>
             </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-secondary"><i class="fa fa-sign-in-alt mr-1"></i> Créer un compte</button>
+            </div>
+        </form>
+
+        <div class="mt-6 text-xs text-muted">
+            <a href="{{ route('login') }}"> J'ai déjà un compte</a>
         </div>
     </div>
 </div>

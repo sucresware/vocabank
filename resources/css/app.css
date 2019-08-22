@@ -1,0 +1,381 @@
+@tailwind base;
+@tailwind components;
+
+/** Global **/
+
+@import url('https://rsms.me/inter/inter.css');
+
+body {
+    font-family: 'Inter', sans-serif;
+    @apply text-sm;
+}
+
+@supports (font-variation-settings: normal) {
+    html {
+        font-family: 'Inter var', sans-serif;
+    }
+}
+
+hr {
+    @apply my-4;
+}
+
+nav {
+    @apply w-full py-3 mb-6;
+}
+
+.form-control {
+    @apply rounded px-2 py-1
+}
+
+.form-control:disabled {
+    @apply cursor-not-allowed;
+}
+
+.btn {
+    @apply inline-block px-3 py-1 font-bold text-center rounded-full;
+}
+
+.btn-lg {
+    @apply px-4 py-2;
+}
+
+.btn-xs {
+    @apply text-xs px-3 py-1;
+}
+
+.card {
+    @apply rounded shadow;
+}
+
+.card .hoverable {
+    @apply rounded;
+}
+
+/** Theme Vocabank v1 **/
+
+body.theme-legacy  {
+    @apply bg-gray-100 text-gray-700;
+}
+
+.theme-legacy hr {
+    @apply bg-gray-200;
+    height: 1px;
+}
+
+.theme-legacy .text-muted {
+    @apply text-gray-500;
+}
+
+.theme-legacy a, .theme-legacy .a {
+    @apply text-gray-600;
+}
+
+.theme-legacy a:hover, .theme-legacy .a:hover {
+    @apply text-gray-500;
+}
+
+.theme-legacy nav {
+    @apply bg-gray-800 shadow-lg;
+}
+
+.theme-legacy .form-control {
+    @apply border border-gray-300;
+}
+
+.theme-legacy .form-control.form-control-inverse {
+    @apply border-0 bg-gray-700 text-white;
+}
+
+.theme-legacy .nav-link {
+    @apply text-gray-600;
+}
+
+.theme-legacy .nav-link:hover {
+    @apply text-gray-400;
+}
+
+.theme-legacy .nav-link.active {
+    @apply text-white;
+}
+
+.theme-legacy .btn {
+    @apply text-gray-700;
+}
+
+.theme-legacy .btn-primary {
+    @apply bg-teal-500 text-white;
+}
+
+.theme-legacy .btn-primary:hover {
+    @apply bg-teal-600 text-white;
+}
+
+.theme-legacy .btn-secondary {
+    @apply bg-gray-300;
+}
+
+.theme-legacy .btn-secondary:hover {
+    @apply bg-gray-400 text-black;
+}
+
+.theme-legacy .btn-tertiary:hover {
+    @apply bg-gray-200 text-black;
+}
+
+.theme-legacy .card {
+    @apply bg-white;
+}
+
+.theme-legacy .hoverable:hover {
+    @apply bg-gray-100;
+}
+
+/** Theme Vocabank v2 **/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
+body.theme-vocabank {
+    @apply text-white;
+    background: #17191f;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.theme-vocabank hr {
+    background-color: #242636;
+    height: 1px;
+}
+
+.theme-vocabank .text-muted {
+    @apply text-gray-500;
+}
+
+.theme-vocabank .btn {
+    @apply rounded;
+}
+
+.theme-vocabank a, .theme-vocabank .a {
+    @apply text-gray-100;
+}
+
+.theme-vocabank a:hover, .theme-vocabank .a:hover {
+    @apply text-teal-500;
+}
+
+.theme-vocabank .text-muted a {
+    @apply text-gray-400;
+}
+
+.theme-vocabank .text-muted a:hover {
+    @apply text-teal-500;
+}
+
+.theme-vocabank > nav {
+    @apply relative;
+    background: linear-gradient(to right,#17191f, #23252c);
+}
+
+.theme-vocabank .form-control {
+    @apply border-0 text-white;
+    background: rgba(255, 255, 255, .05);
+}
+
+.theme-vocabank .form-control:disabled {
+    @apply border-0 text-gray-300;
+    background: rgba(255, 255, 255, .15);
+}
+
+.theme-vocabank .form-control.form-control-inverse {}
+
+.theme-vocabank .nav-link {
+    @apply text-white font-bold;
+    opacity: .6;
+}
+
+.theme-vocabank .nav-link:hover {
+    @apply text-white;
+    opacity: .8;
+}
+
+.theme-vocabank .nav-link.active {
+    @apply text-white;
+    opacity: 1;
+}
+
+.theme-vocabank .btn {
+    @apply text-white;
+    transition: all .1s ease-in-out;
+    transition-property: box-shadow, text-shadow, filter, background;
+}
+
+.theme-vocabank .btn:hover {
+    @apply text-white;
+    transition: all .1s ease-in-out;
+    transition-property: box-shadow, text-shadow, filter, background;
+    filter: brightness(1.1) saturate(1.05);
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+}
+
+.theme-vocabank .btn-primary {
+    background: #05c6b1;
+    background-image: linear-gradient(to right, #1ed79d, #05c6b1);
+}
+
+.theme-vocabank .btn-secondary {
+    background: rgba(255, 255, 255, .10);
+}
+
+.theme-vocabank .btn-primary:hover {
+    box-shadow: 0 2px 18px 2px rgba(30,215,157,.3);
+}
+
+.theme-vocabank .btn-secondary:hover {
+    background: rgba(255, 255, 255, .15);
+}
+
+.theme-vocabank .btn-tertiary:hover {
+    background: rgba(255, 255, 255, .10);
+}
+
+.theme-vocabank .card {
+    @apply shadow-lg;
+    background: #1d1f25;
+}
+
+.theme-vocabank .hoverable {
+    transition: .1s;
+}
+
+.theme-vocabank .hoverable:hover {
+    transition: .1s;
+    background: rgba(255, 255, 255, .05);
+}
+
+/** Wavesurfer **/
+
+wave {
+    width: 100%;
+    overflow: hidden !important;
+}
+
+/** Logo **/
+
+#logo #logo-replay {
+    animation: spin .5s ease-in-out;
+}
+
+#logo-replay {
+    transform-origin: 34px 17px;
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
+}
+
+@tailwind utilities;
+
+.m-w-0 {
+    min-width: 0;
+}
+
+.markdown {
+    @apply leading-normal break-words;
+}
+
+.markdown > * + * {
+    @apply mt-0 mb-4;
+}
+
+.markdown li + li {
+    @apply mt-1;
+}
+
+.markdown li > p + p {
+    @apply mt-6;
+}
+
+.markdown strong {
+    @apply font-semibold;
+}
+
+.markdown a {
+    @apply text-blue-600 font-semibold;
+}
+
+.markdown strong a {
+    @apply font-bold;
+}
+
+.markdown h1 {
+    @apply leading-tight border-b text-xl font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h2 {
+    @apply leading-tight border-b text-base font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h3 {
+    @apply leading-snug font-semibold mb-4 mt-6;
+}
+
+.markdown h4 {
+    @apply leading-none font-semibold mb-4 mt-6;
+}
+
+.markdown h5 {
+    @apply leading-tight text-sm font-semibold mb-4 mt-6;
+}
+
+.markdown h6 {
+    @apply leading-tight text-sm font-semibold text-gray-600 mb-4 mt-6;
+}
+
+.markdown blockquote {
+    @apply border-l-4 border-gray-300 pl-4 pr-4 text-gray-600;
+}
+
+.markdown code {
+    @apply font-mono text-sm inline bg-gray-200 rounded px-1;
+}
+
+.markdown pre {
+    @apply bg-gray-100 rounded p-4;
+}
+
+.markdown pre code {
+    @apply block bg-transparent p-0 overflow-visible rounded-none;
+}
+
+.markdown ul {
+    @apply pl-8 list-disc;
+}
+
+.markdown ol {
+    @apply pl-8 list-decimal;
+}
+
+.markdown table {
+    @apply border-gray-600;
+}
+
+.markdown th {
+    @apply border py-1 px-3;
+}
+
+.markdown td {
+    @apply border py-1 px-3;
+}
+
+/* Override pygments style background color. */
+.markdown .highlight pre {
+    @apply bg-gray-100 !important;
+}

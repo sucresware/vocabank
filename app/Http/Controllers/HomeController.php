@@ -8,4 +8,23 @@ class HomeController extends Controller
     {
         return redirect()->route('samples.index');
     }
+
+    public function lightToggler()
+    {
+        $user = auth()->user();
+        $user->disableLogging();
+
+        switch ($user->getSetting('layout.theme', 'theme-vocabank')) {
+            case 'theme-vocabank':
+                $user->setSetting('layout.theme', 'theme-legacy');
+
+            break;
+            case 'theme-legacy':
+                $user->setSetting('layout.theme', 'theme-vocabank');
+
+            break;
+        }
+
+        return ['success' => true];
+    }
 }

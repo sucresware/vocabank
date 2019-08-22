@@ -2,60 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helper;
+use App\Jobs\ConvertToMP3Job;
+use App\Jobs\GenerateWaveformJob;
+use App\Jobs\MakePublicJob;
+use App\Jobs\YoutubeDlJob;
 use App\Models\Sample;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class SampleController extends Controller
 {
     public function index()
     {
-        $recent_samples = Sample::orderBy('created_at', 'DESC')->limit(5)->get();
-        $popular_samples = Sample::orderByViews()->limit(5)->get();
-
-        return view('sample.index', compact('recent_samples', 'popular_samples'));
+        return redirect()->route('samples.recent');
     }
 
     public function recent()
     {
-        $samples = Sample::orderBy('created_at', 'DESC')->paginate(10);
+        $samples = Sample::with('user')->public()->orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('sample.index', compact('samples'));
+        if (request()->ajax()) {
+            return $samples;
+        }
+
+        return view('sample.index', compact('samples'))->with('filter', 'recent');
     }
 
     public function popular()
     {
-        $samples = Sample::orderByViews()->paginate(10);
+        $samples = Sample::with('user')->public()->orderByViews()->paginate(15);
 
-        return view('sample.index', compact('samples'));
+        if (request()->ajax()) {
+            return $samples;
+        }
+
+        return view('sample.index', compact('samples'))->with('filter', 'popular');
     }
 
     public function search(Request $request)
     {
         if ($request->q) {
-            $q = explode(' ', $request->q);
-            $samples = Sample::query();
+            $samples = Sample::with('user')->public();
 
-            foreach ($q as $q_) {
-                $samples = $samples->whereHas('tags', function ($query) use ($q_) {
-                    return $query->where('name', 'like', $q_ . '%');
-                });
+            if (!$request->tag) {
+                $samples = $samples
+                    ->whereHas('tags', function ($query) use ($request) { return $query->where('name', 'like', '%' . $request->q . '%'); })
+                    ->orWhere('name', 'like', '%' . $request->q . '%')
+                    ->orWhere('description', 'like', '%' . $request->q . '%');
+            } else {
+                $samples = $samples->whereHas('tags', function ($query) use ($request) { return $query->where('name', $request->q); });
             }
 
-            $samples = $samples->paginate(10);
+            $samples = $samples->paginate(15);
 
             return view('sample.index', compact('samples'))->with('q', $request->q);
         } else {
-            return view('sample.index');
+            return redirect()->route('home');
         }
     }
 
     public function random()
     {
-        $sample = Sample::limit(1)->inRandomOrder()->first();
+        $sample = Sample::public()->limit(1)->inRandomOrder()->first();
 
         return redirect()->route('samples.show', $sample);
     }
@@ -65,59 +77,98 @@ class SampleController extends Controller
         return view('sample.create');
     }
 
-    public function store(Request $request)
+    public function createURL()
     {
-        // $request->merge(['tags', Helper::stripAccents($request->tags)]);
+        return view('sample.create_url');
+    }
 
-        $validator = \Validator::make($request->all(), [
-            'name' => ['required', 'min:3', 'max:255'],
-            'vocaroo_link' => ['required', 'regex:' . '/http(?:s|):\/\/vocaroo.com\/i\/((?:\w|-)*)/m'],
-            'tags' => [
-                'required', 'regex:' . '/^(?:[a-zA-Z0-9]| )+$/m',
-                function ($attribute, $value, $fail) {
-                    $tags = explode(' ', $value);
-                    $tags = array_unique($tags);
-                    if (count($tags) < 3) {
-                        $fail('Tu dois spécifier au moins 3 tags!');
-                    }
-                    if (count($tags) > 10) {
-                        $fail('Maximum 10 tags !');
-                    }
-                },
-            ],
-            'thumbnail' => ['image'],
+    public function preflight()
+    {
+        request()->validate([
+            'audio' => ['required', 'file', 'max:10240', 'mimetypes:audio/mpeg,audio/mp3,audio/wav,audio/ogg'],
         ]);
-        $validator->validate();
 
-        $sample = new Sample([
-            'name' => $request->name,
-            'vocaroo_link' => $request->vocaroo_link,
-        ]);
-        $sample->user()->associate(auth()->user());
+        $sample = auth()->user()->samples()->create(
+            ['name' => request()->file('audio')->getClientOriginalName()]
+        );
+
+        $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
+        $sample->audio = $storage_path;
         $sample->save();
 
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail_name = $sample->id . '_thumbnail' . time() . '.' . request()->thumbnail->getClientOriginalExtension();
-            $thumbnail_path = storage_path('app/temp/' . $thumbnail_name);
+        ConvertToMP3Job::withChain([
+            new GenerateWaveformJob($sample->id),
+            new MakePublicJob($sample->id),
+        ])->dispatch($sample->id);
 
-            Image::make(request()->thumbnail)->fit(300)->save($thumbnail_path);
-            $imgur = \Imgur::upload(File::get($thumbnail_path));
-            $sample->thumbnail_link = $imgur->link();
+        return $sample;
+    }
 
-            File::delete($thumbnail_path);
-        } else {
-            $sample->thumbnail_link = '/img/default.png';
+    public function preflightURL()
+    {
+        request()->validate([
+            'url' => ['required'],
+        ]);
+
+        try {
+            $process = new Process([
+                'youtube-dl',
+                request()->url,
+                '--skip-download',
+                '--dump-json',
+                '--no-playlist',
+            ]);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['errors' => ['url' => ['Déso, aucune information n\'a été trouvée']]], 422);
         }
 
-        $sample->save();
+        $ytdl_dump = json_decode($process->getOutput());
 
-        foreach (explode(' ', $request->tags) as $tag) {
-            Tag::firstOrCreate([
-                'name' => $tag,
-            ])->samples()->attach($sample);
+        if ($ytdl_dump->extractor !== 'youtube' && $ytdl_dump->extractor !== 'soundcloud') {
+            if (!isset($ytdl_dump->duration)) {
+                return response()->json(['errors' => ['url' => ['Déso, des informations ont été trouvées mais le site n\'est pas explicitement autorisé (poke the dev!)']]], 422);
+            }
         }
 
-        return redirect()->route('samples.show', $sample);
+        if ($ytdl_dump->duration < 1 || $ytdl_dump->duration >= 5 * 60) { // 5 minutes
+            return response()->json(['errors' => ['url' => ['Le sample doit faire moins de 5 minutes, abuse pas']]], 422);
+        }
+
+        $sample = auth()->user()->samples()->create([
+            'name'        => $ytdl_dump->alt_title ?? $ytdl_dump->title,
+            'description' => 'Source : ' . $ytdl_dump->webpage_url . ' (' . $ytdl_dump->extractor . ')',
+        ]);
+
+        if (isset($ytdl_dump->tags) && count($ytdl_dump->tags)) {
+            foreach ($ytdl_dump->tags as $tag) {
+                Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+            }
+        }
+
+        if (isset($ytdl_dump->thumbnail)) {
+            if (!Storage::disk('public')->exists('images/')) {
+                Storage::disk('public')->makeDirectory('images/', 0775, true);
+            }
+
+            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+
+            Image::make(file_get_contents($ytdl_dump->thumbnail))->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
+            $sample->thumbnail = 'images/' . $thumbnail_name;
+            $sample->save();
+        }
+
+        YoutubeDlJob::withChain([
+            new GenerateWaveformJob($sample->id),
+            new MakePublicJob($sample->id),
+        ])->dispatch($sample->id, request()->url);
+
+        return $sample;
     }
 
     public function show(Sample $sample)
@@ -125,78 +176,98 @@ class SampleController extends Controller
         return view('sample.show', compact('sample'));
     }
 
+    public function next(Sample $sample)
+    {
+        $next_sample = $sample->next;
+
+        if ($next_sample) {
+            return redirect()->route('samples.show', $next_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
+    public function prev(Sample $sample)
+    {
+        $prev_sample = $sample->prev;
+
+        if ($prev_sample) {
+            return redirect()->route('samples.show', $prev_sample);
+        }
+
+        return redirect()->route('home');
+    }
+
     public function iframe(Sample $sample)
     {
+        $sample->user; // Preload
+
         return view('sample.iframe', compact('sample'));
     }
 
-    public function edit($id)
-    { }
-
-    public function update(Request $request, $id)
-    { }
-
-    public function destroy($id)
-    { }
-
     public function listen(Sample $sample)
     {
-        $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
+        views($sample)
+            ->delayInSession(1)
+            ->record();
 
-        $media_name = $sample->id . '_vocaroo_' . $sample->vocaroo_id . '.mp3';
-        $media_path = storage_path('app/temp/' . $media_name);
-        if (!File::exists($media_path)) {
-            File::put($media_path, file_get_contents($url));
-        }
-
-        return response()->file($media_path);
-
-        // $headers = get_headers($url, 1);
-        // $length = array_reverse(array_sort($headers['Content-Length']))[0];
-
-        // return response()->stream(function () use ($url) {
-        //     $stream = fopen($url, 'r');
-        //     fpassthru($stream);
-        //     if (is_resource($stream)) {
-        //         fclose($stream);
-        //     }
-        // }, 200, [
-        //     'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-        //     'Content-Type' => 'audio/mpeg3',
-        //     'Content-Length' => $length,
-        //     'Content-Disposition' => $headers['Content-Disposition'],
-        //     'Pragma' => 'public',
-        // ]);
+        return response()->file(Storage::disk('public')->path($sample->audio));
     }
 
     public function download(Sample $sample)
     {
-        $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
+        return response()->download(Storage::disk('public')->path($sample->audio));
+    }
 
-        $media_name = $sample->id . '_vocaroo_' . $sample->vocaroo_id . '.mp3';
-        $media_path = storage_path('app/temp/' . $media_name);
-        if (!File::exists($media_path)) {
-            File::put($media_path, file_get_contents($url));
+    public function edit(Sample $sample)
+    {
+        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
+
+        $tags = $sample->tags->pluck('name'); // Preload
+
+        return view('sample.edit', compact('sample', 'tags'));
+    }
+
+    public function update(Sample $sample)
+    {
+        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
+
+        request()->validate([
+            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
+            'tags'      => ['nullable', 'array'],
+            'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,gif,jpg', 'max:2048'],
+        ]);
+
+        $sample->name = request()->name;
+        $sample->description = request()->description;
+
+        if (request()->hasFile('thumbnail')) {
+            if (!Storage::disk('public')->exists('images/')) {
+                Storage::disk('public')->makeDirectory('images/', 0775, true);
+            }
+
+            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+
+            Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
+            $sample->thumbnail = 'images/' . $thumbnail_name;
         }
 
-        return response()->download($media_path);
+        $sample->tags()->detach();
+        foreach (request()->tags ?? [] as $tag) {
+            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+        }
 
-        // $url = 'http://vocaroo.com/media_command.php?media=' . $sample->vocaroo_id . '&command=download_mp3';
-        // $headers = get_headers($url, 1);
-        // $length = array_reverse(array_sort($headers['Content-Length']))[0];
+        $sample->save();
 
-        // return response()->stream(function () use ($url) {
-        //     $stream = fopen($url, 'r');
-        //     fpassthru($stream);
-        //     if (is_resource($stream)) {
-        //         fclose($stream);
-        //     }
-        // }, 200, [
-        //     'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-        //     'Content-Type' => 'application/force-download',
-        //     'Content-Length' => $length,
-        //     'Content-Disposition' => trim($headers['Content-Disposition'], ':'),
-        //     'Pragma' => 'public',
-        // ]);
+        return $sample;
+    }
+
+    public function destroy(Sample $sample)
+    {
+        abort_if(!auth()->user()->hasRole('admin'), 403);
+
+        $sample->delete();
+
+        return redirect('/');
     }
 }

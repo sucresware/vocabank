@@ -2,16 +2,55 @@
 
 namespace App\Models;
 
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
+use App\Helpers\SucresHelper;
+use Illuminate\Support\Facades\Storage;
 use CyrildeWit\EloquentViewable\Viewable;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Regex\Regex;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Glorand\Model\Settings\Traits\HasSettingsTable;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
 class Sample extends Model implements ViewableContract
 {
-    use Viewable;
+    use Viewable, HasSettingsTable, LogsActivity;
+
+    const STATUS_DRAFT = 0;
+    const STATUS_PROCESSING = 1;
+    const STATUS_PUBLIC = 2;
+
+    protected $casts = [
+        'settings' => 'array',
+    ];
+
+    protected $hidden = [
+        'thumbnail', 'waveform', 'audio',
+    ];
+
+    protected $appends = [
+        'views', 'presented_date', 'thumbnail_url', 'waveform_url',
+    ];
 
     protected $guarded = [];
+
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::deleting(function ($sample) {
+            $sample->tags()->detach();
+
+            collect(Storage::disk('local')->allFiles('temp'))
+                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
+                ->each(function ($file) { Storage::disk('local')->delete($file); });
+
+            collect(Storage::disk('public')->allFiles())
+                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
+                ->each(function ($file) { Storage::disk('public')->delete($file); });
+        });
+    }
 
     public function user()
     {
@@ -23,39 +62,40 @@ class Sample extends Model implements ViewableContract
         return $this->belongsToMany(Tag::class);
     }
 
-    public function getVocarooIdAttribute()
+    public function scopePublic($query)
     {
-        $regex = Regex::match('/http(?:s|):\/\/vocaroo.com\/i\/((?:\w|-)*)/m', $this->vocaroo_link);
-
-        if (!$regex->hasMatch()) {
-            return null;
-        }
-
-        return $regex->group(1);
+        return $query->whereStatus(static::STATUS_PUBLIC);
     }
 
-    public function render($options = [])
+    public function getNextAttribute()
     {
-        views($this)
-            ->delayInSession(1)
-            ->record();
+        return static::public()->where('created_at', '>', $this->created_at)->orderBy('created_at', 'asc')->first();
+    }
 
-        $height = $options['height'] ?? '128';
-        $controls = $options['controls'] ?? true;
-        $autoplay = $options['autoplay'] ?? false;
-        $uniqid = $options['uniqid'] ?? $this->id;
+    public function getPrevAttribute()
+    {
+        return static::public()->where('created_at', '<', $this->created_at)->orderBy('created_at', 'desc')->first();
+    }
 
-        $markup = '<div data-wavesurfer data-src="/samples/' . $this->id . '/listen" data-id="' . $uniqid . '" data-height="' . $height . '" ' . ($autoplay ? 'data-autoplay' : '') . '>';
-        $markup .= '</div>';
+    public function getViewsAttribute()
+    {
+        return $this->views()->count();
+    }
 
-        if ($controls) {
-            $markup .= '<div class="btn-group d-block text-center mt-3">';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="play"><small><i class="fas fa-fw fa-play"></i></small></a>';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="pause"><small><i class="fas fa-fw fa-pause"></i></small></a>';
-            $markup .= '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" data-wavecontrol data-target="' . $uniqid . '" data-control="stop"><small><i class="fas fa-fw fa-stop"></i></small></a>';
-            $markup .= '</div>';
-        }
+    public function getPresentedDateAttribute()
+    {
+        $markup = SucresHelper::niceDate($this->created_at, SucresHelper::NICEDATE_WITH_HOURS);
 
         return $markup;
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        return $this->thumbnail ? Storage::disk('public')->url($this->thumbnail) : url('/img/default.png');
+    }
+
+    public function getWaveformUrlAttribute()
+    {
+        return $this->waveform ? Storage::disk('public')->url($this->waveform) : url('/img/waveform.png');
     }
 }

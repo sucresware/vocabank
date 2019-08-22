@@ -1,82 +1,69 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-require('select2')
 let ClipboardJS = require('clipboard/dist/clipboard.min.js')
+let axios = require('axios');
 
-let $ = require("jquery")
+import {
+    Howl,
+    Howler
+} from 'howler';
 
-import bsCustomFileInput from 'bs-custom-file-input'
-import WaveSurfer from 'wavesurfer.js';
+/** Vue */
 
-$(document).ready(function () {
-    bsCustomFileInput.init()
-    var clipboard = new ClipboardJS('[data-clipboard]');
+window.Vue = require('vue');
 
-    clipboard.on('success', function (e) {
-        $(e.trigger).html("<i class='fas fa-check fa-fw mr-1'></i> Copié");
-        e.clearSelection();
+const files = require.context('./', true, /\.vue$/i);
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+
+import SlideUpDown from 'vue-slide-up-down'
+import InfiniteLoading from 'vue-infinite-loading';
+import Transitions from 'vue2-transitions'
+import VueClipboard from 'vue-clipboard2'
+
+Vue.component('slide-up-down', SlideUpDown)
+Vue.use(InfiniteLoading)
+Vue.use(Transitions)
+Vue.use(VueClipboard)
+
+const app = new Vue({
+    el: '#app',
+});
+
+/** Navbar */
+let navToggle = document.getElementById('nav-toggle');
+if (navToggle) {
+    navToggle.onclick = () => document.getElementById("nav-content").classList.toggle("hidden");
+}
+
+/** ClipboardJS */
+let dataClipboard = document.querySelector('[data-clipboard]');
+
+if (dataClipboard) new ClipboardJS(dataClipboard);
+
+/** Onche Light Switcher */
+let lightSwitch = document.getElementById('lightSwitch');
+
+if (lightSwitch) {
+    let lightTogglerPlayer = new Howl({
+        src: '/audio/tink.mp3',
+        volume: .6,
+        html5: true,
+        onloaderror: () => {
+            console.warn('Could not load light toggler sound.')
+        }
     });
 
-    $('[data-wavesurfer]').each(function (k, el) {
-        var id = $(el).attr('data-id')
-        var src = $(el).attr('data-src')
-        var height = $(el).attr('data-height')
+    lightSwitch.onclick = function(event) {
+        let bodyClasses = document.querySelector('body').classList;
 
-        var wavesurfer = WaveSurfer.create({
-            container: el,
-            waveColor: '#4C5669',
-            progressColor: '#4d6e96',
-            cursorColor: '#4d6e96',
-            height: height,
-            normalize: true,
-            backend: 'MediaElement'
-        })
-        wavesurfer.load(src)
-        wavesurfer.setVolume(0.7)
-        wavesurfer.on('ready', function () {
-            $('[data-wavecontrol][data-target=' + id + ']').click(function (e) {
-                var $el = $(e.target)
-                var control = $el.closest('.btn').attr('data-control')
-                switch (control) {
-                    case 'play':
-                        wavesurfer.play()
-                        break
-                    case 'pause':
-                        wavesurfer.pause()
-                        break
-                    case 'stop':
-                        wavesurfer.stop()
-                        break
-                    case 'toggle':
-                        var $i = ($el.is('i') ? $el : $el.children('i'))
-                        if (wavesurfer.isPlaying()) {
-                            $i.removeClass().addClass('far fa-play-circle fa-fw')
-                        } else {
-                            $i.removeClass().addClass('far fa-pause-circle fa-fw')
-                        }
-                        wavesurfer.playPause()
-                        break
-                }
-            })
-        })
-    })
+        if (bodyClasses.contains('theme-legacy')) {
+            bodyClasses.add('theme-vocabank');
+            bodyClasses.remove('theme-legacy');
+        } else {
+            bodyClasses.add('theme-legacy');
+            bodyClasses.remove('theme-vocabank');
+        }
 
-
-    // $('.select2').each(function (k, el) {
-    //     $(el).select2({
-    //         theme: 'bootstrap4',
-    //     })
-    // })
-
-    // $('.select2-tags').each(function (k, el) {
-    //     $(el).select2({
-    //         // theme: 'bootstrap4',
-    //         tags: true
-    //     })
-    // })
-})
+        axios.get("/light-toggler");
+        lightTogglerPlayer.play();
+    }
+}
