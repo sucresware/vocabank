@@ -36,7 +36,7 @@
             </div>
         @endif
     </div>
-    <div class="flex-1">
+    <div class="flex-1 w-full">
         @if (count($samples))
             <samples-index
             :paginator="{{ $samples->toJson() }}"

@@ -2375,6 +2375,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
@@ -34725,13 +34727,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "hoverable" },
+    { staticClass: "hoverable w-full" },
     [
       _c(
         "div",
         {
           staticClass:
-            "hover:cursor-pointer px-2 py-2 w-full flex items-center relative",
+            "hover:cursor-pointer px-2 py-2 w-full flex flex-no-wrap items-center relative",
           on: {
             click: function($event) {
               return _vm.toggle()
@@ -34763,7 +34765,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "relative h-8 w-8" }, [
+          _c("div", { staticClass: "flex-none relative h-8 w-8" }, [
             _c("img", {
               staticClass:
                 "rounded-full border-2 border-gray-400 absolute object-cover top-0 bottom-0 left-0 right-0",
@@ -34859,12 +34861,14 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "z-20 mx-3 flex-1 truncate font-bold" }, [
-            _vm._v(_vm._s(_vm.sample.name))
+          _c("div", { staticClass: "mx-3 m-w-0" }, [
+            _c("div", { staticClass: "truncate font-bold" }, [
+              _vm._v(_vm._s(_vm.sample.name))
+            ])
           ]),
           _vm._v(" "),
           _vm.sample.views
-            ? _c("div", { staticClass: "z-20 ml-auto" }, [
+            ? _c("div", { staticClass: "flex-none ml-auto w-auto" }, [
                 _c("i", { staticClass: "fas fa-undo" }),
                 _vm._v("\n      " + _vm._s(_vm.sample.views) + "\n    ")
               ])

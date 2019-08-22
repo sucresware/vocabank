@@ -56,7 +56,7 @@
     </nav>
 
     <div class="container w-full mx-auto flex flex-wrap mb-10" id="app">
-        <div class="flex-1 mb-6 px-4">
+        <div class="flex-1 mb-6 px-4 m-w-0">
             @yield('content')
         </div>
         <div class="px-4 w-full md:w-1/4">

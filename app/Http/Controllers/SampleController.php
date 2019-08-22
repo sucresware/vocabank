@@ -61,7 +61,7 @@ class SampleController extends Controller
 
             return view('sample.index', compact('samples'))->with('q', $request->q);
         } else {
-            return view('sample.index');
+            return redirect()->route('home');
         }
     }
 

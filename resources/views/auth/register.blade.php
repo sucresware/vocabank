@@ -4,59 +4,68 @@
     Inscription
 @endsection
 
-@section('body-classes', 'bg-gray-800 text-gray-200 w-full h-screen text-sm')
+@section('body-classes', 'theme-vocabank w-full h-screen')
 
 @section('body')
 <div class="flex w-full h-screen items-center justify-center">
-    <div class="w-1/6 text-center">
+    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w:1/6 text-center mx-4">
         <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48 animated fadeInDown">
 
-        <a href="/login/4sucres" class="hover:bg-gray-600 bg-gray-700 text-white text-center px-4 py-2 font-bold rounded-full mb-6 inline-block">
-            <img src="/img/4sucres.png" class="inline h-6 mr-1" alt="">
-            Inscription avec 4sucres
-        </a>
+        <div class="mb-6">
+            <a href="/login/4sucres" class="btn btn-primary">
+                <img src="/img/4sucres.png" class="inline h-6 mr-1" alt="4sucres">
+                Inscription avec 4sucres
+            </a>
+        </div>
 
-        <div class="text-center mb-6 mt-2">
-            <div class="bg-gray-700" style="height: 1px;"></div>
-            <div class="-mt-3">
-                <span class="bg-gray-800 px-2">ou</span>
-            </div>
+        <div class="flex justify-center items-center text-center mb-6">
+            <hr class="flex-1">
+            <div class="mx-4">ou</div>
+            <hr class="flex-1">
         </div>
 
         <form action="{{ route('register') }}" method="post">
             @csrf
 
-            <input type="text" placeholder="Pseudo" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="name" value="{{ old('name') }}">
+            <div class="card mb-4 p-4">
+                <div class="mb-3">
+                    <input type="text" placeholder="Pseudo" class="form-control w-full" name="name" value="{{ old('name') }}">
 
-            @if ($errors->has('name'))
-                <div class="text-red-500 mb-3 text-xs font-bold">
-                    {{ $errors->first('name') }}
+                    @if ($errors->has('name'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            {{ $errors->first('name') }}
+                        </div>
+                    @endif
                 </div>
-            @endif
 
-            <input type="text" placeholder="Adresse e-mail" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="email" value="{{ old('email') }}">
+                <div class="mb-3">
+                    <input type="text" placeholder="Adresse e-mail" class="form-control w-full" name="email" value="{{ old('email') }}">
 
-            @if ($errors->has('email'))
-                <div class="text-red-500 mb-3 text-xs font-bold">
-                    {{ $errors->first('email') }}
+                    @if ($errors->has('email'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            {{ $errors->first('email') }}
+                        </div>
+                    @endif
                 </div>
-            @endif
 
-            <input type="password" placeholder="Mot de passe" class="bg-gray-700 rounded px-2 py-1 text-white mb-3 block w-full" name="password">
+                <div>
+                    <input type="password" placeholder="Mot de passe" class="form-control w-full" name="password">
 
-            @if ($errors->has('password'))
-                <div class="text-red-500 mb-3 text-xs font-bold">
-                    <strong>{{ $errors->first('password') }}
+                    @if ($errors->has('password'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            <strong>{{ $errors->first('password') }}
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
 
             <div class="text-right">
-                <button type="submit" class="hover:bg-gray-600 bg-gray-700 text-white text-center px-3 py-1 font-bold rounded-full"><i class="fa fa-sign-in-alt mr-1"></i> Créer un compte</button>
+                <button type="submit" class="btn btn-secondary"><i class="fa fa-sign-in-alt mr-1"></i> Créer un compte</button>
             </div>
         </form>
 
-        <div class="mt-6 text-xs text-gray-500">
-            <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-400"> J'ai déjà un compte</a>
+        <div class="mt-6 text-xs text-muted">
+            <a href="{{ route('login') }}"> J'ai déjà un compte</a>
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <template>
-  <div class="hoverable">
+  <div class="hoverable w-full">
     <div
-      class="hover:cursor-pointer px-2 py-2 w-full flex items-center relative"
+      class="hover:cursor-pointer px-2 py-2 w-full flex flex-no-wrap items-center relative"
       v-on:click="toggle()"
     >
       <fade-transition :duration="150">
@@ -10,7 +10,7 @@
         </div>
       </fade-transition>
 
-      <div class="relative h-8 w-8">
+      <div class="flex-none relative h-8 w-8">
         <img
           :src="sample.thumbnail_url"
           class="rounded-full border-2 border-gray-400 absolute object-cover top-0 bottom-0 left-0 right-0"
@@ -48,8 +48,10 @@
           ></i>
         </div>
       </div>
-      <div class="z-20 mx-3 flex-1 truncate font-bold">{{ sample.name }}</div>
-      <div class="z-20 ml-auto" v-if="sample.views">
+      <div class="mx-3 m-w-0">
+        <div class="truncate font-bold">{{ sample.name }}</div>
+      </div>
+      <div class="flex-none ml-auto w-auto" v-if="sample.views">
         <i class="fas fa-undo"></i>
         {{ sample.views }}
       </div>
