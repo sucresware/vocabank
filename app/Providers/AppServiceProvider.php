@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
-use App\Auth\FourSucresProvider;
-use App\Models\Sample;
 use App\Models\Tag;
+use App\Models\Sample;
+use App\Models\StaticPage;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use App\Auth\FourSucresProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -35,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('count', 'desc')
                     ->limit(10)
                     ->get();
+            }));
+
+            $view->with('static_pages', Cache::remember('static_pages', now()->addMinute(), function () {
+                return StaticPage::orderBy('name')->get();
             }));
 
             return $view;

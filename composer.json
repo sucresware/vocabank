@@ -22,6 +22,7 @@
         "laravel/socialite": "^4.1",
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
+        "league/commonmark": "^1.0",
         "mattketmo/email-checker": "^1.5",
         "molayli/laravel-cloudflare-real-ip": "^0.1.0",
         "norkunas/youtube-dl-php": "^1.3",

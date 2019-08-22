@@ -32,8 +32,6 @@ nav {
     @apply cursor-not-allowed;
 }
 
-/** Buttons **/
-
 .btn {
     @apply inline-block px-3 py-1 font-bold text-center rounded-full;
 }
@@ -253,114 +251,6 @@ body.theme-vocabank {
     background: rgba(255, 255, 255, .05);
 }
 
-/** Theme Outrun **/
-
-body.theme-outrun {
-    @apply text-white;
-    background-color: #272A33;
-}
-
-.theme-outrun hr {
-    @apply bg-white;
-    opacity: .3;
-    height: 1px;
-}
-
-.theme-outrun .text-muted {
-    @apply text-gray-300;
-}
-
-.theme-outrun a, .theme-outrun .a {
-    @apply text-gray-100;
-}
-
-.theme-outrun a:hover, .theme-outrun .a:hover {
-    @apply text-gray-200;
-}
-
-.theme-outrun .text-muted a {
-    @apply text-gray-400;
-}
-
-.theme-outrun .text-muted a:hover {
-    @apply text-gray-500;
-}
-
-.theme-outrun > nav {
-    background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-    @apply relative;
-}
-
-.theme-outrun > nav::after {
-    @apply absolute left-0 right-0 w-full;
-    bottom: -450px;
-    height: 450px;
-    content: "";
-    width: 100%;
-    background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-    z-index: -1;
-}
-
-.theme-outrun .form-control {
-    @apply border-0 text-white;
-    background: rgba(255, 255, 255, .15);
-}
-
-.theme-outrun .form-control:disabled {
-    @apply border-0 text-gray-300;
-    background: rgba(255, 255, 255, .3);
-}
-
-.theme-outrun .form-control.form-control-inverse {}
-
-.theme-outrun .nav-link {
-    @apply text-white;
-    opacity: .6;
-}
-
-.theme-outrun .nav-link:hover {
-    opacity: .8;
-}
-
-.theme-outrun .nav-link.active {
-    @apply text-white;
-    opacity: 1;
-}
-
-.theme-outrun .btn {
-    @apply text-white;
-}
-
-.theme-outrun .btn-primary {
-    background: rgba(255, 255, 255, .30);
-}
-
-.theme-outrun .btn-secondary {
-    background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .btn-primary:hover, .theme-outrun .btn-secondary:hover {
-    background: rgba(255, 255, 255, .50);
-}
-
-.theme-outrun .btn-tertiary:hover {
-    background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .card {
-    @apply shadow-lg;
-    background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .hoverable {
-    transition: .1s;
-}
-
-.theme-outrun .hoverable:hover {
-    transition: .1s;
-    background: rgba(255, 255, 255, .15);
-}
-
 /** Wavesurfer **/
 
 wave {
@@ -395,4 +285,97 @@ wave {
 
 .m-w-0 {
     min-width: 0;
+}
+
+.markdown {
+    @apply leading-normal break-words;
+}
+
+.markdown > * + * {
+    @apply mt-0 mb-4;
+}
+
+.markdown li + li {
+    @apply mt-1;
+}
+
+.markdown li > p + p {
+    @apply mt-6;
+}
+
+.markdown strong {
+    @apply font-semibold;
+}
+
+.markdown a {
+    @apply text-blue-600 font-semibold;
+}
+
+.markdown strong a {
+    @apply font-bold;
+}
+
+.markdown h1 {
+    @apply leading-tight border-b text-xl font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h2 {
+    @apply leading-tight border-b text-base font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h3 {
+    @apply leading-snug font-semibold mb-4 mt-6;
+}
+
+.markdown h4 {
+    @apply leading-none font-semibold mb-4 mt-6;
+}
+
+.markdown h5 {
+    @apply leading-tight text-sm font-semibold mb-4 mt-6;
+}
+
+.markdown h6 {
+    @apply leading-tight text-sm font-semibold text-gray-600 mb-4 mt-6;
+}
+
+.markdown blockquote {
+    @apply border-l-4 border-gray-300 pl-4 pr-4 text-gray-600;
+}
+
+.markdown code {
+    @apply font-mono text-sm inline bg-gray-200 rounded px-1;
+}
+
+.markdown pre {
+    @apply bg-gray-100 rounded p-4;
+}
+
+.markdown pre code {
+    @apply block bg-transparent p-0 overflow-visible rounded-none;
+}
+
+.markdown ul {
+    @apply pl-8 list-disc;
+}
+
+.markdown ol {
+    @apply pl-8 list-decimal;
+}
+
+.markdown table {
+    @apply border-gray-600;
+}
+
+.markdown th {
+    @apply border py-1 px-3;
+}
+
+.markdown td {
+    @apply border py-1 px-3;
+}
+
+/* Override pygments style background color. */
+.markdown .highlight pre {
+    @apply bg-gray-100 !important;
 }

@@ -19,8 +19,7 @@ Route::get('/login/4sucres', 'Auth\LoginController@loginWithFourSucres');
 Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresCallback');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::view('/terms', 'static/terms')->name('terms');
-Route::view('/api', 'static/api')->name('api');
+Route::get('/pages/{slug}', 'StaticPageController@show')->name('pages');
 
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
 
@@ -52,4 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/samples/{sample}/process-url', 'SampleController@processURL')->name('samples.process.url');
 
     Route::get('/light-toggler', 'HomeController@lightToggler');
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin'], 'as' => 'admin.'], function () {
+    Route::get('/admin', 'Admin/AdminController@index')->name('index');
 });

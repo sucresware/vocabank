@@ -72,9 +72,9 @@
 
             <footer class="text-xs text-muted">
                 <div class="mb-2">
-                    Liens :<br>
-                    <a href="{{ route('terms') }}">Conditions générales d'utilisation</a><br>
-                    <a href="{{ route('api') }}">API</a><br>
+                    @foreach ($static_pages as $static_page)
+                        <a href="{{ route('pages', $static_page->slug) }}">{{ $static_page->name }}</a><br>
+                    @endforeach
                     <a href="mailto:vocabank@4sucres.org">Contact</a><br>
                     <a href="mailto:vocabank@4sucres.org">Signaler un contenu</a>
                 </div>

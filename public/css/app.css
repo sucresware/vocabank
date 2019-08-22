@@ -664,8 +664,6 @@ nav {
   cursor: not-allowed;
 }
 
-/** Buttons **/
-
 .btn {
   display: inline-block;
   padding-left: 0.75rem;
@@ -914,120 +912,6 @@ body.theme-vocabank {
 .theme-vocabank .hoverable:hover {
   transition: .1s;
   background: rgba(255, 255, 255, .05);
-}
-
-/** Theme Outrun **/
-
-body.theme-outrun {
-  color: #fff;
-  background-color: #272A33;
-}
-
-.theme-outrun hr {
-  background-color: #fff;
-  opacity: .3;
-  height: 1px;
-}
-
-.theme-outrun .text-muted {
-  color: #e2e8f0;
-}
-
-.theme-outrun a, .theme-outrun .a {
-  color: #f7fafc;
-}
-
-.theme-outrun a:hover, .theme-outrun .a:hover {
-  color: #edf2f7;
-}
-
-.theme-outrun .text-muted a {
-  color: #cbd5e0;
-}
-
-.theme-outrun .text-muted a:hover {
-  color: #a0aec0;
-}
-
-.theme-outrun > nav {
-  background: linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-  position: relative;
-}
-
-.theme-outrun > nav::after {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  bottom: -450px;
-  height: 450px;
-  content: "";
-  width: 100%;
-  background: linear-gradient(180deg, rgba(39, 42, 51, 0) 0%, #272A33 100%), linear-gradient(270deg, #35CEBC 0%, #4B2E85 100%);
-  z-index: -1;
-}
-
-.theme-outrun .form-control {
-  border-width: 0;
-  color: #fff;
-  background: rgba(255, 255, 255, .15);
-}
-
-.theme-outrun .form-control:disabled {
-  border-width: 0;
-  color: #e2e8f0;
-  background: rgba(255, 255, 255, .3);
-}
-
-.theme-outrun .form-control.form-control-inverse {
-}
-
-.theme-outrun .nav-link {
-  color: #fff;
-  opacity: .6;
-}
-
-.theme-outrun .nav-link:hover {
-  opacity: .8;
-}
-
-.theme-outrun .nav-link.active {
-  color: #fff;
-  opacity: 1;
-}
-
-.theme-outrun .btn {
-  color: #fff;
-}
-
-.theme-outrun .btn-primary {
-  background: rgba(255, 255, 255, .30);
-}
-
-.theme-outrun .btn-secondary {
-  background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .btn-primary:hover, .theme-outrun .btn-secondary:hover {
-  background: rgba(255, 255, 255, .50);
-}
-
-.theme-outrun .btn-tertiary:hover {
-  background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .card {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  background: rgba(255, 255, 255, .10);
-}
-
-.theme-outrun .hoverable {
-  transition: .1s;
-}
-
-.theme-outrun .hoverable:hover {
-  transition: .1s;
-  background: rgba(255, 255, 255, .15);
 }
 
 /** Wavesurfer **/
@@ -8054,6 +7938,156 @@ wave {
 
 .m-w-0 {
   min-width: 0;
+}
+
+.markdown {
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.markdown > * + * {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown li + li {
+  margin-top: 0.25rem;
+}
+
+.markdown li > p + p {
+  margin-top: 1.5rem;
+}
+
+.markdown strong {
+  font-weight: 600;
+}
+
+.markdown a {
+  color: #3182ce;
+  font-weight: 600;
+}
+
+.markdown strong a {
+  font-weight: 700;
+}
+
+.markdown h1 {
+  line-height: 1.25;
+  border-bottom-width: 1px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.markdown h2 {
+  line-height: 1.25;
+  border-bottom-width: 1px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.markdown h3 {
+  line-height: 1.375;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.markdown h4 {
+  line-height: 1;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.markdown h5 {
+  line-height: 1.25;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.markdown h6 {
+  line-height: 1.25;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.markdown blockquote {
+  border-left-width: 4px;
+  border-color: #e2e8f0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #718096;
+}
+
+.markdown code {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  display: inline;
+  background-color: #edf2f7;
+  border-radius: 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.markdown pre {
+  background-color: #f7fafc;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+
+.markdown pre code {
+  display: block;
+  background-color: transparent;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.markdown ul {
+  padding-left: 2rem;
+  list-style-type: disc;
+}
+
+.markdown ol {
+  padding-left: 2rem;
+  list-style-type: decimal;
+}
+
+.markdown table {
+  border-color: #718096;
+}
+
+.markdown th {
+  border-width: 1px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.markdown td {
+  border-width: 1px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* Override pygments style background color. */
+
+.markdown .highlight pre {
+  background-color: #f7fafc !important;
 }
 
 @media (min-width: 640px) {
