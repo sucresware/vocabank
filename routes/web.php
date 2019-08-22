@@ -13,8 +13,8 @@
 
 Route::get('/', 'HomeController@index');
 
-Route::get('/register', 'Auth\RegisterController@register')->name('register');
-Route::post('/register', 'Auth\RegisterController@submit');
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('/register', 'Auth\RegisterController@register');
 
 Route::get('/login/4sucres', 'Auth\LoginController@loginWithFourSucres');
 Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresCallback');
