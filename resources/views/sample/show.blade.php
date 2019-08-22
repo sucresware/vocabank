@@ -112,16 +112,18 @@
                 <div class="px-4 mb-4 flex flex-wrap">
                     <button class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-primary mx-1" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> Copier le lien</button>
                     <a href="{{ route('samples.download', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1" title="Télécharger"><i class="fa fa-download"></i> Télécharger</a>
-                    @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))
-                        <a href="{{ route('samples.edit', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1 lg:ml-auto"><i class="fas fa-pencil-alt"></i> <span class="ml-1 lg:hidden">Modifier</span></a>
-                    @endif
-                    @if (auth()->user()->hasRole('admin'))
-                        <button
-                            class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1"
-                            onclick="event.preventDefault(); document.getElementById('delete-form').submit();"
-                        ><i class="fas fa-trash"></i> <span class="ml-1 lg:hidden">Supprimer</span></button>
-                        <form id="delete-form" action="{{ route('samples.destroy', $sample) }}" method="POST" style="display: none;">@csrf @method('delete')</form>
-                    @endif
+                    @auth
+                        @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))
+                            <a href="{{ route('samples.edit', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1 lg:ml-auto"><i class="fas fa-pencil-alt"></i> <span class="ml-1 lg:hidden">Modifier</span></a>
+                        @endif
+                        @if (auth()->user()->hasRole('admin'))
+                            <button
+                                class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1"
+                                onclick="event.preventDefault(); document.getElementById('delete-form').submit();"
+                            ><i class="fas fa-trash"></i> <span class="ml-1 lg:hidden">Supprimer</span></button>
+                            <form id="delete-form" action="{{ route('samples.destroy', $sample) }}" method="POST" style="display: none;">@csrf @method('delete')</form>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>
