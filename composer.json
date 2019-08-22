@@ -27,6 +27,7 @@
         "molayli/laravel-cloudflare-real-ip": "^0.1.0",
         "norkunas/youtube-dl-php": "^1.3",
         "php-ffmpeg/php-ffmpeg": "^0.14.0",
+        "pragmarx/version": "^0.2.9",
         "realrashid/sweet-alert": "^1.1",
         "realripley00/bootstrap-4-form": "^1.1",
         "renatomarinho/laravel-page-speed": "^1.8",
@@ -75,7 +76,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan version:refresh"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
