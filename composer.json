@@ -17,7 +17,6 @@
         "guzzlehttp/guzzle": "^6.3",
         "hieu-le/active": "^3.5",
         "intervention/image": "^2.4",
-        "jasny/sso": "^0.3.0",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^4.1",
         "laravel/telescope": "^2.0",
@@ -29,15 +28,9 @@
         "php-ffmpeg/php-ffmpeg": "^0.14.0",
         "pragmarx/version": "^0.2.9",
         "realrashid/sweet-alert": "^1.1",
-        "realripley00/bootstrap-4-form": "^1.1",
-        "renatomarinho/laravel-page-speed": "^1.8",
         "sentry/sentry-laravel": "1.0.2",
         "spatie/laravel-activitylog": "^3.7",
-        "spatie/laravel-model-status": "^1.7",
-        "spatie/laravel-permission": "^2.37",
-        "spatie/regex": "^1.4",
-        "timehunter/laravel-google-recaptcha-v3": "~2.2.16",
-        "yish/imgur": "^1.0"
+        "spatie/laravel-permission": "^2.37"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

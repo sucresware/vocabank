@@ -3,35 +3,34 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Models\VerifyUser;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
-
-    use ResetsPasswords;
-
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
+    public function showResetForm($token)
     {
-        $this->middleware('guest');
+        $verify_user = VerifyUser::where('token', $token)->firstOrFail();
+
+        return view('auth.passwords.reset', compact('token'));
+    }
+
+    public function reset($token)
+    {
+        $verify_user = VerifyUser::where('token', $token)->firstOrFail();
+        $user = $verify_user->user;
+
+        request()->validate([
+            'new_password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $user->password = Hash::make(request()->new_password);
+        $user->save();
+
+        Auth::login($user);
+
+        return redirect()->route('home')
+            ->with('success', 'Mot de passe modifié, bon retour !');
     }
 }

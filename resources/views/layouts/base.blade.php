@@ -38,7 +38,6 @@
     @endif
 
     @include('sweetalert::alert')
-    {!! GoogleReCaptchaV3::init() !!}
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>

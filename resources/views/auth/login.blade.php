@@ -56,7 +56,7 @@
 
         <div class="mt-6 text-xs text-muted">
             <a href="{{ route('register') }}"> Inscription</a> —
-            <a href="{{ route('register') }}"> Mot de passe oublié</a>
+            <a href="{{ route('password.request') }}"> Mot de passe oublié</a>
         </div>
     </div>
 </div>

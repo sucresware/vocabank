@@ -13,10 +13,19 @@
 
 Route::get('/', 'HomeController@index');
 
-Auth::routes();
+Route::get('/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/register', 'Auth\RegisterController@submit');
 
 Route::get('/login/4sucres', 'Auth\LoginController@loginWithFourSucres');
 Route::get('/login/4sucres/callback', 'Auth\LoginController@loginWithFourSucresCallback');
+
+Route::get('/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('/password/reset/{token}', 'Auth\ResetPasswordController@reset')->name('password.update');
+
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('/login', 'Auth\LoginController@login');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/pages/{slug}', 'StaticPageController@show')->name('pages');
@@ -37,6 +46,8 @@ Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.pre
 Route::resource('samples', 'SampleController');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
     Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
     Route::put('/users/{user}', 'UserController@update')->name('users.update');
     Route::get('/users/{user}/edit/email', 'UserController@editEmail')->name('users.edit.email');

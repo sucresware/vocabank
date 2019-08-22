@@ -1,47 +1,32 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+@section('title', 'Mot de passe oublié')
+@section('body-classes', 'theme-vocabank w-full h-screen')
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+@section('body')
+<div class="flex w-full h-screen items-center justify-center">
+    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w:1/6 text-center mx-4">
+        <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48 animated fadeInDown">
+
+        <form action="{{ route('password.email') }}" method="post">
+            @csrf
+
+            <div class="card mb-4 p-4">
+                <div>
+                    <input type="text" placeholder="Adresse e-mail" class="form-control w-full" name="email" value="{{ old('email') }}">
+
+                    @if ($errors->has('email'))
+                        <div class="text-red-500 mt-3 text-xs font-bold">
+                            {{ $errors->first('email') }}
                         </div>
                     @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-secondary"><i class="fa fa-sign-in-alt mr-1"></i> Bah alors, on est rouillé ?</button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

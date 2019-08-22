@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8474f120682c2efce8d73261dde66f0b",
+    "content-hash": "d8d1d1bbc9bf9beb7c4cd09b7e545dc3",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -245,61 +245,6 @@
                 "visits"
             ],
             "time": "2019-03-03T15:10:44+00:00"
-        },
-        {
-            "name": "desarrolla2/cache",
-            "version": "v2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/desarrolla2/Cache.git",
-                "reference": "ebd1f7bfd1be605a9b5fbb0a4b25a948a31fe963"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/desarrolla2/Cache/zipball/ebd1f7bfd1be605a9b5fbb0a4b25a948a31fe963",
-                "reference": "ebd1f7bfd1be605a9b5fbb0a4b25a948a31fe963",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "predis/predis": "~1.0.0"
-            },
-            "suggest": {
-                "predis/predis": "Predis support"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Desarrolla2\\Cache\\": "src/",
-                    "Desarrolla2\\Test\\Cache\\": "test/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Daniel González",
-                    "homepage": "http://desarrolla2.com/"
-                }
-            ],
-            "description": "Provides an cache interface for several adapters Apc, Apcu, File, Mongo, Memcache, Memcached, Mysql, Mongo, Redis is supported. New adapters is comming!",
-            "homepage": "https://github.com/desarrolla2/Cache/",
-            "keywords": [
-                "apc",
-                "apcu",
-                "cache",
-                "file",
-                "memcache",
-                "memcached",
-                "mongo",
-                "mysql",
-                "redis"
-            ],
-            "time": "2017-01-18T12:58:33+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -800,16 +745,16 @@
         },
         {
             "name": "fruitcake/laravel-telescope-toolbar",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruitcake/laravel-telescope-toolbar.git",
-                "reference": "0b9ee1b891dca99ea2614b3912e650973c88647f"
+                "reference": "dbfdd4484ee2abdf431085e451a3c1959f9aa079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruitcake/laravel-telescope-toolbar/zipball/0b9ee1b891dca99ea2614b3912e650973c88647f",
-                "reference": "0b9ee1b891dca99ea2614b3912e650973c88647f",
+                "url": "https://api.github.com/repos/fruitcake/laravel-telescope-toolbar/zipball/dbfdd4484ee2abdf431085e451a3c1959f9aa079",
+                "reference": "dbfdd4484ee2abdf431085e451a3c1959f9aa079",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +809,7 @@
                 "toolbar",
                 "webprofiler"
             ],
-            "time": "2019-08-20T12:38:50+00:00"
+            "time": "2019-08-21T13:32:18+00:00"
         },
         {
             "name": "glorand/laravel-model-settings",
@@ -1435,97 +1380,6 @@
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
-            "name": "jasny/sso",
-            "version": "v0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jasny/sso.git",
-                "reference": "0cb18c072e7b14db3d2d2549c051f41ca837e5e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jasny/sso/zipball/0cb18c072e7b14db3d2d2549c051f41ca837e5e9",
-                "reference": "0cb18c072e7b14db3d2d2549c051f41ca837e5e9",
-                "shasum": ""
-            },
-            "require": {
-                "desarrolla2/cache": "^2.0.0",
-                "jasny/validation-result": "^1.0.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "^2.1.0",
-                "jasny/php-code-quality": "^1.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Jasny\\SSO\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Arnold Daniels",
-                    "email": "arnold@jasny.net",
-                    "homepage": "http://www.jasny.net"
-                }
-            ],
-            "description": "Simple Single Sign-On",
-            "homepage": "http://www.jasny.net/articles/simple-single-sign-on-for-php/",
-            "keywords": [
-                "SSO",
-                "auth"
-            ],
-            "time": "2017-02-24T22:44:27+00:00"
-        },
-        {
-            "name": "jasny/validation-result",
-            "version": "v1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jasny/validation-result.git",
-                "reference": "fbce54837c8414cf5af22981ac33b26eb13b2a51"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jasny/validation-result/zipball/fbce54837c8414cf5af22981ac33b26eb13b2a51",
-                "reference": "fbce54837c8414cf5af22981ac33b26eb13b2a51",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "jasny/php-code-quality": "^1.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Jasny\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Arnold Daniels",
-                    "email": "arnold@jasny.net",
-                    "homepage": "http://www.jasny.net"
-                }
-            ],
-            "description": "A result object for validation",
-            "keywords": [
-                "validation"
-            ],
-            "time": "2019-02-12T12:51:58+00:00"
-        },
-        {
             "name": "jaybizzle/crawler-detect",
             "version": "v1.2.84",
             "source": {
@@ -1960,74 +1814,6 @@
                 "psysh"
             ],
             "time": "2019-08-07T15:10:45+00:00"
-        },
-        {
-            "name": "laravelcollective/html",
-            "version": "v5.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "0e360143d3476fe4141d267a260c140569fa207b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/0e360143d3476fe4141d267a260c140569fa207b",
-                "reference": "0e360143d3476fe4141d267a260c140569fa207b",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/http": "5.8.*",
-                "illuminate/routing": "5.8.*",
-                "illuminate/session": "5.8.*",
-                "illuminate/support": "5.8.*",
-                "illuminate/view": "5.8.*",
-                "php": ">=7.1.3"
-            },
-            "require-dev": {
-                "illuminate/database": "5.8.*",
-                "mockery/mockery": "~1.0",
-                "phpunit/phpunit": "~7.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.8-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Collective\\Html\\HtmlServiceProvider"
-                    ],
-                    "aliases": {
-                        "Form": "Collective\\Html\\FormFacade",
-                        "Html": "Collective\\Html\\HtmlFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Collective\\Html\\": "src/"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylorotwell@gmail.com"
-                },
-                {
-                    "name": "Adam Engebretson",
-                    "email": "adam@laravelcollective.com"
-                }
-            ],
-            "description": "HTML and Form Builders for the Laravel Framework",
-            "homepage": "https://laravelcollective.com",
-            "time": "2019-03-01T22:53:41+00:00"
         },
         {
             "name": "league/commonmark",
@@ -4145,122 +3931,6 @@
             "time": "2019-03-29T18:34:57+00:00"
         },
         {
-            "name": "realripley00/bootstrap-4-form",
-            "version": "1.1.29",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/realripley00/bootstrap-form.git",
-                "reference": "e8a446a39463911772c4df70819f03bf4c1d477f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/realripley00/bootstrap-form/zipball/e8a446a39463911772c4df70819f03bf4c1d477f",
-                "reference": "e8a446a39463911772c4df70819f03bf4c1d477f",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/config": "~5.0",
-                "illuminate/session": "~5.0",
-                "illuminate/support": "~5.0",
-                "laravelcollective/html": "~5.0",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "~4.6"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RealRipley\\BootstrapForm\\BootstrapFormServiceProvider"
-                    ],
-                    "aliases": {
-                        "BootForm": "RealRipley\\BootstrapForm\\Facades\\BootstrapForm"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RealRipley\\BootstrapForm\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "RealRipley00",
-                    "email": "realripley00@gmail.com"
-                }
-            ],
-            "description": "Laravel 5 form wrappers for Bootstrap 4.",
-            "keywords": [
-                "bootstrap",
-                "form",
-                "laravel"
-            ],
-            "time": "2018-12-03T02:05:48+00:00"
-        },
-        {
-            "name": "renatomarinho/laravel-page-speed",
-            "version": "1.8.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/renatomarinho/laravel-page-speed.git",
-                "reference": "6785f3e836f362e945a618339a6b38600f279599"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/renatomarinho/laravel-page-speed/zipball/6785f3e836f362e945a618339a6b38600f279599",
-                "reference": "6785f3e836f362e945a618339a6b38600f279599",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "5.3.* || 5.4.* || 5.5.* || 5.6.* || 5.7.* || 5.8.*",
-                "php": "^5.6 || ^7.0"
-            },
-            "require-dev": {
-                "mockery/mockery": ">=0.9.4",
-                "orchestra/testbench": "^3.2",
-                "phpunit/phpunit": "^5.7 || ^6.0",
-                "squizlabs/php_codesniffer": "^2.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RenatoMarinho\\LaravelPageSpeed\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RenatoMarinho\\LaravelPageSpeed\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Renato Marinho",
-                    "email": "renato.marinho@s2move.com"
-                }
-            ],
-            "description": "Laravel Page Speed",
-            "keywords": [
-                "html",
-                "laravel",
-                "minify",
-                "optmize",
-                "page speed"
-            ],
-            "time": "2019-03-08T19:27:46+00:00"
-        },
-        {
             "name": "sentry/sdk",
             "version": "2.0.3",
             "source": {
@@ -4507,67 +4177,6 @@
             "time": "2019-07-24T07:41:20+00:00"
         },
         {
-            "name": "spatie/laravel-model-status",
-            "version": "1.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-model-status.git",
-                "reference": "067661beaedc2e40040365493ed8a5b1c393bf47"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-model-status/zipball/067661beaedc2e40040365493ed8a5b1c393bf47",
-                "reference": "067661beaedc2e40040365493ed8a5b1c393bf47",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5.8.0",
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.8.0",
-                "phpunit/phpunit": "^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Spatie\\ModelStatus\\ModelStatusServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\ModelStatus\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Thomas Verhelst",
-                    "email": "tvke91@gmail.com",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A package to enable assigning statuses to Eloquent Models",
-            "homepage": "https://github.com/spatie/laravel-model-status",
-            "keywords": [
-                "laravel-status",
-                "spatie"
-            ],
-            "time": "2019-06-11T22:50:05+00:00"
-        },
-        {
             "name": "spatie/laravel-permission",
             "version": "2.37.0",
             "source": {
@@ -4631,55 +4240,6 @@
                 "spatie"
             ],
             "time": "2019-04-09T12:45:17+00:00"
-        },
-        {
-            "name": "spatie/regex",
-            "version": "1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/regex.git",
-                "reference": "b046f05e07b82cbd1a4bed5d5a2a2139a87ff417"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/regex/zipball/b046f05e07b82cbd1a4bed5d5a2a2139a87ff417",
-                "reference": "b046f05e07b82cbd1a4bed5d5a2a2139a87ff417",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Regex\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian De Deyne",
-                    "email": "sebastian@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A sane interface for php's built in preg_* functions",
-            "homepage": "https://github.com/spatie/regex",
-            "keywords": [
-                "expression",
-                "expressions",
-                "regex",
-                "regular",
-                "spatie"
-            ],
-            "time": "2019-06-19T06:59:15+00:00"
         },
         {
             "name": "spatie/string",
@@ -6317,76 +5877,6 @@
             "time": "2017-11-27T11:13:29+00:00"
         },
         {
-            "name": "timehunter/laravel-google-recaptcha-v3",
-            "version": "2.2.20",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RyanDaDeng/laravel-google-recaptcha-v3.git",
-                "reference": "42e8fe0ea24a570ce4a846417f45f72e33b08d3f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RyanDaDeng/laravel-google-recaptcha-v3/zipball/42e8fe0ea24a570ce4a846417f45f72e33b08d3f",
-                "reference": "42e8fe0ea24a570ce4a846417f45f72e33b08d3f",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.2",
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.0",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "~7.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "TimeHunter\\LaravelGoogleReCaptchaV3\\Providers\\GoogleReCaptchaV3ServiceProvider"
-                    ],
-                    "aliases": {
-                        "GoogleReCaptchaV3": "TimeHunter\\LaravelGoogleReCaptchaV3\\Facades\\GoogleReCaptchaV3"
-                    }
-                },
-                "branch-alias": {
-                    "dev-master": "3.0.*-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "TimeHunter\\LaravelGoogleReCaptchaV3\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Deng",
-                    "email": "ryandadeng@gmail.com",
-                    "homepage": "https://ryandeng.com"
-                }
-            ],
-            "description": "Laravel Package for google reCAPTCHA v3",
-            "homepage": "https://github.com/RyanDaDeng/laravel-google-recaptcha-v3",
-            "keywords": [
-                "Google ReCaptcha",
-                "GoogleReCaptcha",
-                "Laravel reCAPTCHA",
-                "google recaptcha v3",
-                "laravel",
-                "laravel google recaptcha",
-                "laravel google recaptcha v3",
-                "laravel recaptcha v3",
-                "recaptcha",
-                "recaptcha v3",
-                "recaptcha v3 laravel"
-            ],
-            "time": "2019-08-12T10:46:20+00:00"
-        },
-        {
             "name": "vlucas/phpdotenv",
             "version": "v3.4.0",
             "source": {
@@ -6437,53 +5927,6 @@
                 "environment"
             ],
             "time": "2019-06-15T22:40:20+00:00"
-        },
-        {
-            "name": "yish/imgur",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Mombuyish/Laravel-Imgur.git",
-                "reference": "fd67f7d8926ae02deb3b2ddde39e66031450cacf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Mombuyish/Laravel-Imgur/zipball/fd67f7d8926ae02deb3b2ddde39e66031450cacf",
-                "reference": "fd67f7d8926ae02deb3b2ddde39e66031450cacf",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.3"
-            },
-            "type": "library",
-            "extra": {
-                "component": "package",
-                "laravel": {
-                    "providers": [
-                        "Yish\\Imgur\\UploadServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Yish\\Imgur\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Yish",
-                    "email": "mombuartworks@gmail.com"
-                }
-            ],
-            "description": "Imgur upload API with Laravel.",
-            "homepage": "https://github.com/Mombuyish/Laravel-Imgur",
-            "keywords": [
-                "imgur",
-                "laravel",
-                "upload"
-            ],
-            "time": "2017-12-13T07:27:47+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -7577,16 +7020,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.14",
+            "version": "7.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2834789aeb9ac182ad69bfdf9ae91856a59945ff"
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2834789aeb9ac182ad69bfdf9ae91856a59945ff",
-                "reference": "2834789aeb9ac182ad69bfdf9ae91856a59945ff",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d79c053d972856b8b941bb233e39dc521a5093f0",
+                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0",
                 "shasum": ""
             },
             "require": {
@@ -7657,7 +7100,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-07-15T06:24:08+00:00"
+            "time": "2019-08-21T07:05:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
