@@ -3734,6 +3734,34 @@ wave {
   cursor: not-allowed;
 }
 
+.hover\:cursor-auto:hover {
+  cursor: auto;
+}
+
+.hover\:cursor-default:hover {
+  cursor: default;
+}
+
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.hover\:cursor-wait:hover {
+  cursor: wait;
+}
+
+.hover\:cursor-text:hover {
+  cursor: text;
+}
+
+.hover\:cursor-move:hover {
+  cursor: move;
+}
+
+.hover\:cursor-not-allowed:hover {
+  cursor: not-allowed;
+}
+
 .block {
   display: block;
 }
@@ -5539,6 +5567,46 @@ wave {
 }
 
 .opacity-100 {
+  opacity: 1;
+}
+
+.hover\:opacity-0:hover {
+  opacity: 0;
+}
+
+.hover\:opacity-25:hover {
+  opacity: 0.25;
+}
+
+.hover\:opacity-50:hover {
+  opacity: 0.5;
+}
+
+.hover\:opacity-75:hover {
+  opacity: 0.75;
+}
+
+.hover\:opacity-100:hover {
+  opacity: 1;
+}
+
+.focus\:opacity-0:focus {
+  opacity: 0;
+}
+
+.focus\:opacity-25:focus {
+  opacity: 0.25;
+}
+
+.focus\:opacity-50:focus {
+  opacity: 0.5;
+}
+
+.focus\:opacity-75:focus {
+  opacity: 0.75;
+}
+
+.focus\:opacity-100:focus {
   opacity: 1;
 }
 
@@ -10635,34 +10703,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .sm\:cursor-auto {
-    cursor: auto;
-  }
-
-  .sm\:cursor-default {
-    cursor: default;
-  }
-
-  .sm\:cursor-pointer {
-    cursor: pointer;
-  }
-
-  .sm\:cursor-wait {
-    cursor: wait;
-  }
-
-  .sm\:cursor-text {
-    cursor: text;
-  }
-
-  .sm\:cursor-move {
-    cursor: move;
-  }
-
-  .sm\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .sm\:block {
     display: block;
   }
@@ -12468,6 +12508,46 @@ wave {
   }
 
   .sm\:opacity-100 {
+    opacity: 1;
+  }
+
+  .sm\:hover\:opacity-0:hover {
+    opacity: 0;
+  }
+
+  .sm\:hover\:opacity-25:hover {
+    opacity: 0.25;
+  }
+
+  .sm\:hover\:opacity-50:hover {
+    opacity: 0.5;
+  }
+
+  .sm\:hover\:opacity-75:hover {
+    opacity: 0.75;
+  }
+
+  .sm\:hover\:opacity-100:hover {
+    opacity: 1;
+  }
+
+  .sm\:focus\:opacity-0:focus {
+    opacity: 0;
+  }
+
+  .sm\:focus\:opacity-25:focus {
+    opacity: 0.25;
+  }
+
+  .sm\:focus\:opacity-50:focus {
+    opacity: 0.5;
+  }
+
+  .sm\:focus\:opacity-75:focus {
+    opacity: 0.75;
+  }
+
+  .sm\:focus\:opacity-100:focus {
     opacity: 1;
   }
 
@@ -17561,34 +17641,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .md\:cursor-auto {
-    cursor: auto;
-  }
-
-  .md\:cursor-default {
-    cursor: default;
-  }
-
-  .md\:cursor-pointer {
-    cursor: pointer;
-  }
-
-  .md\:cursor-wait {
-    cursor: wait;
-  }
-
-  .md\:cursor-text {
-    cursor: text;
-  }
-
-  .md\:cursor-move {
-    cursor: move;
-  }
-
-  .md\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .md\:block {
     display: block;
   }
@@ -19394,6 +19446,46 @@ wave {
   }
 
   .md\:opacity-100 {
+    opacity: 1;
+  }
+
+  .md\:hover\:opacity-0:hover {
+    opacity: 0;
+  }
+
+  .md\:hover\:opacity-25:hover {
+    opacity: 0.25;
+  }
+
+  .md\:hover\:opacity-50:hover {
+    opacity: 0.5;
+  }
+
+  .md\:hover\:opacity-75:hover {
+    opacity: 0.75;
+  }
+
+  .md\:hover\:opacity-100:hover {
+    opacity: 1;
+  }
+
+  .md\:focus\:opacity-0:focus {
+    opacity: 0;
+  }
+
+  .md\:focus\:opacity-25:focus {
+    opacity: 0.25;
+  }
+
+  .md\:focus\:opacity-50:focus {
+    opacity: 0.5;
+  }
+
+  .md\:focus\:opacity-75:focus {
+    opacity: 0.75;
+  }
+
+  .md\:focus\:opacity-100:focus {
     opacity: 1;
   }
 
@@ -24487,34 +24579,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .lg\:cursor-auto {
-    cursor: auto;
-  }
-
-  .lg\:cursor-default {
-    cursor: default;
-  }
-
-  .lg\:cursor-pointer {
-    cursor: pointer;
-  }
-
-  .lg\:cursor-wait {
-    cursor: wait;
-  }
-
-  .lg\:cursor-text {
-    cursor: text;
-  }
-
-  .lg\:cursor-move {
-    cursor: move;
-  }
-
-  .lg\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .lg\:block {
     display: block;
   }
@@ -26320,6 +26384,46 @@ wave {
   }
 
   .lg\:opacity-100 {
+    opacity: 1;
+  }
+
+  .lg\:hover\:opacity-0:hover {
+    opacity: 0;
+  }
+
+  .lg\:hover\:opacity-25:hover {
+    opacity: 0.25;
+  }
+
+  .lg\:hover\:opacity-50:hover {
+    opacity: 0.5;
+  }
+
+  .lg\:hover\:opacity-75:hover {
+    opacity: 0.75;
+  }
+
+  .lg\:hover\:opacity-100:hover {
+    opacity: 1;
+  }
+
+  .lg\:focus\:opacity-0:focus {
+    opacity: 0;
+  }
+
+  .lg\:focus\:opacity-25:focus {
+    opacity: 0.25;
+  }
+
+  .lg\:focus\:opacity-50:focus {
+    opacity: 0.5;
+  }
+
+  .lg\:focus\:opacity-75:focus {
+    opacity: 0.75;
+  }
+
+  .lg\:focus\:opacity-100:focus {
     opacity: 1;
   }
 
@@ -31413,34 +31517,6 @@ wave {
     border-left-width: 1px;
   }
 
-  .xl\:cursor-auto {
-    cursor: auto;
-  }
-
-  .xl\:cursor-default {
-    cursor: default;
-  }
-
-  .xl\:cursor-pointer {
-    cursor: pointer;
-  }
-
-  .xl\:cursor-wait {
-    cursor: wait;
-  }
-
-  .xl\:cursor-text {
-    cursor: text;
-  }
-
-  .xl\:cursor-move {
-    cursor: move;
-  }
-
-  .xl\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .xl\:block {
     display: block;
   }
@@ -33246,6 +33322,46 @@ wave {
   }
 
   .xl\:opacity-100 {
+    opacity: 1;
+  }
+
+  .xl\:hover\:opacity-0:hover {
+    opacity: 0;
+  }
+
+  .xl\:hover\:opacity-25:hover {
+    opacity: 0.25;
+  }
+
+  .xl\:hover\:opacity-50:hover {
+    opacity: 0.5;
+  }
+
+  .xl\:hover\:opacity-75:hover {
+    opacity: 0.75;
+  }
+
+  .xl\:hover\:opacity-100:hover {
+    opacity: 1;
+  }
+
+  .xl\:focus\:opacity-0:focus {
+    opacity: 0;
+  }
+
+  .xl\:focus\:opacity-25:focus {
+    opacity: 0.25;
+  }
+
+  .xl\:focus\:opacity-50:focus {
+    opacity: 0.5;
+  }
+
+  .xl\:focus\:opacity-75:focus {
+    opacity: 0.75;
+  }
+
+  .xl\:focus\:opacity-100:focus {
     opacity: 1;
   }
 
