@@ -22,8 +22,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('samples:clear-dead')
-                 ->hourly();
+        $schedule->command('samples:clear-dead')->hourly();
+        $schedule->command('activitylog:clean')->daily();
     }
 
     /**

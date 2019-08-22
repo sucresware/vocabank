@@ -54,5 +54,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin'], 'as' => 'admin.'], function () {
-    Route::get('/admin', 'Admin/AdminController@index')->name('index');
+    Route::get('/', 'Admin\AdminController@index')->name('index');
+    Route::resource('/static-pages', 'Admin\StaticPageController');
 });

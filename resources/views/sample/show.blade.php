@@ -5,12 +5,16 @@
 @endsection
 
 @section('content')
-    <div class="hidden md:block flex justify-between mb-4">
+    <div class="hidden md:flex mb-4">
         @if ($sample->prev)
-            <a href="{{ route('samples.prev', $sample) }}" class="mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"><i class="fas fa-angle-left"></i></a>
+            <div>
+                <a href="{{ route('samples.prev', $sample) }}" class="btn btn-xs"><i class="fas fa-angle-left"></i></a>
+            </div>
         @endif
         @if ($sample->next)
-            <a href="{{ route('samples.next', $sample) }}" class="ml-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"><i class="fas fa-angle-right"></i></a>
+            <div class="ml-auto">
+                <a href="{{ route('samples.next', $sample) }}" class="btn btn-xs"><i class="fas fa-angle-right"></i></a>
+            </div>
         @endif
     </div>
 

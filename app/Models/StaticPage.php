@@ -7,6 +7,8 @@ use League\CommonMark\CommonMarkConverter;
 
 class StaticPage extends Model
 {
+    protected $guarded = [];
+
     public function getParsedContentAttribute(){
         $converter = new CommonMarkConverter([
             'html_input' => 'escape',

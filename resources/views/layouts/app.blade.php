@@ -39,13 +39,18 @@
                             <a href="{{ route('samples.create') }}" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i> Ajouter</a>
                         </li>
                         <li class="mr-2 ml-auto md:ml-2">
-                            <button id="lightSwitch" class="nav-link"><i class="fa fa-fw fa-lightbulb"></i></button>
+                            <button id="lightSwitch" class="nav-link" title="Changer de thème"><i class="fa fa-fw fa-lightbulb"></i></button>
                         </li>
                         <li class="mx-2">
-                            <a href="{{ route('users.show', auth()->user()) }}" class="nav-link {{ active_class(if_route('users.show', auth()->user())) }}"><i class="fas fa-fw fa-user"></i></a>
+                            <a href="{{ route('users.show', auth()->user()) }}" class="nav-link {{ active_class(if_route('users.show', auth()->user())) }}" title="Mon profil"><i class="fas fa-fw fa-user"></i></a>
                         </li>
+                        @if (auth()->user()->hasRole('admin'))
+                            <li class="mx-2">
+                                <a href="{{ route('admin.index') }}" class="nav-link {{ active_class(if_route_pattern('admin.*')) }}" title="Administration"><i class="fas fa-fw fa-lock"></i></a>
+                            </li>
+                        @endif
                         <li class="mx-2">
-                            <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-fw fa-sign-out-alt"></i></a>
+                            <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Déconnexion"><i class="fas fa-fw fa-sign-out-alt"></i></a>
                         </li>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>

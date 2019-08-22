@@ -19,7 +19,7 @@
             </div>
 
             @if (auth()->user() == $user)
-                <div class="text-center"><a href="{{ route('users.edit', $user) }}" class="mt-6 btn btn-secondary btn-xs"><i class="fas fa-pencil-alt mr-1"></i> Modifier mon profil</a></div>
+                <div class="text-center"><a href="{{ route('users.edit', $user) }}" class="mt-6 btn btn-secondary btn-xs"><i class="fas fa-pencil-alt mr-1"></i> Modifier</a></div>
         @endif
         </div>
 

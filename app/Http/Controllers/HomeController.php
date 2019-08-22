@@ -11,13 +11,16 @@ class HomeController extends Controller
 
     public function lightToggler()
     {
-        switch (auth()->user()->getSetting('layout.theme', 'theme-vocabank')) {
+        $user = auth()->user();
+        $user->disableLogging();
+
+        switch ($user->getSetting('layout.theme', 'theme-vocabank')) {
             case 'theme-vocabank':
-                auth()->user()->setSetting('layout.theme', 'theme-legacy');
+                $user->setSetting('layout.theme', 'theme-legacy');
 
             break;
             case 'theme-legacy':
-                auth()->user()->setSetting('layout.theme', 'theme-vocabank');
+                $user->setSetting('layout.theme', 'theme-vocabank');
 
             break;
         }

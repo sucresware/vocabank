@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles, LogsActivity;
 
     protected $fillable = [
         'name', 'email', 'password', 'fourSucres_account',
@@ -22,6 +23,9 @@ class User extends Authenticatable
         'fourSucres_account' => 'array',
         'settings'           => 'array',
     ];
+
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
 
     public function samples()
     {

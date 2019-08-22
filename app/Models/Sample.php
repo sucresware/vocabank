@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Helpers\SucresHelper;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
+use Illuminate\Support\Facades\Storage;
 use CyrildeWit\EloquentViewable\Viewable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
 class Sample extends Model implements ViewableContract
 {
-    use Viewable, HasSettingsTable;
+    use Viewable, HasSettingsTable, LogsActivity;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
@@ -30,6 +31,9 @@ class Sample extends Model implements ViewableContract
     ];
 
     protected $guarded = [];
+
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
 
     protected static function boot(): void
     {

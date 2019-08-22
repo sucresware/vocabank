@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale(config('app.locale'));
         setlocale(LC_TIME, config('app.locale'));
 
-        View::composer('*', function ($view) {
+        View::composer('layouts.app', function ($view) {
             $view->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
                 return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
                     ->join('samples', 'samples.id', '=', 'sample_tag.sample_id')

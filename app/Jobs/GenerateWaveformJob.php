@@ -32,6 +32,7 @@ class GenerateWaveformJob implements ShouldQueue
     public function handle()
     {
         $this->sample = Sample::findOrFail($this->sample_id);
+        $this->sample->disableLogging();
 
         $this->sample->status = Sample::STATUS_PROCESSING;
         $this->sample->save();
