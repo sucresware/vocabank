@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\Tag;
+use App\Auth\FourSucresProvider;
 use App\Models\Sample;
 use App\Models\StaticPage;
+use App\Models\Tag;
 use Illuminate\Support\Carbon;
-use App\Auth\FourSucresProvider;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if (config('app.env') === 'production') {
             \URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS', 'on');
         }
 
         Carbon::setLocale(config('app.locale'));

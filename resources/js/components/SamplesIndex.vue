@@ -16,15 +16,15 @@
     <div v-if="!infinite" class="flex justify-between mb-3">
       <div
         class="mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"
-        v-show="page !== 1"
-        v-on:click="loadPage(page-1)"
+        v-show="prevPageUrl"
+        v-on:click="switchPage()"
       >
         <i class="fas fa-angle-left"></i>
       </div>
       <div
         class="ml-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"
-        v-show="page !== lastPage"
-        v-on:click="loadPage(page+1)"
+        v-show="nextPageUrl"
+        v-on:click="switchPage(true)"
       >
         <i class="fas fa-angle-right"></i>
       </div>
@@ -39,21 +39,18 @@ export default {
   props: ["filter", "paginator", "infinite"],
   data() {
     return {
-      page: "",
-      path: "",
+      nextPageUrl: "",
+      prevPageUrl: "",
       samples: [],
-      pageTop: "",
-      lastPage: 1
     };
   },
   methods: {
     infiniteHandler($state) {
       axios
-        .get(this.path, {
-          params: { page: (this.page += 1) }
-        })
+        .get(this.nextPageUrl)
         .then(
           response => {
+            this.nextPageUrl = response.data.next_page_url;
             if (response.data.data.length) {
               this.samples.push(...response.data.data);
               $state.loaded();
@@ -66,21 +63,19 @@ export default {
           }
         );
     },
-    loadPage(page) {
-      let vm = this;
+    switchPage(next) {
+      let intended = (next) ? this.nextPageUrl : this.prevPageUrl;
       axios
-        .get(this.path, {
-          params: { page: page }
-        })
+        .get(intended)
         .then(response => {
           if (response.data.data.length) {
-            vm.page = page;
-            vm.lastPage = response.data.last_page;
-            vm.samples = response.data.data;
+            this.nextPageUrl = response.data.next_page_url;
+            this.prevPageUrl = response.data.prev_page_url;
+            this.samples = response.data.data;
             history.pushState(
               {},
               null,
-              response.data.path + "?page=" + vm.page
+              intended
             );
           }
         });
@@ -88,9 +83,8 @@ export default {
   },
   mounted: function() {
     this.samples = this.paginator.data;
-    this.page = this.paginator.current_page;
-    this.last_page = this.paginator.last_page;
-    this.path = "//" + location.host + location.pathname; //this.paginator.path;
+    this.nextPageUrl = this.paginator.next_page_url;
+    this.prevPageUrl = this.paginator.prev_page_url;
   }
 };
 </script>

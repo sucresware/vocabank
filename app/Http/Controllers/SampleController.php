@@ -57,7 +57,9 @@ class SampleController extends Controller
                 $samples = $samples->whereHas('tags', function ($query) use ($request) { return $query->where('name', $request->q); });
             }
 
-            $samples = $samples->paginate(15);
+            $samples = $samples
+                ->paginate(15)
+                ->appends(['q' => $request->q]);
 
             return view('sample.index', compact('samples'))->with('q', $request->q);
         } else {
