@@ -67,7 +67,8 @@
           ajouté {{ sample.presented_date }}
           <template v-if="sample.user">
             — par
-            <a :href="'/users/' + sample.user.id" class="link">{{ sample.user.name }}</a>
+            <a v-if="inIframe" :href="'/users/' + sample.user.id" class="link" target="_blank">{{ sample.user.name }}</a>
+            <a v-else :href="'/users/' + sample.user.id" class="link">{{ sample.user.name }}</a>
           </template>
         </div>
         <div class="w-full sm:w-auto sm:ml-auto">
