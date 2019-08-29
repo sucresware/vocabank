@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Helpers\SucresHelper;
-use Illuminate\Support\Facades\Storage;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sample extends Model implements ViewableContract
 {

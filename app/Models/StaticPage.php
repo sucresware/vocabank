@@ -9,12 +9,13 @@ class StaticPage extends Model
 {
     protected $guarded = [];
 
-    public function getParsedContentAttribute(){
+    public function getParsedContentAttribute()
+    {
         $converter = new CommonMarkConverter([
-            'html_input' => 'escape',
+            'html_input'         => 'escape',
             'allow_unsafe_links' => false,
-            'max_nesting_level' => 10,
-            'renderer' => [
+            'max_nesting_level'  => 10,
+            'renderer'           => [
                 'block_separator' => "\n",
                 'inner_separator' => "\n",
                 'soft_break'      => "\n",

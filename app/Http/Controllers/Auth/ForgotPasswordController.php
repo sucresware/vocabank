@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\ResetPassword;
 use App\Models\User;
 use App\Models\VerifyUser;
-use App\Rules\Throttle;
 use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordController extends Controller
@@ -19,7 +18,7 @@ class ForgotPasswordController extends Controller
     public function sendResetLinkEmail()
     {
         request()->validate([
-            'email'                => ['required', 'email'],
+            'email' => ['required', 'email'],
             // 'g-recaptcha-response' => ['required', 'captcha'],
         ]);
 

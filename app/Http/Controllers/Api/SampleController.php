@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Sample;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class SampleController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $samples = Sample::with('user')->public();
 
         switch (request()->input('order', 'recent')) {
@@ -25,7 +26,8 @@ class SampleController extends Controller
         return $samples->paginate(30);
     }
 
-    public function search (Request $request) {
+    public function search(Request $request)
+    {
         $request->validate([
             'q' => 'required',
         ]);
@@ -44,7 +46,8 @@ class SampleController extends Controller
         return $samples->paginate(30);
     }
 
-    public function show(Sample $sample) {
+    public function show(Sample $sample)
+    {
         return $sample;
     }
 }

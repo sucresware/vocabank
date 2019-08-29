@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\StaticPage;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class StaticPageController extends Controller
 {
     public function index()
     {
         $static_pages = StaticPage::get();
+
         return view('admin.static_page.index', compact('static_pages'));
     }
 
@@ -22,8 +23,8 @@ class StaticPageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'slug' => 'required|max:255',
+            'name'    => 'required|max:255',
+            'slug'    => 'required|max:255',
             'content' => 'required',
         ]);
 
@@ -40,8 +41,8 @@ class StaticPageController extends Controller
     public function update(Request $request, StaticPage $static_page)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'slug' => 'required|max:255',
+            'name'    => 'required|max:255',
+            'slug'    => 'required|max:255',
             'content' => 'required',
         ]);
 
@@ -53,7 +54,8 @@ class StaticPageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  StaticPage $static_page
+     * @param int  StaticPage $static_page
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(StaticPage $static_page)
