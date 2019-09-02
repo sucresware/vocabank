@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/4sucres/vocabank/raw/master/public/img/animated-logo.gif" width="512"></p>
+<p align="center"><img src="https://github.com/4sucres/vocabank/raw/master/resources/img/animated-logo.gif" width="512"></p>
 
 <p align="center">
 <img alt="David" src="https://img.shields.io/david/4sucres/vocabank?style=flat-square">
