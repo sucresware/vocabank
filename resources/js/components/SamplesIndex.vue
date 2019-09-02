@@ -1,5 +1,22 @@
 <template>
   <div>
+    <div v-if="!infinite" class="flex justify-between mb-3">
+      <div
+        class="mr-auto btn btn-tertiary"
+        v-show="prevPageUrl"
+        v-on:click="switchPage()"
+      >
+        <i class="fas fa-angle-left"></i>
+      </div>
+      <div
+        class="ml-auto btn btn-tertiary"
+        v-show="nextPageUrl"
+        v-on:click="switchPage(true)"
+      >
+        <i class="fas fa-angle-right"></i>
+      </div>
+    </div>
+
     <div v-for="sample in samples" :key="sample.id">
       <div class="card mb-2">
         <sample-preview :sample="sample"></sample-preview>
@@ -15,14 +32,14 @@
 
     <div v-if="!infinite" class="flex justify-between mb-3">
       <div
-        class="mr-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"
+        class="mr-auto btn btn-tertiary"
         v-show="prevPageUrl"
         v-on:click="switchPage()"
       >
         <i class="fas fa-angle-left"></i>
       </div>
       <div
-        class="ml-auto cursor-pointer px-3 py-1 font-bold rounded-full hover:bg-gray-300 text-xs"
+        class="ml-auto btn btn-tertiary"
         v-show="nextPageUrl"
         v-on:click="switchPage(true)"
       >
