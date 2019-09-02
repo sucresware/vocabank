@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/{user}/edit/password', 'UserController@editPassword')->name('users.edit.password');
     Route::put('/users/{user}/password', 'UserController@updatePassword')->name('users.update.password');
 
+    Route::post('/samples/{sample}/like', 'SampleController@like')->name('samples.like');
     Route::get('/samples/{sample}/edit', 'SampleController@edit')->name('samples.edit');
     Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
     Route::post('/samples/preflight/url', 'SampleController@preflightURL')->name('samples.preflight.url');

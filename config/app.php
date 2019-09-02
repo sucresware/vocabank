@@ -163,6 +163,7 @@ return [
         /*
          * Package Service Providers...
          */
+        \Conner\Likeable\LikeableServiceProvider::class,
 
         /*
          * Application Service Providers...

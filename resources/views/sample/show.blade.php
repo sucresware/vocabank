@@ -110,8 +110,12 @@
                 <hr>
 
                 <div class="px-4 mb-4 flex flex-wrap">
-                    <button class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-primary mx-1" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> Copier le lien</button>
-                    <a href="{{ route('samples.download', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1" title="Télécharger"><i class="fa fa-download"></i> Télécharger</a>
+                    <button class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-primary mx-1" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> <span class="lg:hidden xl:inline">Copier le lien</span></button>
+                    @auth
+                        <button class="w-full lg:w-auto mb-2 lg:mb-0 btn @if ($sample->liked) btn-primary @else btn-secondary @endif mx-1" title="Favori" onclick="event.preventDefault(); document.getElementById('like-form').submit();"><i class="fas fa-heart"></i> <span class="lg:hidden xl:inline">Favori</span></button>
+                        <form action="{{ route('samples.like', $sample) }}" id="like-form" method="post" class="hidden">@csrf</form>
+                    @endauth
+                    <a href="{{ route('samples.download', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1" title="Télécharger"><i class="fa fa-download"></i> <span class="lg:hidden xl:inline">Télécharger</span></a>
                     @auth
                         @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))
                             <a href="{{ route('samples.edit', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1 lg:ml-auto"><i class="fas fa-pencil-alt"></i> <span class="ml-1 lg:hidden">Modifier</span></a>

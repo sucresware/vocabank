@@ -28,6 +28,7 @@
         "php-ffmpeg/php-ffmpeg": "^0.14.0",
         "pragmarx/version": "^0.2.9",
         "realrashid/sweet-alert": "^1.1",
+        "rtconner/laravel-likeable": "~1.2",
         "sentry/sentry-laravel": "1.0.2",
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-permission": "^2.37"

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\SucresHelper;
+use Conner\Likeable\LikeableTrait as Likeable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
@@ -12,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sample extends Model implements ViewableContract
 {
-    use Viewable, HasSettingsTable, LogsActivity;
+    use Viewable, HasSettingsTable, LogsActivity, Likeable;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
@@ -27,7 +28,7 @@ class Sample extends Model implements ViewableContract
     ];
 
     protected $appends = [
-        'views', 'presented_date', 'thumbnail_url', 'waveform_url',
+        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'liked',
     ];
 
     protected $guarded = [];
@@ -97,5 +98,14 @@ class Sample extends Model implements ViewableContract
     public function getWaveformUrlAttribute()
     {
         return $this->waveform ? Storage::disk('public')->url($this->waveform) : url('/img/waveform.png');
+    }
+
+    public function getLikedAttribute()
+    {
+        if (auth()->user()) {
+            return $this->liked();
+        }
+
+        return null;
     }
 }

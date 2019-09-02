@@ -80,13 +80,28 @@
             >Détails</a>
           </template>
           <template v-else>
-            <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary">Détails</a>
+            <button
+              class="btn btn-xs"
+              :class="{
+                'btn-primary': sample.liked,
+                'btn-secondary': !sample.liked,
+              }"
+              v-if="sample.liked !== undefined && sample.liked !== null"
+              v-on:click="toggleLike()"
+              title="Favori"
+            >
+              <i class="fas fa-heart"></i> <span class="sm:hidden md:inline ml-1">Favori</span>
+            </button>
+            <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary" title="Détails">
+              <i class="fas fa-info-circle"></i>
+              <span class="sm:hidden md:inline ml-1">Détails</span>
+            </a>
             <button
               class="btn btn-xs btn-primary"
               v-clipboard:copy="sampleUrl"
               title="Copier le lien"
             >
-              <i class="fas fa-copy"></i>
+              <i class="fas fa-copy"></i> <span class="sm:hidden md:inline ml-1">Copier</span>
             </button>
           </template>
         </div>
@@ -98,6 +113,7 @@
 <script>
 let $ = require("jquery");
 import WaveSurfer from "wavesurfer.js";
+import axios from "axios";
 
 export default {
   props: ["sample", "views", "iframe"],
@@ -150,6 +166,10 @@ export default {
         this.isPlaying = !this.isPlaying;
         this.waveSurfer.playPause();
       }
+    },
+    toggleLike(){
+      this.sample.liked = !this.sample.liked;
+      axios.post("/samples/" + this.sample.id + "/like");
     }
   },
   computed: {

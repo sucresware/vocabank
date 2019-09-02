@@ -18,14 +18,25 @@ class SampleController extends Controller
 {
     public function index()
     {
-        $samples = Sample::with('user')
-            ->public();
+        switch (request()->filter) {
+            case 'liked':
+                $samples = Sample::with('user')
+                    ->public()
+                    ->whereLikedBy(auth()->user()->id);
+
+                break;
+            default:
+                $samples = Sample::with('user')
+                    ->public();
+
+                break;
+        }
 
         switch (request()->order) {
             case 'popular':
-            $samples = $samples->orderByViews();
+                $samples = $samples->orderByViews();
 
-            break;
+                break;
             case 'recent':
             default:
                 $samples = $samples->orderBy('created_at', 'DESC');
@@ -33,7 +44,9 @@ class SampleController extends Controller
                 break;
         }
 
-        $samples = $samples->paginate(15);
+        $samples = $samples
+            ->paginate(15)
+            ->appends(request()->input());
 
         if (request()->ajax()) {
             return $samples;
@@ -280,6 +293,6 @@ class SampleController extends Controller
             $sample->like();
         }
 
-        return $sample;
+        return request()->ajax() ? $sample : back();
     }
 }

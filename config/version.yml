@@ -2,8 +2,8 @@ version_source: config # "config", "git-local" or "git-remote"
 blade_directive: version
 current:
   major: 2
-  minor: 0
-  patch: 9
+  minor: 1
+  patch: 0
   format: "{$major}.{$minor}.{$patch}"
   git_absorb: false # "false", "git-local" or "git-remote"
 cache:
