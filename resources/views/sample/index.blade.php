@@ -9,6 +9,6 @@
 
 <samples-index
     :paginator="{{ $samples->toJson() }}"
-    :infinite="true"
+    :infinite="false"
     ></samples-index>
 @endsection
