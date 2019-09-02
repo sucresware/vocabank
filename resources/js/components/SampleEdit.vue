@@ -181,7 +181,7 @@ export default {
 
       let reader = new FileReader();
       reader.onload = e => {
-        this.currentSample.thumbnail = e.target.result;
+        this.currentSample.thumbnail_url = e.target.result;
       };
       reader.readAsDataURL(file);
     },
