@@ -91,18 +91,18 @@
               v-on:click="toggleLike()"
               title="Favori"
             >
-              <i class="fas fa-heart"></i> <span class="sm:hidden md:inline ml-1">Favori</span>
+              <i class="fas fa-heart"></i> <span class="hidden md:inline ml-1">Favori</span>
             </button>
             <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary" title="Détails">
               <i class="fas fa-info-circle"></i>
-              <span class="sm:hidden md:inline ml-1">Détails</span>
+              <span class="hidden md:inline ml-1">Détails</span>
             </a>
             <button
               class="btn btn-xs btn-primary"
               v-clipboard:copy="sampleUrl"
               title="Copier le lien"
             >
-              <i class="fas fa-copy"></i> <span class="sm:hidden md:inline ml-1">Copier</span>
+              <i class="fas fa-copy"></i> <span class="hidden md:inline ml-1">Copier</span>
             </button>
           </template>
         </div>
