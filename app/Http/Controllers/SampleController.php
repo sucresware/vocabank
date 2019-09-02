@@ -98,8 +98,16 @@ class SampleController extends Controller
 
     public function preflight()
     {
+        $mimes = [
+            'audio/mpeg',
+            'audio/mp3',
+            'audio/wav',
+            'audio/x-wav',
+            'audio/ogg',
+        ];
+
         request()->validate([
-            'audio' => ['required', 'file', 'max:10240', 'mimetypes:audio/mpeg,audio/mp3,audio/wav,audio/ogg'],
+            'audio' => ['required', 'file', 'max:10240', 'mimetypes:' . implode(',', $mimes)],
         ]);
 
         $sample = auth()->user()->samples()->create(
