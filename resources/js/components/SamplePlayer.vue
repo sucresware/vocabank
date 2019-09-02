@@ -33,6 +33,12 @@
       </div>
     </div>
     <div style="height: 30px;" class="w-full flex items-center relative py-8 mr-3" ref="wavesurfer"></div>
+    <input type="range" class="slider mr-3" :class="{ hidden: !showVolume }" v-model="volume">
+    <div class="mr-3">
+      <button class="btn btn-xs btn-secondary" v-on:click="toggleVolumeControl">
+        <i class="fas fa-volume-up inline"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -48,7 +54,9 @@ export default {
       isLoading: true,
       isPlaying: false,
       hasAutoLoad: false,
-      hasAutoPlay: false
+      hasAutoPlay: false,
+      showVolume: false,
+      volume: 50,
     };
   },
   mounted() {
@@ -72,7 +80,7 @@ export default {
         responsive: true
       });
       this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
-      this.waveSurfer.setVolume(0.7);
+      this.waveSurfer.setVolume(this.volume/100);
       this.isLoading = true;
 
       this.waveSurfer.on("ready", function() {
@@ -90,6 +98,14 @@ export default {
     toggle() {
       this.isPlaying = !this.isPlaying;
       this.waveSurfer.playPause();
+    },
+    toggleVolumeControl(){
+      this.showVolume = !this.showVolume;
+    }
+  },
+  watch: {
+    volume: function(volume, oldVolume){
+      this.waveSurfer.setVolume(volume/100);
     }
   }
 };

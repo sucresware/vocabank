@@ -32,6 +32,32 @@ nav {
     @apply cursor-not-allowed;
 }
 
+.slider {
+    -webkit-appearance: none;
+    height: 4px;
+    @apply rounded;
+    background: #d3d3d3;
+    outline: none;
+  }
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: black;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: black;
+    cursor: pointer;
+}
+
 .btn {
     @apply inline-block px-3 py-1 font-bold text-center rounded-full;
 }
@@ -85,6 +111,31 @@ body.theme-legacy  {
 
 .theme-legacy .form-control.form-control-inverse {
     @apply border-0 bg-gray-700 text-white;
+}
+
+.theme-legacy .slider {
+    -webkit-appearance: none;
+    height: 4px;
+    @apply rounded bg-gray-300;
+    outline: none;
+  }
+
+.theme-legacy .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    @apply bg-teal-500;
+    cursor: pointer;
+}
+
+.theme-legacy .slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    @apply bg-teal-500;
+    cursor: pointer;
 }
 
 .theme-legacy .nav-link {
@@ -190,6 +241,31 @@ body.theme-vocabank {
 }
 
 .theme-vocabank .form-control.form-control-inverse {}
+
+.theme-vocabank .slider {
+    -webkit-appearance: none;
+    height: 4px;
+    background: rgba(255, 255, 255, .10);
+    outline: none;
+  }
+
+.theme-vocabank .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #05c6b1;
+    cursor: pointer;
+}
+
+.theme-vocabank .slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #05c6b1;
+    cursor: pointer;
+}
 
 .theme-vocabank .nav-link {
     @apply text-white font-bold;

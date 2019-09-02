@@ -72,6 +72,7 @@
           </template>
         </div>
         <div class="w-full sm:w-auto sm:ml-auto">
+          <input type="range" v-model="volume" class="slider w-24 mr-1">
           <template v-if="inIframe">
             <a
               :href="'/samples/' + sample.id"
@@ -124,7 +125,8 @@ export default {
       showControls: false,
       waveSurfer: null,
       isLoading: false,
-      isPlaying: false
+      isPlaying: false,
+      volume: 50,
     };
   },
   mounted() {
@@ -150,7 +152,7 @@ export default {
           responsive: true
         });
         this.waveSurfer.load("/samples/" + this.sample.id + "/listen");
-        this.waveSurfer.setVolume(0.7);
+        this.waveSurfer.setVolume(this.volume/100);
         this.isLoading = true;
 
         this.waveSurfer.on("ready", function() {
@@ -170,7 +172,7 @@ export default {
     toggleLike(){
       this.sample.liked = !this.sample.liked;
       axios.post("/samples/" + this.sample.id + "/like");
-    }
+    },
   },
   computed: {
     sampleUrl() {
@@ -181,6 +183,11 @@ export default {
         "/samples/" +
         this.sample.id
       );
+    }
+  },
+  watch: {
+    volume: function(volume, oldVolume){
+      this.waveSurfer.setVolume(volume/100);
     }
   }
 };
