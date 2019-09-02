@@ -32,8 +32,8 @@ Route::get('/pages/{slug}', 'StaticPageController@show')->name('pages');
 
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
 
-Route::get('/samples/recent', 'SampleController@recent')->name('samples.recent');
-Route::get('/samples/popular', 'SampleController@popular')->name('samples.popular');
+Route::permanentRedirect('/samples/recent', '/samples?order=recent');
+Route::permanentRedirect('/samples/popular', '/samples?order=popular');
 Route::get('/samples/search', 'SampleController@search')->name('samples.search');
 Route::get('/samples/random', 'SampleController@random')->name('samples.random');
 

@@ -18,29 +18,28 @@ class SampleController extends Controller
 {
     public function index()
     {
-        return redirect()->route('samples.recent');
-    }
+        $samples = Sample::with('user')
+            ->public();
 
-    public function recent()
-    {
-        $samples = Sample::with('user')->public()->orderBy('created_at', 'DESC')->paginate(15);
+        switch (request()->order) {
+            case 'popular':
+            $samples = $samples->orderByViews();
+
+            break;
+            case 'recent':
+            default:
+                $samples = $samples->orderBy('created_at', 'DESC');
+
+                break;
+        }
+
+        $samples = $samples->paginate(15);
 
         if (request()->ajax()) {
             return $samples;
         }
 
-        return view('sample.index', compact('samples'))->with('filter', 'recent');
-    }
-
-    public function popular()
-    {
-        $samples = Sample::with('user')->public()->orderByViews()->paginate(15);
-
-        if (request()->ajax()) {
-            return $samples;
-        }
-
-        return view('sample.index', compact('samples'))->with('filter', 'popular');
+        return view('sample.index', compact('samples', 'order'))->with('order');
     }
 
     public function search(Request $request)
@@ -271,5 +270,16 @@ class SampleController extends Controller
         $sample->delete();
 
         return redirect('/');
+    }
+
+    public function like(Sample $sample)
+    {
+        if ($sample->liked()) {
+            $sample->unlike();
+        } else {
+            $sample->like();
+        }
+
+        return $sample;
     }
 }
