@@ -119,9 +119,13 @@ body.theme-legacy  {
     @apply bg-gray-400 text-black;
 }
 
-.theme-legacy .btn-tertiary:hover {
-    @apply bg-gray-200 text-black;
+.theme-legacy .btn-secondary.disabled {
+    @apply cursor-not-allowed bg-gray-200 text-gray-500;
 }
+
+/*.theme-legacy .btn-tertiary:hover {
+    @apply bg-gray-200 text-black;
+} */
 
 .theme-legacy .card {
     @apply bg-white;
@@ -233,9 +237,14 @@ body.theme-vocabank {
     background: rgba(255, 255, 255, .15);
 }
 
-.theme-vocabank .btn-tertiary:hover {
-    background: rgba(255, 255, 255, .10);
+.theme-vocabank .btn-secondary.disabled {
+    @apply cursor-not-allowed text-gray-500;
+    background: rgba(255, 255, 255, .05)
 }
+
+/* .theme-vocabank .btn-tertiary:hover {
+    background: rgba(255, 255, 255, .10);
+} */
 
 .theme-vocabank .card {
     @apply shadow-lg;

@@ -1,20 +1,20 @@
 <template>
   <div>
-    <div v-if="!infinite" class="flex justify-between mb-3">
-      <div
-        class="mr-auto btn btn-tertiary"
-        v-show="prevPageUrl"
+    <div v-if="!infinite" class="flex justify-between my-3">
+      <button
+        class="mr-auto btn btn-secondary"
+        :class="{ disabled: !prevPageUrl }"
         v-on:click="switchPage()"
       >
         <i class="fas fa-angle-left"></i>
-      </div>
-      <div
-        class="ml-auto btn btn-tertiary"
-        v-show="nextPageUrl"
+      </button>
+      <button
+        class="ml-auto btn btn-secondary"
+        :class="{ disabled: !nextPageUrl }"
         v-on:click="switchPage(true)"
       >
         <i class="fas fa-angle-right"></i>
-      </div>
+      </button>
     </div>
 
     <div v-for="sample in samples" :key="sample.id">
@@ -30,21 +30,21 @@
       </infinite-loading>
     </div>
 
-    <div v-if="!infinite" class="flex justify-between mb-3">
-      <div
-        class="mr-auto btn btn-tertiary"
-        v-show="prevPageUrl"
+    <div v-if="!infinite" class="flex justify-between my-3">
+      <button
+        class="mr-auto btn btn-secondary"
+        :class="{ disabled: !prevPageUrl }"
         v-on:click="switchPage()"
       >
         <i class="fas fa-angle-left"></i>
-      </div>
-      <div
-        class="ml-auto btn btn-tertiary"
-        v-show="nextPageUrl"
+      </button>
+      <button
+        class="ml-auto btn btn-secondary"
+        :class="{ disabled: !nextPageUrl }"
         v-on:click="switchPage(true)"
       >
         <i class="fas fa-angle-right"></i>
-      </div>
+      </button>
     </div>
   </div>
 </template>
