@@ -28,20 +28,19 @@ class AppServiceProvider extends ServiceProvider
         setlocale(LC_TIME, config('app.locale'));
 
         View::composer('layouts.app', function ($view) {
-            $view->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
-                return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
-                    ->join('samples', 'samples.id', '=', 'sample_tag.sample_id')
-                    ->where('status', Sample::STATUS_PUBLIC)
-                    ->groupBy('tags.id')
-                    ->select(['tags.*', DB::raw('COUNT(*) as count')])
-                    ->orderBy('count', 'desc')
-                    ->limit(10)
-                    ->get();
-            }));
-
-            $view->with('static_pages', Cache::remember('static_pages', now()->addMinute(), function () {
-                return StaticPage::orderBy('name')->get();
-            }));
+            $view
+                ->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
+                    return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
+                        ->join('samples', 'samples.id', '=', 'sample_tag.sample_id')
+                        ->where('status', Sample::STATUS_PUBLIC)
+                        ->groupBy('tags.id')
+                        ->select(['tags.*', DB::raw('COUNT(*) as count')])
+                        ->orderBy('count', 'desc')
+                        ->limit(10)
+                        ->get();
+                }))
+                ->with('static_pages', StaticPage::orderBy('name')->get())
+                ->with('runtime', round((microtime(true) - LARAVEL_START), 3));
 
             return $view;
         });
