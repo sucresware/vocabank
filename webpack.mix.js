@@ -15,5 +15,15 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
     ])
+
+    // Copies reused resources
+    .copy('resources/js/wavesurfer.min.js.map', 'public/js')
+
+    .copyDirectory('resources/img', 'public/img')
+    .copyDirectory('resources/audio', 'public/audio')
+    .copyDirectory('resources/svg', 'public/svg')
+    .copyDirectory('resources/vendor', 'public/vendor')
+    .copyDirectory('resources/public', 'public/')
+
     .version()
     .disableNotifications();

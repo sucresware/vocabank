@@ -12,14 +12,14 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
 
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url('/icons/apple-touch-icon-144x144.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{ url('/icons/apple-touch-icon-152x152.png') }}">
-    <link rel="icon" type="image/png" href="{{ url('/favicon-32x32.png') }}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{{ url('/favicon-16x16.png') }}" sizes="16x16">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url('/img/icons/apple-touch-icon-144x144.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{ url('/img/icons/apple-touch-icon-152x152.png') }}">
+    <link rel="icon" type="image/png" href="{{ url('/img/icons/favicon-32x32.png') }}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ url('/img/icons/favicon-16x16.png') }}" sizes="16x16">
     <meta name="application-name" content="VocaBank">
     <meta name="theme-color" content="#1F2127">
     <meta name="msapplication-TileColor" content="#1F2127">
-    <meta name="msapplication-TileImage" content="{{ url('/icons/mstile-144x144.png') }}">
+    <meta name="msapplication-TileImage" content="{{ url('/img/icons/mstile-144x144.png') }}">
 </head>
 
 <body class="@yield('body-classes')">
