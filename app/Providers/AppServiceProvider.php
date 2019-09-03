@@ -27,7 +27,9 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale(config('app.locale'));
         setlocale(LC_TIME, config('app.locale'));
 
-        View::composer('layouts.app', function ($view) {
+        $runtime = round((microtime(true) - LARAVEL_START), 3);
+
+        View::composer('layouts.app', function ($view) use ($runtime) {
             $view
                 ->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
                     return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
@@ -40,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 }))
                 ->with('static_pages', StaticPage::orderBy('name')->get())
-                ->with('runtime', round((microtime(true) - LARAVEL_START), 3));
+                ->with('runtime', $runtime);
 
             return $view;
         });
