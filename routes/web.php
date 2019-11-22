@@ -37,6 +37,7 @@ Route::permanentRedirect('/samples/popular', '/samples?order=popular');
 Route::get('/samples/search', 'SampleController@search')->name('samples.search');
 Route::get('/samples/random', 'SampleController@random')->name('samples.random');
 
+Route::get('/samples/{sample}/data', 'SampleController@data')->name('samples.data');
 Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples.listen');
 Route::get('/samples/{sample}/download', 'SampleController@download')->name('samples.download');
 Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');

@@ -198,6 +198,11 @@ class SampleController extends Controller
         return view('sample.show', compact('sample'));
     }
 
+    public function data(Sample $sample)
+    {
+        return $sample;
+    }
+
     public function next(Sample $sample)
     {
         $next_sample = $sample->next;
