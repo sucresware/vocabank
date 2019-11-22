@@ -87,11 +87,11 @@
                 <hr>
 
                 <div class="mb-2">
-                    VocaBank @version('compact') &copy; 2019<br>
+                    VocaBank @version('compact') &copy; - SucresWare 2019<br>
                     Parce qu'on entendait rien sur <a href="https://risibank.fr">RisiBank</a>.<br>
                 <hr>
                     Temps d'exécution : <span title="{{ round((microtime(true) - LARAVEL_START), 3) . ' s' }}">{{ $runtime}} s</span><br>
-                    <a href="https://4sucres.org" target="_blank">4sucres.org</a> — <a href="https://github.com/4sucres/vocabank" target="_blank">GitHub</a>
+                    <a href="https://4sucres.org" target="_blank">4sucres.org</a> — <a href="https://github.com/SucresWare/vocabank" target="_blank">GitHub</a>
                 </div>
             </footer>
         </div>
