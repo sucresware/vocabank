@@ -13,7 +13,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sample extends Model implements ViewableContract
 {
-    use Viewable, HasSettingsTable, LogsActivity, Likeable;
+    use Viewable;
+    use HasSettingsTable;
+    use LogsActivity;
+    use Likeable;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
@@ -28,7 +31,7 @@ class Sample extends Model implements ViewableContract
     ];
 
     protected $appends = [
-        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'liked',
+        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'audio_url', 'liked',
     ];
 
     protected $guarded = [];
@@ -98,6 +101,11 @@ class Sample extends Model implements ViewableContract
     public function getWaveformUrlAttribute()
     {
         return $this->waveform ? Storage::disk('public')->url($this->waveform) : url('/img/waveform.png');
+    }
+
+    public function getAudioUrlAttribute()
+    {
+        return $this->audio ? Storage::disk('public')->url($this->audio) : '';
     }
 
     public function getLikedAttribute()
