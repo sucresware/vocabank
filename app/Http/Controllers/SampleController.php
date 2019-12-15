@@ -52,7 +52,7 @@ class SampleController extends Controller
             return $samples;
         }
 
-        return view('sample.index', compact('samples', 'order'))->with('order');
+        return view('sample.index', compact('samples'));
     }
 
     public function search(Request $request)
@@ -62,11 +62,15 @@ class SampleController extends Controller
 
             if (!$request->tag) {
                 $samples = $samples
-                    ->whereHas('tags', function ($query) use ($request) { return $query->where('name', 'like', '%' . $request->q . '%'); })
+                    ->whereHas('tags', function ($query) use ($request) {
+                        return $query->where('name', 'like', '%' . $request->q . '%');
+                    })
                     ->orWhere('name', 'like', '%' . $request->q . '%')
                     ->orWhere('description', 'like', '%' . $request->q . '%');
             } else {
-                $samples = $samples->whereHas('tags', function ($query) use ($request) { return $query->where('name', $request->q); });
+                $samples = $samples->whereHas('tags', function ($query) use ($request) {
+                    return $query->where('name', $request->q);
+                });
             }
 
             $samples = $samples
