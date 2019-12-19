@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -58,5 +58,10 @@ class User extends Authenticatable
         $this->save();
 
         return $this;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'name';
     }
 }

@@ -7,7 +7,7 @@ use Conner\Likeable\LikeableTrait as Likeable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
-use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -44,12 +44,20 @@ class Sample extends Model implements ViewableContract
             $sample->tags()->detach();
 
             collect(Storage::disk('local')->allFiles('temp'))
-                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
-                ->each(function ($file) { Storage::disk('local')->delete($file); });
+                ->filter(function ($file) use ($sample) {
+                    return preg_match('/' . $sample->id . '_/', $file);
+                })
+                ->each(function ($file) {
+                    Storage::disk('local')->delete($file);
+                });
 
             collect(Storage::disk('public')->allFiles())
-                ->filter(function ($file) use ($sample) { return preg_match('/' . $sample->id . '_/', $file); })
-                ->each(function ($file) { Storage::disk('public')->delete($file); });
+                ->filter(function ($file) use ($sample) {
+                    return preg_match('/' . $sample->id . '_/', $file);
+                })
+                ->each(function ($file) {
+                    Storage::disk('public')->delete($file);
+                });
         });
     }
 
@@ -107,5 +115,13 @@ class Sample extends Model implements ViewableContract
         }
 
         return null;
+    }
+
+    public function resolveRouteBinding($value)
+    {
+        return $this
+            ->where('id', $value)
+            ->orWhere('uuid', $value)
+            ->first() ?? abort(404);
     }
 }
