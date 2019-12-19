@@ -1,22 +1,22 @@
 <template>
-  <div class="hoverable w-full">
+  <div class="w-full hoverable">
     <div
-      class="hover:cursor-pointer px-2 py-2 w-full flex flex-no-wrap items-center relative"
+      class="relative flex flex-no-wrap items-center w-full px-2 py-2 hover:cursor-pointer"
       v-on:click="toggle()"
     >
       <fade-transition :duration="150">
-        <div class="absolute px-5 top-0 bottom-0 left-0 right-0" v-show="showWaveform">
+        <div class="absolute top-0 bottom-0 left-0 right-0 px-5" v-show="showWaveform">
           <img :src="sample.waveform_url" class="w-full h-full" style="opacity: 0.30" />
         </div>
       </fade-transition>
 
-      <div class="flex-none relative h-8 w-8">
+      <div class="relative flex-none w-8 h-8">
         <img
           :src="sample.thumbnail_url"
-          class="rounded-full border-2 border-gray-400 absolute object-cover top-0 bottom-0 left-0 right-0"
+          class="absolute top-0 bottom-0 left-0 right-0 object-cover border-2 border-gray-400 rounded-full"
         />
         <div
-          class="opacity-0 hover:opacity-100 rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center"
+          class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center text-white border-2 border-gray-400 rounded-full opacity-0 hover:opacity-100"
           style="background: rgba(0, 0, 0, 0.5)"
           v-show="!showControls"
         >
@@ -27,7 +27,7 @@
           ></i>
         </div>
         <div
-          class="rounded-full border-2 border-gray-400 absolute top-0 bottom-0 left-0 right-0 text-white flex items-center justify-center"
+          class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center text-white border-2 border-gray-400 rounded-full"
           style="background: rgba(0, 0, 0, 0.5)"
           v-show="showControls"
         >
@@ -49,9 +49,9 @@
         </div>
       </div>
       <div class="mx-3 m-w-0">
-        <div class="truncate font-bold">{{ sample.name }}</div>
+        <div class="font-bold truncate">{{ sample.name }}</div>
       </div>
-      <div class="flex-none ml-auto w-auto" v-if="sample.views">
+      <div class="flex-none w-auto ml-auto" v-if="sample.views">
         <i class="fas fa-undo"></i>
         {{ sample.views }}
       </div>
@@ -59,20 +59,20 @@
     <slide-up-down :active="showControls" :duration="200">
       <div
         style="height: 30px;"
-        class="w-full flex items-center relative py-8"
+        class="relative flex items-center w-full py-8"
         :id="'wavesurfer-' + sample.id"
       ></div>
-      <div class="flex flex-wrap px-4 pb-4 sm:pb-2 text-xs items-center text-center sm:text-left">
-        <div class="flex-1 sm:flex-auto mb-2 sm:mb-0">
+      <div class="flex flex-wrap items-center px-4 pb-4 text-xs text-center sm:pb-2 sm:text-left">
+        <div class="flex-1 mb-2 sm:flex-auto sm:mb-0">
           ajouté {{ sample.presented_date }}
           <template v-if="sample.user">
             — par
-            <a v-if="inIframe" :href="'/users/' + sample.user.id" class="link" target="_blank">{{ sample.user.name }}</a>
-            <a v-else :href="'/users/' + sample.user.id" class="link">{{ sample.user.name }}</a>
+            <a v-if="inIframe" :href="'/users/' + sample.user.name" class="link" target="_blank">{{ sample.user.name }}</a>
+            <a v-else :href="'/users/' + sample.user.name" class="link">{{ sample.user.name }}</a>
           </template>
         </div>
         <div class="w-full sm:w-auto sm:ml-auto">
-          <input type="range" v-model="volume" class="slider w-24 mr-1">
+          <input type="range" v-model="volume" class="w-24 mr-1 slider">
           <template v-if="inIframe">
             <a
               :href="'/samples/' + sample.id"
@@ -91,18 +91,18 @@
               v-on:click="toggleLike()"
               title="Favori"
             >
-              <i class="fas fa-heart"></i> <span class="hidden md:inline ml-1">Favori</span>
+              <i class="fas fa-heart"></i> <span class="hidden ml-1 md:inline">Favori</span>
             </button>
             <a :href="'/samples/' + sample.id" class="btn btn-xs btn-secondary" title="Détails">
               <i class="fas fa-info-circle"></i>
-              <span class="hidden md:inline ml-1">Détails</span>
+              <span class="hidden ml-1 md:inline">Détails</span>
             </a>
             <button
               class="btn btn-xs btn-primary"
               v-clipboard:copy="sampleUrl"
               title="Copier le lien"
             >
-              <i class="fas fa-copy"></i> <span class="hidden md:inline ml-1">Copier</span>
+              <i class="fas fa-copy"></i> <span class="hidden ml-1 md:inline">Copier</span>
             </button>
           </template>
         </div>
