@@ -23,7 +23,7 @@ class GenerateWaveformJob implements ShouldQueue
      */
     public function __construct($sample_id)
     {
-        $this->sample_id = \Hashids::connection('samples')->decode($sample_id)[0] ?? null;
+        $this->sample_id = $sample_id;
     }
 
     /**
