@@ -44,7 +44,7 @@ class YoutubeDlJob implements ShouldQueue
             Storage::disk('public')->makeDirectory('samples/', 0775, true);
         }
 
-        $audio_name = $this->sample->id . '_youtubedl_' . time() . '.mp3';
+        $audio_name = $this->sample->real_id . '_youtubedl_' . time() . '.mp3';
 
         $dl = new YoutubeDl([
             'extract-audio' => true,

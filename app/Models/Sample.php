@@ -122,6 +122,11 @@ class Sample extends Model implements ViewableContract
         return \Hashids::connection('samples')->encode($this->attributes['id']);
     }
 
+    public function getRealIdAttribute()
+    {
+        return $this->attributes['id'];
+    }
+
     public function resolveRouteBinding($value)
     {
         $id = \Hashids::connection('samples')->decode($value)[0] ?? null;

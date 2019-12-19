@@ -118,15 +118,15 @@ class SampleController extends Controller
             ['name' => request()->file('audio')->getClientOriginalName()]
         );
 
-        $audio_name = $sample->id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
+        $audio_name = $sample->real_id . '_audio_' . time() . '.' . request()->audio->getClientOriginalExtension();
         $storage_path = request()->file('audio')->storeAs('temp', $audio_name, 'local');
         $sample->audio = $storage_path;
         $sample->save();
 
         ConvertToMP3Job::withChain([
-            new GenerateWaveformJob($sample->id),
-            new MakePublicJob($sample->id),
-        ])->dispatch($sample->id);
+            new GenerateWaveformJob($sample->real_id),
+            new MakePublicJob($sample->real_id),
+        ])->dispatch($sample->real_id);
 
         return $sample;
     }
@@ -182,7 +182,7 @@ class SampleController extends Controller
                 Storage::disk('public')->makeDirectory('images/', 0775, true);
             }
 
-            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+            $thumbnail_name = $sample->real_id . '_thumbnail_' . time() . '.jpg';
 
             Image::make(file_get_contents($ytdl_dump->thumbnail))->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
             $sample->thumbnail = 'images/' . $thumbnail_name;
@@ -190,9 +190,9 @@ class SampleController extends Controller
         }
 
         YoutubeDlJob::withChain([
-            new GenerateWaveformJob($sample->id),
-            new MakePublicJob($sample->id),
-        ])->dispatch($sample->id, request()->url);
+            new GenerateWaveformJob($sample->real_id),
+            new MakePublicJob($sample->real_id),
+        ])->dispatch($sample->real_id, request()->url);
 
         return $sample;
     }
@@ -264,7 +264,7 @@ class SampleController extends Controller
         abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
 
         request()->validate([
-            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->id],
+            'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->real_id],
             'tags'      => ['nullable', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,gif,jpg', 'max:2048'],
         ]);
@@ -277,7 +277,7 @@ class SampleController extends Controller
                 Storage::disk('public')->makeDirectory('images/', 0775, true);
             }
 
-            $thumbnail_name = $sample->id . '_thumbnail_' . time() . '.jpg';
+            $thumbnail_name = $sample->real_id . '_thumbnail_' . time() . '.jpg';
 
             Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
             $sample->thumbnail = 'images/' . $thumbnail_name;
