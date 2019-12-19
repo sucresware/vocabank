@@ -16,7 +16,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'email', 'fourSucres_account', 'settings',
+        'id', 'password', 'remember_token', 'email', 'fourSucres_account', 'settings', 'created_at', 'updated_at', 'description', 'status'
     ];
 
     protected $casts = [

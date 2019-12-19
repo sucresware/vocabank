@@ -24,11 +24,11 @@ class Sample extends Model implements ViewableContract
     ];
 
     protected $hidden = [
-        'thumbnail', 'waveform', 'audio',
+        'thumbnail', 'waveform', 'audio', 'settings', 'updated_at', 'user_id', 'uuid'
     ];
 
     protected $appends = [
-        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'liked',
+        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'liked'
     ];
 
     protected $guarded = [];
