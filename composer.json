@@ -32,7 +32,8 @@
         "rtconner/laravel-likeable": "~1.2",
         "sentry/sentry-laravel": "1.0.2",
         "spatie/laravel-activitylog": "^3.7",
-        "spatie/laravel-permission": "^2.37"
+        "spatie/laravel-permission": "^2.37",
+        "vinkla/hashids": "6.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
