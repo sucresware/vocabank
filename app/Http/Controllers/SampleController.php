@@ -173,7 +173,7 @@ class SampleController extends Controller
 
         if (isset($ytdl_dump->tags) && count($ytdl_dump->tags)) {
             foreach ($ytdl_dump->tags as $tag) {
-                Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+                Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample->real_id);
             }
         }
 
@@ -285,7 +285,7 @@ class SampleController extends Controller
 
         $sample->tags()->detach();
         foreach (request()->tags ?? [] as $tag) {
-            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample);
+            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample->real_id);
         }
 
         $sample->save();
