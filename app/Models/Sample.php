@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Helpers\SucresHelper;
-use Conner\Likeable\LikeableTrait as Likeable;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
-use CyrildeWit\EloquentViewable\Viewable;
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Conner\Likeable\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use CyrildeWit\EloquentViewable\Viewable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Glorand\Model\Settings\Traits\HasSettingsTable;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
 class Sample extends Model implements ViewableContract
 {
