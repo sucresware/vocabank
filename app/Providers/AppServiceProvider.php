@@ -29,7 +29,14 @@ class AppServiceProvider extends ServiceProvider
 
         $runtime = round((microtime(true) - LARAVEL_START), 3);
 
-        View::composer('layouts.app', function ($view) use ($runtime) {
+        $version = 'WIP';
+
+        try {
+            $version = 'v' . file_get_contents(config_path('.version'));
+        } catch (\Exception $e) {
+        }
+
+        View::composer('layouts.app', function ($view) use ($runtime, $version) {
             $view
                 ->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
                     return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
@@ -42,7 +49,8 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 }))
                 ->with('static_pages', StaticPage::orderBy('name')->get())
-                ->with('runtime', $runtime);
+                ->with('runtime', $runtime)
+                ->with('version', $version);
 
             return $view;
         });
@@ -54,11 +62,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
-        $socialite->extend('foursucres', function ($app) use ($socialite) {
-            $config = $app['config']['services.foursucres'];
+        $socialite->extend(
+            'foursucres',
+            function ($app) use ($socialite) {
+                $config = $app['config']['services.foursucres'];
 
-            return $socialite->buildProvider(FourSucresProvider::class, $config);
-        }
-    );
+                return $socialite->buildProvider(FourSucresProvider::class, $config);
+            }
+        );
     }
 }

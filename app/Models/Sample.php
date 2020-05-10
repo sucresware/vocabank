@@ -6,14 +6,14 @@ use App\Helpers\SucresHelper;
 use Conner\Likeable\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use CyrildeWit\EloquentViewable\Viewable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use CyrildeWit\EloquentViewable\Contracts\Viewable;
+use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
-class Sample extends Model implements ViewableContract
+class Sample extends Model implements Viewable
 {
-    use Viewable, HasSettingsTable, LogsActivity, Likeable;
+    use InteractsWithViews, HasSettingsTable, LogsActivity, Likeable;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;

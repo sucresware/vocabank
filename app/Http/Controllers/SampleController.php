@@ -239,7 +239,7 @@ class SampleController extends Controller
     public function listen(Sample $sample)
     {
         views($sample)
-            ->delayInSession(1)
+            ->cooldown(now()->seconds(1))
             ->record();
 
         return response()->file(Storage::disk('public')->path($sample->audio));
