@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,13 +38,11 @@ Route::permanentRedirect('/samples/recent', '/samples?order=recent');
 Route::permanentRedirect('/samples/popular', '/samples?order=popular');
 Route::get('/samples/random', 'SampleController@random')->name('samples.random');
 
-Route::group(['middleware' => 'cors'], function () {
-    Route::get('/samples/search', 'SampleController@search')->name('samples.search');
-    Route::get('/samples/{sample}/data', 'SampleController@data')->name('samples.data');
-    Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples.listen');
-    Route::get('/samples/{sample}/download{extension?}', 'SampleController@download')->name('samples.download');
-    Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');
-});
+Route::get('/samples/search', 'SampleController@search')->name('samples.search');
+Route::get('/samples/{sample}/data', 'SampleController@data')->name('samples.data');
+Route::get('/samples/{sample}/listen', 'SampleController@listen')->name('samples.listen');
+Route::get('/samples/{sample}/download{extension?}', 'SampleController@download')->name('samples.download');
+Route::get('/samples/{sample}/iframe', 'SampleController@iframe')->name('samples.iframe');
 
 Route::get('/samples/{sample}/next', 'SampleController@next')->name('samples.next');
 Route::get('/samples/{sample}/prev', 'SampleController@prev')->name('samples.prev');

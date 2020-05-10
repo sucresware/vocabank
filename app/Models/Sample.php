@@ -127,7 +127,7 @@ class Sample extends Model implements Viewable
         return $this->attributes['id'];
     }
 
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         $id = \Hashids::connection('samples')->decode($value)[0] ?? null;
 
