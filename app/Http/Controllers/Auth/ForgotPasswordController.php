@@ -27,7 +27,7 @@ class ForgotPasswordController extends Controller
         if ($user != null) {
             $verify_user = VerifyUser::create([
                 'user_id' => $user->id,
-                'token'   => str_random(40),
+                'token'   => \Str::random(40),
                 'scope'   => VerifyUser::SCOPE_RESET_PASSWORD,
             ]);
 
