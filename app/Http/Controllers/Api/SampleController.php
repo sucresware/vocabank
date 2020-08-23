@@ -17,10 +17,6 @@ class SampleController extends Controller
                 $samples = $samples->orderBy('created_at', 'DESC');
 
                 break;
-            case 'popular':
-                $samples = $samples->orderByViews();
-
-            break;
         }
 
         return $samples->paginate(30);
@@ -36,11 +32,15 @@ class SampleController extends Controller
 
         if (!$request->tag) {
             $samples = $samples
-                ->whereHas('tags', function ($query) use ($request) { return $query->where('name', 'like', '%' . $request->q . '%'); })
+                ->whereHas('tags', function ($query) use ($request) {
+                    return $query->where('name', 'like', '%' . $request->q . '%');
+                })
                 ->orWhere('name', 'like', '%' . $request->q . '%')
                 ->orWhere('description', 'like', '%' . $request->q . '%');
         } else {
-            $samples = $samples->whereHas('tags', function ($query) use ($request) { return $query->where('name', $request->q); });
+            $samples = $samples->whereHas('tags', function ($query) use ($request) {
+                return $query->where('name', $request->q);
+            });
         }
 
         return $samples->paginate(30);

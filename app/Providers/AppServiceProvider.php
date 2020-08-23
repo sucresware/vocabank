@@ -38,16 +38,6 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.app', function ($view) use ($runtime, $version) {
             $view
-                ->with('popular_tags', Cache::remember('popular_tags', now()->addMinute(), function () {
-                    return Tag::join('sample_tag', 'tags.id', '=', 'sample_tag.tag_id')
-                        ->join('samples', 'samples.id', '=', 'sample_tag.sample_id')
-                        ->where('status', Sample::STATUS_PUBLIC)
-                        ->groupBy('tags.id')
-                        ->select(['tags.*', DB::raw('COUNT(*) as count')])
-                        ->orderBy('count', 'desc')
-                        ->limit(10)
-                        ->get();
-                }))
                 ->with('static_pages', StaticPage::orderBy('name')->get())
                 ->with('runtime', $runtime)
                 ->with('version', $version);

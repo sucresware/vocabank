@@ -51,10 +51,6 @@
       <div class="mx-3 m-w-0">
         <div class="font-bold truncate">{{ sample.name }}</div>
       </div>
-      <div class="flex-none w-auto ml-auto" v-if="sample.views">
-        <i class="fas fa-undo"></i>
-        {{ sample.views }}
-      </div>
     </div>
     <slide-up-down :active="showControls" :duration="200">
       <div
@@ -117,7 +113,7 @@ import WaveSurfer from "wavesurfer.js";
 import axios from "axios";
 
 export default {
-  props: ["sample", "views", "iframe"],
+  props: ["sample", "iframe"],
   data() {
     return {
       inIframe: false,

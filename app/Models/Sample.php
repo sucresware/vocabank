@@ -7,13 +7,11 @@ use Conner\Likeable\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
-use CyrildeWit\EloquentViewable\Contracts\Viewable;
-use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 
-class Sample extends Model implements Viewable
+class Sample extends Model
 {
-    use InteractsWithViews, HasSettingsTable, LogsActivity, Likeable;
+    use HasSettingsTable, LogsActivity, Likeable;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;
@@ -28,7 +26,7 @@ class Sample extends Model implements Viewable
     ];
 
     protected $appends = [
-        'views', 'presented_date', 'thumbnail_url', 'waveform_url', 'liked'
+        'presented_date', 'thumbnail_url', 'waveform_url', 'liked'
     ];
 
     protected $guarded = [];
@@ -84,11 +82,6 @@ class Sample extends Model implements Viewable
     public function getPrevAttribute()
     {
         return static::public()->where('created_at', '<', $this->created_at)->orderBy('created_at', 'desc')->first();
-    }
-
-    public function getViewsAttribute()
-    {
-        return $this->views()->count();
     }
 
     public function getPresentedDateAttribute()

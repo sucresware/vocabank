@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="hidden md:flex mb-4">
+    <div class="hidden mb-4 md:flex">
         @if ($sample->prev)
             <div>
                 <a href="{{ route('samples.prev', $sample) }}" class="btn btn-xs"><i class="fas fa-angle-left"></i></a>
@@ -18,12 +18,12 @@
         @endif
     </div>
 
-    <div class="card mb-3">
+    <div class="mb-3 card">
         <div class="flex flex-wrap">
-            <div class="w-full lg:w-auto overflow-hidden flex relative">
-                <img src="{{ $sample->thumbnail_url }}" class="object-cover h-64 lg:h-auto w-full" style="filter: blur(10px); transform: scale(1.1);">
-                <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                    <img src="{{ $sample->thumbnail_url }}" class="h-48 w-48 shadow-lg rounded-full">
+            <div class="relative flex w-full overflow-hidden lg:w-auto">
+                <img src="{{ $sample->thumbnail_url }}" class="object-cover w-full h-64 lg:h-auto" style="filter: blur(10px); transform: scale(1.1);">
+                <div class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+                    <img src="{{ $sample->thumbnail_url }}" class="w-48 h-48 rounded-full shadow-lg">
                 </div>
             </div>
             <div class="flex-1">
@@ -48,7 +48,7 @@
                         <div class="w-48 text-muted">
                             Nom
                         </div>
-                        <div class="w-full lg:w-auto font-bold">
+                        <div class="w-full font-bold lg:w-auto">
                             {{ $sample->name }}
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="w-full lg:w-auto ">
                                 @foreach($sample->tags as $tag)
-                                    <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="btn btn-xs btn-secondary mb-1"><i class="fas fa-hashtag"></i>{{ $tag->name }}</a>
+                                    <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="mb-1 btn btn-xs btn-secondary"><i class="fas fa-hashtag"></i>{{ $tag->name }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -97,32 +97,24 @@
                             <a href="{{ route('users.show', $sample->user) }}">{{ $sample->user->name }}</a>
                         </div>
                     </div>
-                    <div class="flex flex-wrap mb-2">
-                        <div class="w-48 text-muted">
-                            Vues
-                        </div>
-                        <div class="w-full lg:w-auto">
-                            <span class="">{{ $sample->views }}</span> ({{ views($sample)->unique()->count() }})
-                        </div>
-                    </div>
                 </div>
 
                 <hr>
 
-                <div class="px-4 mb-4 flex flex-wrap">
-                    <button class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-primary mx-1" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> <span class="lg:hidden xl:inline">Copier le lien</span></button>
+                <div class="flex flex-wrap px-4 mb-4">
+                    <button class="w-full mx-1 mb-2 lg:w-auto lg:mb-0 btn btn-primary" data-clipboard data-clipboard-text="{{ route('samples.show', $sample) }}" title="Copier le lien"><i class="fa fa-copy"></i> <span class="lg:hidden xl:inline">Copier le lien</span></button>
                     @auth
                         <button class="w-full lg:w-auto mb-2 lg:mb-0 btn @if ($sample->liked) btn-primary @else btn-secondary @endif mx-1" title="Favori" onclick="event.preventDefault(); document.getElementById('like-form').submit();"><i class="fas fa-heart"></i> <span class="lg:hidden xl:inline">Favori</span></button>
                         <form action="{{ route('samples.like', $sample) }}" id="like-form" method="post" class="hidden">@csrf</form>
                     @endauth
-                    <a href="{{ route('samples.download', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1" title="Télécharger"><i class="fa fa-download"></i> <span class="lg:hidden xl:inline">Télécharger</span></a>
+                    <a href="{{ route('samples.download', $sample) }}" class="w-full mx-1 mb-2 lg:w-auto lg:mb-0 btn btn-secondary" title="Télécharger"><i class="fa fa-download"></i> <span class="lg:hidden xl:inline">Télécharger</span></a>
                     @auth
                         @if (($sample->user == auth()->user()) || (auth()->user()->hasRole('admin')))
-                            <a href="{{ route('samples.edit', $sample) }}" class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1 lg:ml-auto"><i class="fas fa-pencil-alt"></i> <span class="ml-1 lg:hidden">Modifier</span></a>
+                            <a href="{{ route('samples.edit', $sample) }}" class="w-full mx-1 mb-2 lg:w-auto lg:mb-0 btn btn-secondary lg:ml-auto"><i class="fas fa-pencil-alt"></i> <span class="ml-1 lg:hidden">Modifier</span></a>
                         @endif
                         @if (auth()->user()->hasRole('admin'))
                             <button
-                                class="w-full lg:w-auto mb-2 lg:mb-0 btn btn-secondary mx-1"
+                                class="w-full mx-1 mb-2 lg:w-auto lg:mb-0 btn btn-secondary"
                                 onclick="event.preventDefault(); document.getElementById('delete-form').submit();"
                             ><i class="fas fa-trash"></i> <span class="ml-1 lg:hidden">Supprimer</span></button>
                             <form id="delete-form" action="{{ route('samples.destroy', $sample) }}" method="POST" style="display: none;">@csrf @method('delete')</form>

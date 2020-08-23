@@ -33,10 +33,6 @@ class SampleController extends Controller
         }
 
         switch (request()->order) {
-            case 'popular':
-                $samples = $samples->orderByViews();
-
-                break;
             case 'recent':
             default:
                 $samples = $samples->orderBy('created_at', 'DESC');
@@ -238,10 +234,6 @@ class SampleController extends Controller
 
     public function listen(Sample $sample)
     {
-        views($sample)
-            ->cooldown(now()->seconds(1))
-            ->record();
-
         return response()->file(Storage::disk('public')->path($sample->audio));
     }
 

@@ -65,16 +65,6 @@
             @yield('content')
         </div>
         <div class="w-full px-4 md:w-1/4">
-            <div class="mb-2 text-xs text-muted">
-                Tags les plus utilisés :
-            </div>
-
-            @foreach($popular_tags as $tag)
-                <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="mb-1 btn btn-xs btn-secondary"><i class="fas fa-hashtag"></i>{{ $tag->name }} <span class="text-muted">({{ $tag->count }})</span></a>
-            @endforeach
-
-            <hr>
-
             <footer class="text-xs text-muted">
                 <div class="mb-2">
                     @foreach ($static_pages as $static_page)
