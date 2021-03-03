@@ -2,6 +2,7 @@
 
 namespace App\Auth;
 
+use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
@@ -27,15 +28,20 @@ class FourSucresProvider extends AbstractProvider implements ProviderInterface
         );
     }
 
+    public function getAccessTokenResponse($code)
+    {
+        $response = Http::post($this->getTokenUrl(), $this->getTokenFields($code));
+
+        return $response->json();
+    }
+
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get(config('services.foursucres.server_url') . '/api/v1/@me', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-            ],
-        ]);
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get(config('services.foursucres.server_url') . '/api/v1/@me');
 
-        return json_decode($response->getBody(), true);
+        return $response->json();
     }
 
     protected function mapUserToObject(array $user)
