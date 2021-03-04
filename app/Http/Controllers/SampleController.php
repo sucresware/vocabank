@@ -73,6 +73,10 @@ class SampleController extends Controller
                 ->paginate(15)
                 ->appends(['q' => $request->q]);
 
+            if (request()->ajax()) {
+                return $samples;
+            }
+
             return view('sample.index', compact('samples'))->with('q', $request->q);
         } else {
             return redirect()->route('home');
