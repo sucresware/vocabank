@@ -12,16 +12,15 @@ class User extends Authenticatable
     use Notifiable, HasRoles, LogsActivity;
 
     protected $fillable = [
-        'name', 'email', 'password', 'fourSucres_account',
+        'name', 'email', 'password',
     ];
 
     protected $hidden = [
-        'id', 'password', 'remember_token', 'email', 'fourSucres_account', 'settings', 'created_at', 'updated_at', 'description', 'status'
+        'id', 'password', 'remember_token', 'email', 'settings', 'created_at', 'updated_at', 'description', 'status'
     ];
 
     protected $casts = [
-        'fourSucres_account' => 'array',
-        'settings'           => 'array',
+        'settings' => 'array',
     ];
 
     protected static $logOnlyDirty = true;

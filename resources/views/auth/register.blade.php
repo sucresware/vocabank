@@ -7,52 +7,39 @@
 @section('body-classes', 'theme-vocabank w-full h-screen')
 
 @section('body')
-<div class="flex w-full h-screen items-center justify-center">
-    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w:1/6 text-center mx-4">
-        <img src="/svg/logo_white.svg" class="mx-auto mb-6 w-48 animated fadeInDown">
-
-        <div class="mb-6">
-            <a href="/login/4sucres" class="btn btn-primary">
-                <img src="/img/4sucres.png" class="inline h-6 mr-1" alt="4sucres">
-                Inscription avec 4sucres
-            </a>
-        </div>
-
-        <div class="flex justify-center items-center text-center mb-6">
-            <hr class="flex-1">
-            <div class="mx-4">ou</div>
-            <hr class="flex-1">
-        </div>
+<div class="flex items-center justify-center w-full h-screen">
+    <div class="w-full mx-4 text-center sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w:1/6">
+        <img src="/svg/logo_white.svg" class="w-48 mx-auto mb-6 animated fadeInDown">
 
         <form action="{{ route('register') }}" method="post">
             @csrf
 
-            <div class="card mb-4 p-4">
+            <div class="p-4 mb-4 card">
                 <div class="mb-3">
-                    <input type="text" placeholder="Pseudo" class="form-control w-full" name="name" value="{{ old('name') }}">
+                    <input type="text" placeholder="Pseudo" class="w-full form-control" name="name" value="{{ old('name') }}">
 
                     @if ($errors->has('name'))
-                        <div class="text-red-500 mt-3 text-xs font-bold">
+                        <div class="mt-3 text-xs font-bold text-red-500">
                             {{ $errors->first('name') }}
                         </div>
                     @endif
                 </div>
 
                 <div class="mb-3">
-                    <input type="text" placeholder="Adresse e-mail" class="form-control w-full" name="email" value="{{ old('email') }}">
+                    <input type="text" placeholder="Adresse e-mail" class="w-full form-control" name="email" value="{{ old('email') }}">
 
                     @if ($errors->has('email'))
-                        <div class="text-red-500 mt-3 text-xs font-bold">
+                        <div class="mt-3 text-xs font-bold text-red-500">
                             {{ $errors->first('email') }}
                         </div>
                     @endif
                 </div>
 
                 <div>
-                    <input type="password" placeholder="Mot de passe" class="form-control w-full" name="password">
+                    <input type="password" placeholder="Mot de passe" class="w-full form-control" name="password">
 
                     @if ($errors->has('password'))
-                        <div class="text-red-500 mt-3 text-xs font-bold">
+                        <div class="mt-3 text-xs font-bold text-red-500">
                             <strong>{{ $errors->first('password') }}
                         </div>
                     @endif
@@ -60,7 +47,7 @@
             </div>
 
             <div class="text-right">
-                <button type="submit" class="btn btn-secondary"><i class="fa fa-sign-in-alt mr-1"></i> Créer un compte</button>
+                <button type="submit" class="btn btn-secondary"><i class="mr-1 fa fa-sign-in-alt"></i> Créer un compte</button>
             </div>
         </form>
 
