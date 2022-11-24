@@ -55,6 +55,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/users/{user}/email', 'UserController@updateEmail')->name('users.update.email');
     Route::get('/users/{user}/edit/password', 'UserController@editPassword')->name('users.edit.password');
     Route::put('/users/{user}/password', 'UserController@updatePassword')->name('users.update.password');
+    Route::get('/users/{user}/delete', 'UserController@delete')->name('users.delete');
+    Route::delete('/users/{user}', 'UserController@destroy')->name('users.destroy');
 
     Route::post('/samples/{sample}/like', 'SampleController@like')->name('samples.like');
     Route::get('/samples/{sample}/edit', 'SampleController@edit')->name('samples.edit');

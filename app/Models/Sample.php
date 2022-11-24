@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Sample extends Model
 {
-    use HasSettingsTable, LogsActivity, Likeable;
+    use HasSettingsTable, LogsActivity, Likeable, SoftDeletes;
 
     const STATUS_DRAFT = 0;
     const STATUS_PROCESSING = 1;

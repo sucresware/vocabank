@@ -97,4 +97,28 @@ class UserController extends Controller
 
         return redirect(route('users.edit.password', $user))->with('success', 'Modifications enregistrées !');
     }
+
+    public function delete(User $user)
+    {
+        return view('user.delete', compact('user'));
+    }
+
+    public function destroy(User $user)
+    {
+        $validator = Validator::make(request()->input(), [
+            'password' => ['required'],
+        ]);
+
+        if ($user->password && !Hash::check(request()->password, $user->password)) {
+            $validator->errors()->add('password', 'Le mot de passe est incorrect');
+
+            return redirect(route('users.delete', $user))->withErrors($validator)->withInput(request()->input());
+        }
+
+        auth()->logout();
+        $user->samples()->delete();
+        $user->delete();
+
+        return redirect(route('home'))->with('success', 'Ton compte a bien été supprimé !');
+    }
 }
