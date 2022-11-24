@@ -3,6 +3,7 @@
 /vendor
 .env
 .phpunit.result.cache
+docker-compose.override.yml
 Homestead.json
 Homestead.yaml
 npm-debug.log
@@ -12,4 +13,5 @@ yarn-error.log
 !/public/index.php
 .php_cs.cache
 *.sql
+/.idea
 /.vscode
