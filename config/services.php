@@ -38,8 +38,4 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
-
-    'youtube' => [
-        'key' => env('YOUTUBE_KEY', 'AIzaSyDYwPzLevXauI-kTSVXTLroLyHEONuF9Rw'),
-    ],
 ];
