@@ -37,7 +37,7 @@ class GenerateWaveformJob implements ShouldQueue
         $this->sample->status = Sample::STATUS_PROCESSING;
         $this->sample->save();
 
-        if (!Storage::disk('public')->exists('images/')) {
+        if (! Storage::disk('public')->exists('images/')) {
             Storage::disk('public')->makeDirectory('images/', 0775, true);
         }
 

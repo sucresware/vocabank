@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Helpers\SucresHelper;
 use Conner\Likeable\Likeable;
+use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Glorand\Model\Settings\Traits\HasSettingsTable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Sample extends Model
 {
@@ -23,11 +23,11 @@ class Sample extends Model
     ];
 
     protected $hidden = [
-        'thumbnail', 'waveform', 'audio', 'settings', 'updated_at', 'user_id', 'uuid'
+        'thumbnail', 'waveform', 'audio', 'settings', 'updated_at', 'user_id', 'uuid',
     ];
 
     protected $appends = [
-        'presented_date', 'thumbnail_url', 'waveform_url', 'liked'
+        'presented_date', 'thumbnail_url', 'waveform_url', 'liked',
     ];
 
     protected $guarded = [];

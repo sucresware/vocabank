@@ -2,12 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Sample;
 use App\Models\StaticPage;
-use App\Models\Tag;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 

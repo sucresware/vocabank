@@ -40,7 +40,7 @@ class YoutubeDlJob implements ShouldQueue
         $this->sample->status = Sample::STATUS_PROCESSING;
         $this->sample->save();
 
-        if (!Storage::disk('public')->exists('samples/')) {
+        if (! Storage::disk('public')->exists('samples/')) {
             Storage::disk('public')->makeDirectory('samples/', 0775, true);
         }
 

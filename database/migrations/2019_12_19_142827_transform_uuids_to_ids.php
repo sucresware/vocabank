@@ -1,11 +1,9 @@
 <?php
 
-use App\Models\User;
-use App\Models\VerifyUser;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class TransformUuidsToIds extends Migration
 {
@@ -138,7 +136,7 @@ class TransformUuidsToIds extends Migration
      */
     public function down()
     {
-        /**
+        /*
          * This migration is not reversable.
          */
     }

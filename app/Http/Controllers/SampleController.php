@@ -56,7 +56,7 @@ class SampleController extends Controller
         if ($request->q) {
             $samples = Sample::with('user')->public();
 
-            if (!$request->tag) {
+            if (! $request->tag) {
                 $samples = $samples
                     ->whereHas('tags', function ($query) use ($request) {
                         return $query->where('name', 'like', '%' . $request->q . '%');
@@ -151,7 +151,7 @@ class SampleController extends Controller
             ]);
             $process->run();
 
-            if (!$process->isSuccessful()) {
+            if (! $process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
         } catch (\Exception $e) {
@@ -161,7 +161,7 @@ class SampleController extends Controller
         $ytdl_dump = json_decode($process->getOutput());
 
         if ($ytdl_dump->extractor !== 'youtube' && $ytdl_dump->extractor !== 'soundcloud') {
-            if (!isset($ytdl_dump->duration)) {
+            if (! isset($ytdl_dump->duration)) {
                 return response()->json(['errors' => ['url' => ['Déso, des informations ont été trouvées mais le site n\'est pas explicitement autorisé (poke the dev!)']]], 422);
             }
         }
@@ -182,7 +182,7 @@ class SampleController extends Controller
         }
 
         if (isset($ytdl_dump->thumbnail)) {
-            if (!Storage::disk('public')->exists('images/')) {
+            if (! Storage::disk('public')->exists('images/')) {
                 Storage::disk('public')->makeDirectory('images/', 0775, true);
             }
 
@@ -252,7 +252,7 @@ class SampleController extends Controller
 
     public function edit(Sample $sample)
     {
-        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
+        abort_if(($sample->user != auth()->user()) && (! auth()->user()->hasRole('admin')), 403);
 
         $tags = $sample->tags->pluck('name'); // Preload
 
@@ -261,7 +261,7 @@ class SampleController extends Controller
 
     public function update(Sample $sample)
     {
-        abort_if(($sample->user != auth()->user()) && (!auth()->user()->hasRole('admin')), 403);
+        abort_if(($sample->user != auth()->user()) && (! auth()->user()->hasRole('admin')), 403);
 
         request()->validate([
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->real_id],
@@ -273,7 +273,7 @@ class SampleController extends Controller
         $sample->description = request()->description;
 
         if (request()->hasFile('thumbnail')) {
-            if (!Storage::disk('public')->exists('images/')) {
+            if (! Storage::disk('public')->exists('images/')) {
                 Storage::disk('public')->makeDirectory('images/', 0775, true);
             }
 
@@ -295,7 +295,7 @@ class SampleController extends Controller
 
     public function destroy(Sample $sample)
     {
-        abort_if(!auth()->user()->hasRole('admin'), 403);
+        abort_if(! auth()->user()->hasRole('admin'), 403);
 
         $sample->delete();
 

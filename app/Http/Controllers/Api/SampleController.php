@@ -30,7 +30,7 @@ class SampleController extends Controller
 
         $samples = Sample::with('user')->public();
 
-        if (!$request->tag) {
+        if (! $request->tag) {
             $samples = $samples
                 ->whereHas('tags', function ($query) use ($request) {
                     return $query->where('name', 'like', '%' . $request->q . '%');

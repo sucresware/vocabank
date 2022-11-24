@@ -18,11 +18,11 @@ class HomeController extends Controller
             case 'theme-vocabank':
                 $user->setSetting('layout.theme', 'theme-legacy');
 
-            break;
+                break;
             case 'theme-legacy':
                 $user->setSetting('layout.theme', 'theme-vocabank');
 
-            break;
+                break;
         }
 
         return ['success' => true];

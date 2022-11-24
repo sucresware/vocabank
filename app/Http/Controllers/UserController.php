@@ -43,7 +43,7 @@ class UserController extends Controller
         ]);
 
         if (request()->hasFile('avatar')) {
-            if (!Storage::disk('public')->exists('avatars/')) {
+            if (! Storage::disk('public')->exists('avatars/')) {
                 Storage::disk('public')->makeDirectory('avatars/', 0775, true);
             }
 
@@ -86,7 +86,7 @@ class UserController extends Controller
             'new_password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
-        if ($user->password && !Hash::check(request()->password, $user->password)) {
+        if ($user->password && ! Hash::check(request()->password, $user->password)) {
             $validator->errors()->add('password', 'Le mot de passe est incorrect');
 
             return redirect(route('users.edit.password', $user))->withErrors($validator)->withInput(request()->input());
@@ -109,7 +109,7 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
-        if ($user->password && !Hash::check(request()->password, $user->password)) {
+        if ($user->password && ! Hash::check(request()->password, $user->password)) {
             $validator->errors()->add('password', 'Le mot de passe est incorrect');
 
             return redirect(route('users.delete', $user))->withErrors($validator)->withInput(request()->input());
