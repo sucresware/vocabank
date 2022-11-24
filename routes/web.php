@@ -63,7 +63,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/samples/preflight', 'SampleController@preflight')->name('samples.preflight');
     Route::post('/samples/preflight/url', 'SampleController@preflightURL')->name('samples.preflight.url');
     Route::get('/samples/create/url', 'SampleController@createURL')->name('samples.create.url');
-    Route::get('/samples/{sample}/process-url', 'SampleController@processURL')->name('samples.process.url');
 
     Route::get('/light-toggler', 'HomeController@lightToggler');
 });

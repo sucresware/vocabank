@@ -97,6 +97,8 @@ class SampleController extends Controller
 
     public function createURL()
     {
+        abort_if(config('app.import_from_url') === false, 404);
+
         return view('sample.create_url');
     }
 
@@ -133,6 +135,8 @@ class SampleController extends Controller
 
     public function preflightURL()
     {
+        abort_if(config('app.import_from_url') === false, 404);
+
         request()->validate([
             'url' => ['required'],
         ]);

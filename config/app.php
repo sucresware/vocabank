@@ -225,4 +225,6 @@ return [
         'View'         => Illuminate\Support\Facades\View::class,
         'Hashids'      => Vinkla\Hashids\Facades\Hashids::class,
     ],
+
+    'import_from_url' => env('IMPORT_FROM_URL', false),
 ];
