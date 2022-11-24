@@ -6,6 +6,6 @@
 
 @section('content')
 
-<sample-edit :sample="{{ $sample }}" :tags="{{ $tags }}"></sample-edit>
+<sample-edit :sample="{{ $sample }}"></sample-edit>
 
 @endsection

@@ -37,39 +37,6 @@
         v-if="formErrors && formErrors.name !== undefined"
       >{{ formErrors.name[0] }}</div>
     </div>
-    <div class="mb-3">
-      <div class="text-xs mb-1">Tags</div>
-      <input
-        type="text"
-        class="form-control w-full"
-        @keyup.enter="appendTag()"
-        v-model="currentTag"
-        :disabled="formSubmitted"
-      />
-      <div
-        class="text-red-500 mt-3 text-xs font-bold"
-        v-if="formErrors && formErrors.tags !== undefined"
-      >{{ formErrors.tags[0] }}</div>
-
-      <div class="text-muted mt-3 text-xs" v-if="currentSample.tags.length == 0">
-        Exemples :
-        <i class="fas fa-hashtag"></i> olinux
-        <i class="fas fa-hashtag"></i> meme
-        <i class="fas fa-hashtag"></i> 4sucres
-      </div>
-
-      <div class="my-3">
-        <div
-          class="btn btn-xs btn-secondary hover:line-through cursor-pointer mr-1 inline-block"
-          v-for="(tag, i) in currentSample.tags"
-          :key="i"
-          v-on:click="removeTag(i)"
-        >
-          <i class="fas fa-hashtag"></i>
-          {{ tag }}
-        </div>
-      </div>
-    </div>
     <div>
       <div class="mb-3">
         <div class="text-xs mb-1">Description</div>
@@ -109,13 +76,12 @@
 import axios from "axios";
 
 export default {
-  props: ["sample", "tags"],
+  props: ["sample"],
   data() {
     return {
       currentSample: null,
       formErrors: {},
       formSubmitted: false,
-      currentTag: "",
       files: {
         thumbnail: null
       }
@@ -124,7 +90,6 @@ export default {
   mounted() {
     this.currentSample = this.sample;
     this.currentSample.thumbnail = "/storage/" + this.currentSample.thumbnail;
-    this.currentSample.tags = this.tags;
 
     setTimeout(this.mountDragAndDrop, 500);
   },
@@ -185,33 +150,12 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    appendTag() {
-      let safeTag = this.currentTag.trim().replace(/  */gi, "-");
-      if (
-        safeTag &&
-        safeTag != "" &&
-        this.currentSample.tags.indexOf(safeTag) == -1 &&
-        safeTag.length < 30 &&
-        this.currentSample.tags.length < 10
-      ) {
-        this.currentSample.tags.push(safeTag);
-      }
-
-      this.currentTag = "";
-    },
-    removeTag(i) {
-      this.currentSample.tags.splice(i, 1);
-    },
     submit() {
       let formData = new FormData();
       if (this.formSubmitted) return;
 
       formData.append("_method", "put");
       formData.append("name", this.currentSample.name);
-
-      this.currentSample.tags.forEach((tag, i) => {
-        formData.append("tags[" + i + "]", tag);
-      });
 
       if (this.currentSample.description !== null)
         formData.append("description", this.currentSample.description);

@@ -40,8 +40,6 @@ class Sample extends Model
         parent::boot();
 
         self::deleting(function ($sample) {
-            $sample->tags()->detach();
-
             collect(Storage::disk('local')->allFiles('temp'))
                 ->filter(function ($file) use ($sample) {
                     return preg_match('/' . $sample->id . '_/', $file);
@@ -63,11 +61,6 @@ class Sample extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
     }
 
     public function scopePublic($query)

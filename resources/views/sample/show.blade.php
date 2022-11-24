@@ -63,19 +63,6 @@
                             </div>
                         </div>
                     @endif
-
-                    @if ($sample->tags->count())
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-48 text-muted">
-                                Tags
-                            </div>
-                            <div class="w-full lg:w-auto ">
-                                @foreach($sample->tags as $tag)
-                                    <a href="{{ route('samples.search') }}?q={{ $tag->name }}&tag=✓" class="mb-1 btn btn-xs btn-secondary"><i class="fas fa-hashtag"></i>{{ $tag->name }}</a>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
                 </div>
 
                 <hr>

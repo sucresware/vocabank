@@ -7,7 +7,6 @@ use App\Jobs\GenerateWaveformJob;
 use App\Jobs\MakePublicJob;
 use App\Jobs\YoutubeDlJob;
 use App\Models\Sample;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -56,18 +55,9 @@ class SampleController extends Controller
         if ($request->q) {
             $samples = Sample::with('user')->public();
 
-            if (! $request->tag) {
-                $samples = $samples
-                    ->whereHas('tags', function ($query) use ($request) {
-                        return $query->where('name', 'like', '%' . $request->q . '%');
-                    })
-                    ->orWhere('name', 'like', '%' . $request->q . '%')
-                    ->orWhere('description', 'like', '%' . $request->q . '%');
-            } else {
-                $samples = $samples->whereHas('tags', function ($query) use ($request) {
-                    return $query->where('name', $request->q);
-                });
-            }
+            $samples = $samples
+                ->where('name', 'like', '%' . $request->q . '%')
+                ->orWhere('description', 'like', '%' . $request->q . '%');
 
             $samples = $samples
                 ->paginate(15)
@@ -175,12 +165,6 @@ class SampleController extends Controller
             'description' => 'Source : ' . $ytdl_dump->webpage_url . ' (' . $ytdl_dump->extractor . ')',
         ]);
 
-        if (isset($ytdl_dump->tags) && count($ytdl_dump->tags)) {
-            foreach ($ytdl_dump->tags as $tag) {
-                Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample->real_id);
-            }
-        }
-
         if (isset($ytdl_dump->thumbnail)) {
             if (! Storage::disk('public')->exists('images/')) {
                 Storage::disk('public')->makeDirectory('images/', 0775, true);
@@ -254,9 +238,7 @@ class SampleController extends Controller
     {
         abort_if(($sample->user != auth()->user()) && (! auth()->user()->hasRole('admin')), 403);
 
-        $tags = $sample->tags->pluck('name'); // Preload
-
-        return view('sample.edit', compact('sample', 'tags'));
+        return view('sample.edit', compact('sample'));
     }
 
     public function update(Sample $sample)
@@ -265,7 +247,6 @@ class SampleController extends Controller
 
         request()->validate([
             'name'      => ['required', 'min:3', 'max:60', 'unique:samples,name,' . $sample->real_id],
-            'tags'      => ['nullable', 'array'],
             'thumbnail' => ['nullable', 'mimes:jpeg,bmp,png,gif,jpg', 'max:2048'],
         ]);
 
@@ -281,11 +262,6 @@ class SampleController extends Controller
 
             Image::make(request()->thumbnail)->fit(300, 300)->save(Storage::disk('public')->path('images/' . $thumbnail_name));
             $sample->thumbnail = 'images/' . $thumbnail_name;
-        }
-
-        $sample->tags()->detach();
-        foreach (request()->tags ?? [] as $tag) {
-            Tag::firstOrCreate(['name' => $tag])->samples()->attach($sample->real_id);
         }
 
         $sample->save();

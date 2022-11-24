@@ -30,18 +30,9 @@ class SampleController extends Controller
 
         $samples = Sample::with('user')->public();
 
-        if (! $request->tag) {
-            $samples = $samples
-                ->whereHas('tags', function ($query) use ($request) {
-                    return $query->where('name', 'like', '%' . $request->q . '%');
-                })
-                ->orWhere('name', 'like', '%' . $request->q . '%')
-                ->orWhere('description', 'like', '%' . $request->q . '%');
-        } else {
-            $samples = $samples->whereHas('tags', function ($query) use ($request) {
-                return $query->where('name', $request->q);
-            });
-        }
+        $samples = $samples
+            ->where('name', 'like', '%' . $request->q . '%')
+            ->orWhere('description', 'like', '%' . $request->q . '%');
 
         return $samples->paginate(30);
     }
